@@ -1,0 +1,17 @@
+{
+  "name": "test-run",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "devDependencies": {
+    "tslint": "^5.9.1",
+    "typescript": "^2.7.2"
+  },
+  "scripts": {
+    "start": "node dist/server.js",
+    "test": "jest --forceExit --coverage --verbose",
+    "build-ts": "tsc",
+    "watch-ts": "tsc -w",
+    "tslint": "tslint -c tslint.json -p tsconfig.json"
+  }
+}
