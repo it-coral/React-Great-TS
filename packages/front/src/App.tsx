@@ -5,6 +5,7 @@ import { Router, Route, Switch } from 'react-router-dom';
 import { createBrowserHistory } from 'history';
 import SignInPage from './containers/SignInPage/index';
 import SignUpPage from './containers/SignUpPage/index';
+import MenuBar from './components/common/MenuBar';
 
 const theme = createMuiTheme({
     palette: {
@@ -18,10 +19,11 @@ class App extends React.Component {
     public render() {
         return (
             <MuiThemeProvider theme={theme}>
+                <MenuBar/>
                 <Router history={history}>
                     <Switch>
-                        <Route exact={true} path="/" component={SignInPage} />
-                        <Route path="/sign-up" component={SignUpPage} />
+                        <Route exact={true} path="/" component={SignInPage}/>
+                        <Route path="/sign-up" component={SignUpPage}/>
                     </Switch>
                 </Router>
             </MuiThemeProvider>
