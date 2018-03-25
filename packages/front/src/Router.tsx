@@ -26,9 +26,9 @@ class RouterContainer extends React.Component<IRouterProps> {
         let AuthRouteHandler = (
             <LoginLayout>
                 <Switch>
-                    <Route path="/login" component={SignInPage} />
+                    <Route path="/signin" component={SignInPage} />
                     <Route path="/signup" component={SignUpPage} />
-                    <Redirect from="*" to="/login" />
+                    <Redirect from="*" to="/signin" />
                 </Switch>
             </LoginLayout>
         );

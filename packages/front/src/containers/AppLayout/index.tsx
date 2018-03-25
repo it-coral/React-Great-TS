@@ -6,10 +6,12 @@ export default class AppLayout extends React.Component {
     render() {
         return (
             <Route path="/app">
-                <MenuBar />
-                <div>
-                    {this.props.children}
-                </div>
+               <React.Fragment>
+                   <MenuBar />
+                   <div>
+                       {this.props.children}
+                   </div>
+               </React.Fragment>
             </Route>
         );
     }

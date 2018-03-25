@@ -14,8 +14,8 @@ class App extends React.Component {
     public render() {
         return (
             <MuiThemeProvider theme={theme}>
-                <CssBaseline />
-                <Router />
+                <CssBaseline/>
+                <Router/>
             </MuiThemeProvider>
         );
     }
