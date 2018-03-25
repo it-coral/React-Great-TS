@@ -1,18 +1,18 @@
 declare module '*';
 
-interface IRouterProps {
-    user: IUser;
+interface RouterProps {
+    user: User;
 }
 
 interface IStore {
-    userAuth: IUserAuth;
+    userAuth: UserAuth;
 }
 
-interface IUserAuth {
-    user: IUser;
+interface UserAuth {
+    user: User;
 }
 
-interface IUser {
+interface User {
     name: string;
     email: string;
 }

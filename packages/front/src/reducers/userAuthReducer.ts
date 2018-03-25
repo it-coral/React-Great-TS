@@ -1,6 +1,6 @@
 import { AnyAction } from 'redux';
 interface IUserAuthModer {
-    user: IUser | null;
+    user: User | null;
 }
 
 const defaultState: IUserAuthModer = {

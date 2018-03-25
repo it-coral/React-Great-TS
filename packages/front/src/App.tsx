@@ -10,7 +10,7 @@ const theme = createMuiTheme({
     },
 });
 
-class App extends React.Component {
+export default class App extends React.Component<{}> {
     public render() {
         return (
             <MuiThemeProvider theme={theme}>
@@ -20,5 +20,3 @@ class App extends React.Component {
         );
     }
 }
-
-export default App;

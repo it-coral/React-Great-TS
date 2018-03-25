@@ -11,15 +11,17 @@ import Main from './containers/Main';
 
 const history = createBrowserHistory();
 
-class RouterContainer extends React.Component<IRouterProps> {
+class RouterContainer extends React.Component<RouterProps> {
     public render() {
         let MainRouteHanlder = (
             <AppLayout>
-                <Switch>
-                    <Route exact={true} path="/main" component={Main} />
-                    <Route path="/404" component={NotFoundPage} />
-                    <Redirect from="*" to="/404" />
-                </Switch>
+                <Route path="/app">
+                    <Switch>
+                        <Route exact={true} path="/main" component={Main} />
+                    </Switch>
+                </Route>
+                <Route path="/404" component={NotFoundPage} />
+                <Redirect from="*" to="/404" />
             </AppLayout>
         );
 
@@ -47,4 +49,4 @@ const mapStateToProps = ({ userAuth }: IStore) => ({
     user: userAuth.user
 });
 
-export default connect<IRouterProps>(mapStateToProps)(RouterContainer);
+export default connect<RouterProps>(mapStateToProps)(RouterContainer);

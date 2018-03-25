@@ -7,9 +7,9 @@ import AppBar from 'material-ui/AppBar';
 import withStyles from 'material-ui/styles/withStyles';
 import { WithStyles } from 'material-ui/styles';
 
-class MenuBar extends React.Component<WithStyles<'root' | 'flex' | 'menuButton'>> {
+class NavBar extends React.Component<WithStyles<'root' | 'flex' | 'menuButton'>> {
     public render(): JSX.Element {
-        const {classes} = this.props;
+        const { classes } = this.props;
         return (
             <AppBar position="static">
                 <Toolbar>
@@ -38,4 +38,4 @@ const decorate = withStyles(() => ({
     },
 }));
 
-export default decorate<{}>(MenuBar);
+export default decorate<{}>(NavBar);
