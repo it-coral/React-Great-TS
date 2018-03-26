@@ -11,7 +11,8 @@ import LoginSocialButtons from '../common/LoginSocialButtons';
 class SignInPage extends React.Component<WithStyles<'root' |
     'title' |
     'orWrapper' |
-    'orText'>> {
+    'orText'|
+    'banner'>> {
     public render(): JSX.Element {
         const {classes} = this.props;
         return (
@@ -49,7 +50,7 @@ class SignInPage extends React.Component<WithStyles<'root' |
                                 </Grid>
                             </Grid>
                             <Grid item={true} xs={12} md={3}>
-                                <Grid style={{marginTop: '10vh'}} container={true} alignItems="center" justify="center">
+                                <Grid className={classes.banner} container={true} alignItems="center" justify="center">
                                     <Link to={'/analyze'}>
                                         <img src="assets/images/analyze-banner.png"/>
                                     </Link>
@@ -81,6 +82,9 @@ const decorate = withStyles((theme) => ({
     orText: {
         background: '#fafafa',
         padding: '0 10px',
+    },
+    banner: {
+        marginTop: theme.spacing.unit * 15,
     }
 }));
 
