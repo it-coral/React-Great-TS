@@ -5,22 +5,14 @@ import { WithStyles } from 'material-ui/styles';
 import withStyles from 'material-ui/styles/withStyles';
 import SigninForm from './SigninForm';
 import { Link } from 'react-router-dom';
-import Button from 'material-ui/Button';
 import Typography from 'material-ui/Typography';
+import LoginSocialButtons from '../common/LoginSocialButtons';
 
-interface ILoginPageProps {
-    test: string;
-}
-
-class SignInPage extends React.Component<ILoginPageProps &
-    WithStyles<'root' |
-        'socialButton' |
-        'googleButton' |
-        'facebookButton' |
-        'linkedInButton' |
-        'title' |
-        'orWrapper'|
-        'orText'>> {
+class SignInPage extends React.Component<WithStyles<'root' |
+    'title' |
+    'orWrapper' |
+    'orText'|
+    'banner'>> {
     public render(): JSX.Element {
         const {classes} = this.props;
         return (
@@ -29,7 +21,6 @@ class SignInPage extends React.Component<ILoginPageProps &
                     <Grid item={true} xs={12}>
                         <Grid
                             container={true}
-                            alignItems="center"
                             direction="row"
                             justify="center"
                         >
@@ -43,26 +34,7 @@ class SignInPage extends React.Component<ILoginPageProps &
                                     Login to testRTC
                                 </Typography>
                                 <Grid container={true}>
-                                    <Grid item={true} xs={12}>
-                                        <Button
-                                            variant="raised"
-                                            className={`${classes.socialButton} ${classes.googleButton}`}
-                                        >
-                                            Sign in with Google
-                                        </Button>
-                                        <Button
-                                            variant="raised"
-                                            className={`${classes.socialButton} ${classes.facebookButton}`}
-                                        >
-                                            Sign in with Facebook
-                                        </Button>
-                                        <Button
-                                            variant="raised"
-                                            className={`${classes.socialButton} ${classes.linkedInButton}`}
-                                        >
-                                            Sign in with LinkedIn
-                                        </Button>
-                                    </Grid>
+                                    <LoginSocialButtons/>
                                     <Grid item={true} xs={12}>
                                         <div className={classes.orWrapper}>
                                             <span className={classes.orText}>
@@ -78,7 +50,7 @@ class SignInPage extends React.Component<ILoginPageProps &
                                 </Grid>
                             </Grid>
                             <Grid item={true} xs={12} md={3}>
-                                <Grid container={true} alignItems="center" justify="center">
+                                <Grid className={classes.banner} container={true} alignItems="center" justify="center">
                                     <Link to={'/analyze'}>
                                         <img src="assets/images/analyze-banner.png"/>
                                     </Link>
@@ -96,20 +68,6 @@ const decorate = withStyles((theme) => ({
     root: {
         padding: theme.spacing.unit * 3,
     },
-    socialButton: {
-        marginBottom: theme.spacing.unit,
-        color: '#fff',
-        width: '100%'
-    },
-    googleButton: {
-        background: '#CF3D2E',
-    },
-    facebookButton: {
-        background: '#3C599F',
-    },
-    linkedInButton: {
-        background: '#0085AE',
-    },
     title: {
         marginTop: theme.spacing.unit * 2,
         marginBottom: theme.spacing.unit * 2,
@@ -124,6 +82,9 @@ const decorate = withStyles((theme) => ({
     orText: {
         background: '#fafafa',
         padding: '0 10px',
+    },
+    banner: {
+        marginTop: theme.spacing.unit * 15,
     }
 }));
 

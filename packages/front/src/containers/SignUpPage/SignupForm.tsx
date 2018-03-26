@@ -16,7 +16,7 @@ interface ISigninFormDispatch {
     authorize(): void;
 }
 
-class SigninForm extends React.Component<RouteComponentProps<{}> & ISigninFormDispatch & WithStyles<'signInButton'>> {
+class SignupForm extends React.Component<RouteComponentProps<{}> & ISigninFormDispatch & WithStyles<'signInButton'>> {
     constructor(props: RouteComponentProps<{}> & ISigninFormDispatch & WithStyles<'signInButton'>) {
         super(props);
 
@@ -37,7 +37,6 @@ class SigninForm extends React.Component<RouteComponentProps<{}> & ISigninFormDi
                                     type="text"
                                     name="email"
                                     placeholder="Email Address"
-                                    label="Email Address"
                                     validate={FormValidators.composeValidators(FormValidators.required,
                                                                                FormValidators.isEmail)}
                                 />
@@ -48,37 +47,45 @@ class SigninForm extends React.Component<RouteComponentProps<{}> & ISigninFormDi
                                     type="password"
                                     name="password"
                                     placeholder="Password"
-                                    label="Password"
+                                    validate={FormValidators.required}
+                                />
+                            </Grid>
+                            <Grid item={true} xs={12}>
+                                <Field
+                                    component={TextFieldControl}
+                                    type="text"
+                                    name="phoneNumber"
+                                    placeholder="Phone Number"
+                                    validate={FormValidators.required}
+                                />
+                            </Grid>
+                            <Grid item={true} xs={12}>
+                                <Field
+                                    component={TextFieldControl}
+                                    type="text"
+                                    name="company"
+                                    placeholder="Company"
                                     validate={FormValidators.required}
                                 />
                             </Grid>
                             <Grid item={true} xs={12}>
                                 <Button type="submit" variant="raised" color="primary" className={classes.signInButton}>
-                                    Sign in
+                                    Sign up
                                 </Button>
                             </Grid>
                             <Grid item={true} xs={6}>
-                                <Link to="/signup">
+                                <Link to="/signin">
                                     <Typography color="textSecondary">
-                                        Create an account
+                                        Already have an account?
                                     </Typography>
                                 </Link>
                             </Grid>
                             <Grid item={true} xs={6}>
-                                <div>
-                                    <Link to="/forgot">
-                                        <Typography color="textSecondary" align="right">
-                                            Forgot password
-                                        </Typography>
-                                    </Link>
-                                </div>
-                                <div>
-                                    <Link to="/forgot">
-                                        <Typography color="textSecondary" align="right">
-                                            Subscribe
-                                        </Typography>
-                                    </Link>
-                                </div>
+                                <Link to="/forgot">
+                                    <Typography color="textSecondary" align="right">
+                                        Subscribe
+                                    </Typography>
+                                </Link>
                             </Grid>
                         </Grid>
                     </form>
@@ -106,4 +113,4 @@ const mapDispatchToProps = (dispatch: Dispatch<IAuthorizeAction>): ISigninFormDi
     };
 };
 
-export default withRouter<any>(decorate<{}>(connect(null, mapDispatchToProps)(SigninForm))); // tslint:disable-line
+export default withRouter<any>(decorate<{}>(connect(null, mapDispatchToProps)(SignupForm))); // tslint:disable-line
