@@ -20,7 +20,6 @@ class SignUpPage extends React.Component<WithStyles<'root' |
                     <Grid item={true} xs={12}>
                         <Grid
                             container={true}
-                            alignItems="center"
                             direction="row"
                             justify="center"
                         >
@@ -50,7 +49,7 @@ class SignUpPage extends React.Component<WithStyles<'root' |
                                 </Grid>
                             </Grid>
                             <Grid item={true} xs={12} md={3}>
-                                <Grid container={true} alignItems="center" justify="center">
+                                <Grid style={{marginTop: '10vh'}} container={true} alignItems="center" justify="center">
                                     <Link to={'/analyze'}>
                                         <img src="assets/images/analyze-banner.png"/>
                                     </Link>
