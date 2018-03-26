@@ -1,1 +1,1 @@
-export const TEST_ACTION_TYPE = 'TEST_ACTION_TYPE';
+export const AUTHORIZE_USER = 'AUTHORIZE_USER';
