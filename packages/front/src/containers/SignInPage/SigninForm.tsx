@@ -6,6 +6,8 @@ import { WithStyles } from 'material-ui';
 import withStyles from 'material-ui/styles/withStyles';
 import { Link } from 'react-router-dom';
 import Typography from 'material-ui/Typography';
+import Email from 'material-ui-icons/Email';
+import Lock from 'material-ui-icons/Lock';
 import { RouteComponentProps, withRouter } from 'react-router';
 import { connect, Dispatch } from 'react-redux';
 import { AuthorizeAction, IAuthorizeAction } from '../../actions/authAction';
@@ -18,15 +20,17 @@ interface ISigninFormDispatch {
 
 class SigninForm extends React.Component<RouteComponentProps<{}>
     & ISigninFormDispatch & WithStyles<
-        'signInButton' |
-        'buttonContainer' |
-        'formContainer' |
-        'forgotPasswordContainer' |
-        'link' |
-        'linkText'
-        >> {
+    'signInButton' |
+    'buttonContainer' |
+    'formContainer' |
+    'forgotPasswordContainer' |
+    'link' |
+    'linkText' |
+    'fieldIconContainer' |
+    'formSection'
+    >> {
     constructor(props: RouteComponentProps<{}> & ISigninFormDispatch & WithStyles<'signInButton' |
-        'buttonContainer' | 'formContainer' | 'forgotPasswordContainer' | 'link' | 'linkText'>) {
+        'buttonContainer' | 'formContainer' | 'forgotPasswordContainer' | 'link' | 'linkText' | 'fieldIconContainer'>) {
         super(props);
 
         this.onSubmit = this.onSubmit.bind(this);
@@ -43,7 +47,10 @@ class SigninForm extends React.Component<RouteComponentProps<{}>
                         onSubmit={handleSubmit}
                     >
                         <Grid container={true}>
-                            <Grid item={true} xs={12}>
+                            <Grid className={classes.fieldIconContainer} item={true} xs={1}>
+                                <Email />
+                            </Grid>
+                            <Grid item={true} xs={11}>
                                 <Field
                                     component={TextFieldControl}
                                     type="text"
@@ -53,7 +60,10 @@ class SigninForm extends React.Component<RouteComponentProps<{}>
                                                                                FormValidators.isEmail)}
                                 />
                             </Grid>
-                            <Grid item={true} xs={12}>
+                            <Grid className={classes.fieldIconContainer} item={true} xs={1}>
+                                <Lock />
+                            </Grid>
+                            <Grid item={true} xs={11}>
                                 <Field
                                     component={TextFieldControl}
                                     type="password"
@@ -62,46 +72,54 @@ class SigninForm extends React.Component<RouteComponentProps<{}>
                                     validate={FormValidators.required}
                                 />
                             </Grid>
-                            <Grid
-                                item={true}
-                                xs={6}
-                                className={classes.forgotPasswordContainer}
-                            >
-                                <Link className={classes.link} to="/forgot">
-                                    <Typography align="right" className={classes.linkText}>
-                                        Forgot password?
-                                    </Typography>
-                                </Link>
-                            </Grid>
-                            <Grid
-                                item={true}
-                                xs={6}
-                                className={classes.buttonContainer}
-                            >
-                                <Button
-                                    type="submit"
-                                    variant="raised"
-                                    color="primary"
-                                    className={classes.signInButton}
+                            <Grid container={true} className={classes.formSection}>
+                                <Grid
+                                    item={true}
+                                    xs={6}
+                                    className={classes.forgotPasswordContainer}
                                 >
-                                    Sign in
-                                </Button>
-                            </Grid>
-                            <Grid item={true} xs={6}>
-                                <Link className={classes.link} to="/signup">
-                                    <Typography color="textSecondary" className={classes.linkText}>
-                                        Create an account
-                                    </Typography>
-                                </Link>
-                            </Grid>
-                            <Grid item={true} xs={6}>
-                                <div>
                                     <Link className={classes.link} to="/forgot">
-                                        <Typography color="textSecondary" align="right" className={classes.linkText}>
-                                            Subscribe
-                                        </Typography>
+                                        <Typography align="right" className={classes.linkText}>
+                                            Forgot password?
+                                    </Typography>
                                     </Link>
-                                </div>
+                                </Grid>
+                                <Grid
+                                    item={true}
+                                    xs={6}
+                                    className={classes.buttonContainer}
+                                >
+                                    <Button
+                                        type="submit"
+                                        variant="raised"
+                                        color="primary"
+                                        className={classes.signInButton}
+                                    >
+                                        Sign in
+                                    </Button>
+                                </Grid>
+                            </Grid>
+                            <Grid container={true} className={classes.formSection}>
+                                <Grid item={true} xs={6}>
+                                    <Link className={classes.link} to="/signup">
+                                        <Typography color="textSecondary" className={classes.linkText}>
+                                            Create an account
+                                    </Typography>
+                                    </Link>
+                                </Grid>
+                                <Grid item={true} xs={6}>
+                                    <div>
+                                        <Link className={classes.link} to="/forgot">
+                                            <Typography
+                                                color="textSecondary"
+                                                align="right"
+                                                className={classes.linkText}
+                                            >
+                                                Subscribe
+                                            </Typography>
+                                        </Link>
+                                    </div>
+                                </Grid>
                             </Grid>
                         </Grid>
                     </form>
@@ -118,6 +136,15 @@ class SigninForm extends React.Component<RouteComponentProps<{}>
 }
 
 const decorate = withStyles(theme => ({
+    formSection: {
+        padding: `${theme.spacing.unit}px 0`
+    },
+    fieldIconContainer: {
+        display: 'flex',
+        justifyContent: 'flex-end',
+        alignItems: 'flex-end',
+        opacity: 0.4
+    },
     buttonContainer: {
         display: 'flex',
         justifyContent: 'flex-end'
