@@ -81,7 +81,11 @@ class SignupForm extends React.Component<RouteComponentProps<{}> & ISigninFormDi
                                     validate={FormValidators.required}
                                 />
                             </Grid>
-                            <Grid item={true} xs={12}>
+                            <Grid
+                                className={classes.buttonContainer}
+                                item={true}
+                                xs={12}
+                            >
                                 <Button type="submit" variant="raised" color="primary" className={classes.signInButton}>
                                     Sign up
                                 </Button>

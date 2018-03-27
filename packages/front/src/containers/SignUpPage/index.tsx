@@ -3,8 +3,8 @@ import Grid from 'material-ui/Grid';
 import Paper from 'material-ui/Paper';
 import { WithStyles } from 'material-ui/styles';
 import withStyles from 'material-ui/styles/withStyles';
-import { Link } from 'react-router-dom';
 import Typography from 'material-ui/Typography';
+import AnalyzerBanner from '../common/AnalyzerBanner';
 import LoginSocialButtons from '../common/LoginSocialButtons';
 import SignupForm from './SignupForm';
 import Slide from 'material-ui/transitions/Slide';
@@ -14,6 +14,7 @@ class SignUpPage extends React.Component<WithStyles<'root' |
     'orWrapper' |
     'orText' |
     'banner' |
+    'bannerLink' |
     'socialsButtonsContainer' |
     'titleContainer'>> {
     public render(): JSX.Element {
@@ -65,23 +66,7 @@ class SignUpPage extends React.Component<WithStyles<'root' |
                     sm={5}
                     lg={4}
                 >
-                    <Slide
-                        direction="left"
-                        in={true}
-                        mountOnEnter={true}
-                        unmountOnExit={true}
-                    >
-                        <Grid
-                            className={classes.banner}
-                            container={true}
-                            alignItems="center"
-                            justify="center"
-                        >
-                            <Link to={'/analyze'}>
-                                <img src="assets/images/analyze-banner.png" />
-                            </Link>
-                        </Grid>
-                    </Slide>
+                    <AnalyzerBanner />
                 </Grid>
             </Grid>
         );
@@ -99,7 +84,10 @@ const decorate = withStyles((theme) => ({
         textTransform: 'uppercase'
     },
     banner: {
-        height: '100%'
+        height: 'auto'
+    },
+    bannerLink: {
+        marginTop: 158
     },
     socialsButtonsContainer: {
         paddingTop: theme.spacing.unit * 7
