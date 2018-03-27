@@ -16,27 +16,40 @@ interface ISigninFormDispatch {
     authorize(): void;
 }
 
-class SignupForm extends React.Component<RouteComponentProps<{}> & ISigninFormDispatch & WithStyles<'signInButton'>> {
-    constructor(props: RouteComponentProps<{}> & ISigninFormDispatch & WithStyles<'signInButton'>) {
+class SignupForm extends React.Component<RouteComponentProps<{}> & ISigninFormDispatch & WithStyles<'signInButton' |
+    'buttonContainer' |
+    'formContainer' |
+    'forgotPasswordContainer' |
+    'link' |
+    'linkText'>> {
+    constructor(props: RouteComponentProps<{}> & ISigninFormDispatch & WithStyles<'signInButton' |
+        'buttonContainer' |
+        'formContainer' |
+        'forgotPasswordContainer' |
+        'link' |
+        'linkText'>) {
         super(props);
 
         this.onSubmit = this.onSubmit.bind(this);
     }
 
     public render(): JSX.Element {
-        const {classes} = this.props;
+        const { classes } = this.props;
         return (
             <Form
                 onSubmit={this.onSubmit}
-                render={({handleSubmit}) => (
-                    <form onSubmit={handleSubmit}>
+                render={({ handleSubmit }) => (
+                    <form
+                        className={classes.formContainer}
+                        onSubmit={handleSubmit}
+                    >
                         <Grid container={true}>
                             <Grid item={true} xs={12}>
                                 <Field
                                     component={TextFieldControl}
                                     type="text"
                                     name="email"
-                                    placeholder="Email Address"
+                                    label="Email Address"
                                     validate={FormValidators.composeValidators(FormValidators.required,
                                                                                FormValidators.isEmail)}
                                 />
@@ -46,7 +59,7 @@ class SignupForm extends React.Component<RouteComponentProps<{}> & ISigninFormDi
                                     component={TextFieldControl}
                                     type="password"
                                     name="password"
-                                    placeholder="Password"
+                                    label="Password"
                                     validate={FormValidators.required}
                                 />
                             </Grid>
@@ -55,7 +68,7 @@ class SignupForm extends React.Component<RouteComponentProps<{}> & ISigninFormDi
                                     component={TextFieldControl}
                                     type="text"
                                     name="phoneNumber"
-                                    placeholder="Phone Number"
+                                    label="Phone Number"
                                     validate={FormValidators.required}
                                 />
                             </Grid>
@@ -64,7 +77,7 @@ class SignupForm extends React.Component<RouteComponentProps<{}> & ISigninFormDi
                                     component={TextFieldControl}
                                     type="text"
                                     name="company"
-                                    placeholder="Company"
+                                    label="Company"
                                     validate={FormValidators.required}
                                 />
                             </Grid>
@@ -74,15 +87,15 @@ class SignupForm extends React.Component<RouteComponentProps<{}> & ISigninFormDi
                                 </Button>
                             </Grid>
                             <Grid item={true} xs={6}>
-                                <Link to="/signin">
-                                    <Typography color="textSecondary">
+                                <Link className={classes.link} to="/signin">
+                                    <Typography color="textSecondary" className={classes.linkText}>
                                         Already have an account?
                                     </Typography>
                                 </Link>
                             </Grid>
                             <Grid item={true} xs={6}>
-                                <Link to="/forgot">
-                                    <Typography color="textSecondary" align="right">
+                                <Link className={classes.link} to="/forgot">
+                                    <Typography color="textSecondary" align="right" className={classes.linkText}>
                                         Subscribe
                                     </Typography>
                                 </Link>
@@ -101,11 +114,35 @@ class SignupForm extends React.Component<RouteComponentProps<{}> & ISigninFormDi
     }
 }
 
-const decorate = withStyles((theme) => ({
+const decorate = withStyles(theme => ({
+    buttonContainer: {
+        display: 'flex',
+        justifyContent: 'flex-end'
+    },
+    forgotPasswordContainer: {
+        display: 'flex',
+        justifyContent: 'flex-start',
+        alignItems: 'center',
+    },
     signInButton: {
-        width: '100%'
+        width: 'auto'
+    },
+    formContainer: {
+        paddingTop: 0
+    },
+    link: {
+        textDecoration: 'none',
+        '&:hover': {
+            textDecoration: 'underline'
+        },
+        '&:active': {
+            textDecoration: 'none'
+        }
+    },
+    linkText: {
+        color: '#559542',
     }
-}));
+} as React.CSSProperties));
 
 const mapDispatchToProps = (dispatch: Dispatch<IAuthorizeAction>): ISigninFormDispatch => {
     return {

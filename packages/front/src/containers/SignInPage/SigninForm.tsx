@@ -1,7 +1,6 @@
 import * as React from 'react';
 import Grid from 'material-ui/Grid';
 import { Field, Form } from 'react-final-form';
-import TextFieldControl from '../../components/common/form-elements/TextFieldControl';
 import Button from 'material-ui/Button';
 import { WithStyles } from 'material-ui';
 import withStyles from 'material-ui/styles/withStyles';
@@ -10,33 +9,45 @@ import Typography from 'material-ui/Typography';
 import { RouteComponentProps, withRouter } from 'react-router';
 import { connect, Dispatch } from 'react-redux';
 import { AuthorizeAction, IAuthorizeAction } from '../../actions/authAction';
+import TextFieldControl from '../../components/common/form-elements/TextFieldControl';
 import FormValidators from '../../helpers/form-validators';
 
 interface ISigninFormDispatch {
     authorize(): void;
 }
 
-class SigninForm extends React.Component<RouteComponentProps<{}> & ISigninFormDispatch & WithStyles<'signInButton'>> {
-    constructor(props: RouteComponentProps<{}> & ISigninFormDispatch & WithStyles<'signInButton'>) {
+class SigninForm extends React.Component<RouteComponentProps<{}>
+    & ISigninFormDispatch & WithStyles<
+        'signInButton' |
+        'buttonContainer' |
+        'formContainer' |
+        'forgotPasswordContainer' |
+        'link' |
+        'linkText'
+        >> {
+    constructor(props: RouteComponentProps<{}> & ISigninFormDispatch & WithStyles<'signInButton' |
+        'buttonContainer' | 'formContainer' | 'forgotPasswordContainer' | 'link' | 'linkText'>) {
         super(props);
 
         this.onSubmit = this.onSubmit.bind(this);
     }
 
     public render(): JSX.Element {
-        const {classes} = this.props;
+        const { classes } = this.props;
         return (
             <Form
                 onSubmit={this.onSubmit}
-                render={({handleSubmit}) => (
-                    <form onSubmit={handleSubmit}>
+                render={({ handleSubmit }) => (
+                    <form
+                        className={classes.formContainer}
+                        onSubmit={handleSubmit}
+                    >
                         <Grid container={true}>
                             <Grid item={true} xs={12}>
                                 <Field
                                     component={TextFieldControl}
                                     type="text"
                                     name="email"
-                                    placeholder="Email Address"
                                     label="Email Address"
                                     validate={FormValidators.composeValidators(FormValidators.required,
                                                                                FormValidators.isEmail)}
@@ -47,34 +58,46 @@ class SigninForm extends React.Component<RouteComponentProps<{}> & ISigninFormDi
                                     component={TextFieldControl}
                                     type="password"
                                     name="password"
-                                    placeholder="Password"
                                     label="Password"
                                     validate={FormValidators.required}
                                 />
                             </Grid>
-                            <Grid item={true} xs={12}>
-                                <Button type="submit" variant="raised" color="primary" className={classes.signInButton}>
+                            <Grid
+                                item={true}
+                                xs={6}
+                                className={classes.forgotPasswordContainer}
+                            >
+                                <Link className={classes.link} to="/forgot">
+                                    <Typography align="right" className={classes.linkText}>
+                                        Forgot password?
+                                    </Typography>
+                                </Link>
+                            </Grid>
+                            <Grid
+                                item={true}
+                                xs={6}
+                                className={classes.buttonContainer}
+                            >
+                                <Button
+                                    type="submit"
+                                    variant="raised"
+                                    color="primary"
+                                    className={classes.signInButton}
+                                >
                                     Sign in
                                 </Button>
                             </Grid>
                             <Grid item={true} xs={6}>
-                                <Link to="/signup">
-                                    <Typography color="textSecondary">
+                                <Link className={classes.link} to="/signup">
+                                    <Typography color="textSecondary" className={classes.linkText}>
                                         Create an account
                                     </Typography>
                                 </Link>
                             </Grid>
                             <Grid item={true} xs={6}>
                                 <div>
-                                    <Link to="/forgot">
-                                        <Typography color="textSecondary" align="right">
-                                            Forgot password
-                                        </Typography>
-                                    </Link>
-                                </div>
-                                <div>
-                                    <Link to="/forgot">
-                                        <Typography color="textSecondary" align="right">
+                                    <Link className={classes.link} to="/forgot">
+                                        <Typography color="textSecondary" align="right" className={classes.linkText}>
                                             Subscribe
                                         </Typography>
                                     </Link>
@@ -94,11 +117,35 @@ class SigninForm extends React.Component<RouteComponentProps<{}> & ISigninFormDi
     }
 }
 
-const decorate = withStyles((theme) => ({
+const decorate = withStyles(theme => ({
+    buttonContainer: {
+        display: 'flex',
+        justifyContent: 'flex-end'
+    },
+    forgotPasswordContainer: {
+        display: 'flex',
+        justifyContent: 'flex-start',
+        alignItems: 'center',
+    },
     signInButton: {
-        width: '100%'
+        width: 'auto'
+    },
+    formContainer: {
+        paddingTop: theme.spacing.unit * 10
+    },
+    link: {
+        textDecoration: 'none',
+        '&:hover': {
+            textDecoration: 'underline'
+        },
+        '&:active': {
+            textDecoration: 'none'
+        }
+    },
+    linkText: {
+        color: '#559542',
     }
-}));
+} as React.CSSProperties));
 
 const mapDispatchToProps = (dispatch: Dispatch<IAuthorizeAction>): ISigninFormDispatch => {
     return {

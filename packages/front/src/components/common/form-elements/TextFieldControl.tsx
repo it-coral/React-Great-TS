@@ -31,6 +31,8 @@ class TextFieldControl extends React.Component<FieldRenderProps & ITextFielContr
 const decorate = withStyles(() => ({
     root: {
         width: '100%',
+        marginTop: 0,
+        marginBottom: 0
     }
 }));
 
