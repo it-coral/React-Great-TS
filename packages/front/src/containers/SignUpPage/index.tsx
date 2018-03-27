@@ -38,7 +38,9 @@ class SignUpPage extends React.Component<WithStyles<'root' |
                                 <Grid item={true} xs={12}>
                                     <div className={classes.orWrapper}>
                                             <span className={classes.orText}>
-                                                Or sign up using email
+                                                <Typography style={{lineHeight: 0, display: 'inline'}}>
+                                                    Or sign up using email
+                                                </Typography>
                                             </span>
                                     </div>
                                 </Grid>
@@ -76,7 +78,7 @@ const decorate = withStyles((theme) => ({
         textAlign: 'center',
         borderBottom: '1px solid #000',
         lineHeight: '0.1em',
-        margin: '10px 0 20px',
+        margin: '20px 0 25px',
     },
     orText: {
         background: '#fafafa',
