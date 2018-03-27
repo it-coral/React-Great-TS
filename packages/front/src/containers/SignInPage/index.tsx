@@ -11,55 +11,54 @@ import LoginSocialButtons from '../common/LoginSocialButtons';
 class SignInPage extends React.Component<WithStyles<'root' |
     'title' |
     'orWrapper' |
-    'orText'|
+    'orText' |
     'banner'>> {
     public render(): JSX.Element {
         const {classes} = this.props;
         return (
-            <div style={{flexGrow: 1}}>
-                <Grid container={true} spacing={8}>
-                    <Grid item={true} xs={12}>
-                        <Grid
-                            container={true}
-                            direction="row"
-                            justify="center"
-                        >
-                            <Grid item={true} xs={12} md={3}>
-                                <Typography
-                                    className={classes.title}
-                                    align="center"
-                                    color="primary"
-                                    variant="title"
-                                >
-                                    Login to testRTC
-                                </Typography>
-                                <Grid container={true}>
-                                    <LoginSocialButtons/>
-                                    <Grid item={true} xs={12}>
-                                        <div className={classes.orWrapper}>
+            <Grid container={true} spacing={0}>
+                <Grid item={true} xs={12}>
+                    <Grid
+                        spacing={0}
+                        container={true}
+                        direction="row"
+                        justify="center"
+                    >
+                        <Grid item={true} xs={12} md={3}>
+                            <Typography
+                                className={classes.title}
+                                align="center"
+                                color="primary"
+                                variant="title"
+                            >
+                                Login to testRTC
+                            </Typography>
+                            <Grid container={true} spacing={0}>
+                                <LoginSocialButtons/>
+                                <Grid item={true} xs={12}>
+                                    <div className={classes.orWrapper}>
                                             <span className={classes.orText}>
                                                 Or
                                             </span>
-                                        </div>
-                                    </Grid>
-                                    <Grid item={true} xs={12}>
-                                        <Paper className={classes.root} elevation={4}>
-                                            <SigninForm/>
-                                        </Paper>
-                                    </Grid>
+                                    </div>
+                                </Grid>
+                                <Grid item={true} xs={12}>
+                                    <Paper className={classes.root} elevation={4}>
+                                        <SigninForm/>
+                                    </Paper>
                                 </Grid>
                             </Grid>
-                            <Grid item={true} xs={12} md={3}>
-                                <Grid className={classes.banner} container={true} alignItems="center" justify="center">
-                                    <Link to={'/analyze'}>
-                                        <img src="assets/images/analyze-banner.png"/>
-                                    </Link>
-                                </Grid>
+                        </Grid>
+                        <Grid item={true} xs={12} md={3}>
+                            <Grid className={classes.banner} container={true} alignItems="center" justify="center">
+                                <Link to={'/analyze'}>
+                                    <img src="assets/images/analyze-banner.png"/>
+                                </Link>
                             </Grid>
                         </Grid>
                     </Grid>
                 </Grid>
-            </div>
+            </Grid>
         );
     }
 }
