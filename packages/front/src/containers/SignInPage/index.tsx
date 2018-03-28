@@ -81,7 +81,7 @@ const decorate = withStyles((theme) => ({
         padding: theme.spacing.unit * 5,
     },
     orText: {
-        margin: `${theme.spacing.unit * 2}px 0`,
+        margin: `0 0 ${theme.spacing.unit * 2}px 0`,
         padding: '0 10px',
         textAlign: 'center',
         textTransform: 'uppercase'
