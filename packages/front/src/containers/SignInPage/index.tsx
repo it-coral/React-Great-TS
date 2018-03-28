@@ -45,13 +45,21 @@ class SignInPage extends React.Component<WithStyles<'root' |
                                     Login to testRTC
                                 </Typography>
                             </div>
-                            <SigninForm />
-                            <div className={classes.orText}>
-                                <Typography>
-                                    Or
+                            <Grid container={true}>
+                                <Grid item={true} xs={12}>
+                                    <SigninForm />
+                                </Grid>
+                                <Grid item={true} xs={12}>
+                                    <div className={classes.orText}>
+                                        <Typography>
+                                            Or
                                 </Typography>
-                            </div>
-                            <LoginSocialButtons />
+                                    </div>
+                                </Grid>
+                            </Grid>
+                            <Grid item={true} xs={12}>
+                                <LoginSocialButtons />
+                            </Grid>
                         </Paper>
                     </Slide>
                 </Grid>

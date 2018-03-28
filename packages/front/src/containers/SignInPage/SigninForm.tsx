@@ -72,53 +72,65 @@ class SigninForm extends React.Component<RouteComponentProps<{}>
                                     validate={FormValidators.required}
                                 />
                             </Grid>
-                            <Grid container={true} className={classes.formSection}>
-                                <Grid
-                                    item={true}
-                                    xs={6}
-                                    className={classes.forgotPasswordContainer}
-                                >
-                                    <Link className={classes.link} to="/forgot">
-                                        <Typography align="right" className={classes.linkText}>
-                                            Forgot password?
-                                    </Typography>
-                                    </Link>
-                                </Grid>
-                                <Grid
-                                    item={true}
-                                    xs={6}
-                                    className={classes.buttonContainer}
-                                >
-                                    <Button
-                                        type="submit"
-                                        variant="raised"
-                                        color="primary"
-                                        className={classes.signInButton}
+                            <Grid
+                                item={true}
+                                xs={12}
+                                className={classes.formSection}
+                            >
+                                <Grid container={true}>
+                                    <Grid
+                                        item={true}
+                                        xs={6}
+                                        className={classes.forgotPasswordContainer}
                                     >
-                                        Sign in
-                                    </Button>
+                                        <Link className={classes.link} to="/forgot">
+                                            <Typography align="right" className={classes.linkText}>
+                                                Forgot password?
+                                    </Typography>
+                                        </Link>
+                                    </Grid>
+                                    <Grid
+                                        item={true}
+                                        xs={6}
+                                        className={classes.buttonContainer}
+                                    >
+                                        <Button
+                                            type="submit"
+                                            variant="raised"
+                                            color="primary"
+                                            className={classes.signInButton}
+                                        >
+                                            Sign in
+                                        </Button>
+                                    </Grid>
                                 </Grid>
                             </Grid>
-                            <Grid container={true} className={classes.formSection}>
-                                <Grid item={true} xs={6}>
-                                    <Link className={classes.link} to="/signup">
-                                        <Typography color="textSecondary" className={classes.linkText}>
-                                            Create an account
-                                    </Typography>
-                                    </Link>
-                                </Grid>
-                                <Grid item={true} xs={6}>
-                                    <div>
-                                        <Link className={classes.link} to="/forgot">
-                                            <Typography
-                                                color="textSecondary"
-                                                align="right"
-                                                className={classes.linkText}
-                                            >
-                                                Subscribe
-                                            </Typography>
+                            <Grid
+                                item={true}
+                                xs={12}
+                                className={classes.formSection}
+                            >
+                                <Grid container={true} className={classes.formSection}>
+                                    <Grid item={true} xs={6}>
+                                        <Link className={classes.link} to="/signup">
+                                            <Typography color="textSecondary" className={classes.linkText}>
+                                                Create an account
+                                        </Typography>
                                         </Link>
-                                    </div>
+                                    </Grid>
+                                    <Grid item={true} xs={6}>
+                                        <div>
+                                            <Link className={classes.link} to="/forgot">
+                                                <Typography
+                                                    color="textSecondary"
+                                                    align="right"
+                                                    className={classes.linkText}
+                                                >
+                                                    Subscribe
+                                                </Typography>
+                                            </Link>
+                                        </div>
+                                    </Grid>
                                 </Grid>
                             </Grid>
                         </Grid>
@@ -141,7 +153,7 @@ const decorate = withStyles(theme => ({
     },
     fieldIconContainer: {
         display: 'flex',
-        justifyContent: 'flex-end',
+        justifyContent: 'flex-start',
         alignItems: 'flex-end',
         opacity: 0.4
     },
