@@ -36,11 +36,9 @@ class RouterContainer extends React.Component<RouterProps> {
         );
 
         return (
-            <div>
-                <Router history={history}>
-                    {this.props.user ? MainRouteHanlder : AuthRouteHandler}
-                </Router>
-            </div>
+            <Router history={history}>
+                {this.props.user ? MainRouteHanlder : AuthRouteHandler}
+            </Router>
         );
     }
 }

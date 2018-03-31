@@ -1,13 +1,16 @@
 import * as React from 'react';
 import NavBar from './components/NavBar';
+import WorkingSection from './components/WorkingSection';
 
 export default class LoginLayout extends React.Component {
     render() {
         return (
-            <div>
+            <React.Fragment>
                 <NavBar />
-                {this.props.children}
-            </div>
+                <WorkingSection>
+                    {this.props.children}
+                </WorkingSection>
+            </React.Fragment>
         );
     }
 }
