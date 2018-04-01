@@ -11,7 +11,7 @@ export default class AuthService {
     public login(email: string, paswword: string) {
         let axiosFactory = new AxiosFactory();
         return axiosFactory.axios.post(`${ApiPath.auth.loginLocal}`,
-            {email: email, password: paswword}, {validateStatus: status => status < 500})
+                                       {email: email, password: paswword}, {validateStatus: status => status < 500})
             .then((res: AxiosResponse<LoginResponse>) => {
                 if (res.status === 200) {
                     this.setToken(res.data.token);

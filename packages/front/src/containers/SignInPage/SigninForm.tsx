@@ -146,12 +146,12 @@ class SigninForm extends React.Component<RouteComponentProps<{}>
         auth.login(values.email, values.password)
             .then((res: any) => { // tslint:disable-line
                 this.props.history.push('/main');
+                this.props.authorize();
             })
             .catch((err: any) => { // tslint:disable-line
                 console.log('err', err); // tslint:disable-line
             });
 
-        // this.props.authorize();
     }
 }
 
