@@ -19,6 +19,15 @@ interface ISigninFormDispatch {
     authorize(): void;
 }
 
+interface ILoginForm {
+    email: string;
+    password: string;
+}
+
+interface ILoginFormError {
+    message: string;
+}
+
 class SigninForm extends React.Component<RouteComponentProps<{}>
     & ISigninFormDispatch & WithStyles<
     'signInButton' |
@@ -42,7 +51,7 @@ class SigninForm extends React.Component<RouteComponentProps<{}>
         return (
             <Form
                 onSubmit={this.onSubmit}
-                render={({ handleSubmit }) => (
+                render={({ handleSubmit, submitError }) => (
                     <form
                         className={classes.formContainer}
                         onSubmit={handleSubmit}
@@ -141,15 +150,15 @@ class SigninForm extends React.Component<RouteComponentProps<{}>
         );
     }
 
-    private onSubmit(values: any): void { //tslint:disable-line
+    private onSubmit(values: ILoginForm): Promise<void |  { [x: string]: string; }> {
         const auth = new AuthService();
-        auth.login(values.email, values.password)
-            .then((res: any) => { // tslint:disable-line
+        return auth.login(values.email, values.password)
+            .then(() => {
                 this.props.history.push('/main');
                 this.props.authorize();
             })
-            .catch((err: any) => { // tslint:disable-line
-                console.log('err', err); // tslint:disable-line
+            .catch((err: ILoginFormError) => {
+                return { password: err.message };
             });
 
     }

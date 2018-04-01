@@ -18,8 +18,8 @@ class TextFieldControl extends React.Component<FieldRenderProps & ITextFielContr
                 label={this.props.label}
                 value={value}
                 name={name}
-                helperText={meta.touched ? meta.error : undefined}
-                error={meta.error && meta.touched}
+                helperText={meta.touched ? (meta.error || meta.submitError) : undefined}
+                error={(meta.error || meta.submitError) && meta.touched}
                 inputProps={restInput}
                 onChange={onChange}
                 margin="normal"
