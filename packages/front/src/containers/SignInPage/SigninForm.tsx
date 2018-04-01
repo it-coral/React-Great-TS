@@ -29,36 +29,44 @@ interface ILoginFormError {
 }
 
 class SigninForm extends React.Component<RouteComponentProps<{}>
-    & ISigninFormDispatch & WithStyles<
-    'signInButton' |
+    & ISigninFormDispatch & WithStyles<'signInButton' |
     'buttonContainer' |
     'formContainer' |
     'forgotPasswordContainer' |
     'link' |
     'linkText' |
     'fieldIconContainer' |
-    'formSection'
-    >> {
+    'formSection'>> {
+    auth: AuthService;
+
     constructor(props: RouteComponentProps<{}> & ISigninFormDispatch & WithStyles<'signInButton' |
         'buttonContainer' | 'formContainer' | 'forgotPasswordContainer' | 'link' | 'linkText' | 'fieldIconContainer'>) {
         super(props);
 
         this.onSubmit = this.onSubmit.bind(this);
+        this.auth = new AuthService();
+    }
+
+    componentDidMount() {
+        if (this.auth.loggedIn()) {
+            this.props.history.push('/main');
+            this.props.authorize();
+        }
     }
 
     public render(): JSX.Element {
-        const { classes } = this.props;
+        const {classes} = this.props;
         return (
             <Form
                 onSubmit={this.onSubmit}
-                render={({ handleSubmit, submitError }) => (
+                render={({handleSubmit, submitError}) => (
                     <form
                         className={classes.formContainer}
                         onSubmit={handleSubmit}
                     >
                         <Grid container={true}>
                             <Grid className={classes.fieldIconContainer} item={true} xs={1}>
-                                <Email />
+                                <Email/>
                             </Grid>
                             <Grid item={true} xs={11}>
                                 <Field
@@ -71,7 +79,7 @@ class SigninForm extends React.Component<RouteComponentProps<{}>
                                 />
                             </Grid>
                             <Grid className={classes.fieldIconContainer} item={true} xs={1}>
-                                <Lock />
+                                <Lock/>
                             </Grid>
                             <Grid item={true} xs={11}>
                                 <Field
@@ -96,7 +104,7 @@ class SigninForm extends React.Component<RouteComponentProps<{}>
                                         <Link className={classes.link} to="/forgot">
                                             <Typography align="right" className={classes.linkText}>
                                                 Forgot password?
-                                    </Typography>
+                                            </Typography>
                                         </Link>
                                     </Grid>
                                     <Grid
@@ -125,7 +133,7 @@ class SigninForm extends React.Component<RouteComponentProps<{}>
                                         <Link className={classes.link} to="/signup">
                                             <Typography color="textSecondary" className={classes.linkText}>
                                                 Create an account
-                                        </Typography>
+                                            </Typography>
                                         </Link>
                                     </Grid>
                                     <Grid item={true} xs={6}>
@@ -150,12 +158,11 @@ class SigninForm extends React.Component<RouteComponentProps<{}>
         );
     }
 
-    private onSubmit(values: ILoginForm): Promise<void |  { [x: string]: string; }> {
-        const auth = new AuthService();
-        return auth.login(values.email, values.password)
+    private onSubmit(values: ILoginForm): Promise<void | { [x: string]: string; }> {
+        return this.auth.login(values.email, values.password)
             .then(() => {
-                this.props.history.push('/main');
                 this.props.authorize();
+                this.props.history.push('/main');
             })
             .catch((err: ILoginFormError) => {
                 return { password: err.message };

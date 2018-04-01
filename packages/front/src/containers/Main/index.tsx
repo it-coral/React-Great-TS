@@ -1,6 +1,7 @@
 import * as React from 'react';
+import withAuth from '../../components/common/auth/withAuth';
 
-export default class Main extends React.Component {
+class Main extends React.Component {
     render() {
         return (
             <div>
@@ -9,3 +10,5 @@ export default class Main extends React.Component {
         );
     }
 }
+
+export default withAuth(Main);
