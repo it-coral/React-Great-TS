@@ -1,6 +1,8 @@
 import * as React from 'react';
 import Navbar from './components/Navbar';
 import Sidebar from './components/Sidebar';
+import { Redirect, Route, Switch } from 'react-router';
+import Main from '../../containers/Main';
 
 interface AppLayoutState {
     mobileOpen: boolean;
@@ -32,7 +34,10 @@ export default class AppLayout extends React.Component<{}, AppLayoutState> {
                     handleDrawerToggle={this.handleDrawerToggle}
                 />
                 <div>
-                    {this.props.children}
+                    <Switch>
+                        <Route path="/app/main" component={Main} />
+                        <Redirect from="*" to="/404"/>
+                    </Switch>
                 </div>
             </React.Fragment>
         );

@@ -9,15 +9,9 @@ import Typography from 'material-ui/Typography';
 import Email from 'material-ui-icons/Email';
 import Lock from 'material-ui-icons/Lock';
 import { RouteComponentProps, withRouter } from 'react-router';
-import { connect, Dispatch } from 'react-redux';
-import { AuthorizeAction, IAuthorizeAction } from '../../actions/authAction';
 import TextFieldControl from '../../components/common/form-elements/TextFieldControl';
 import FormValidators from '../../helpers/form-validators';
 import AuthService from '../../services/AuthService';
-
-interface ISigninFormDispatch {
-    authorize(): void;
-}
 
 interface ILoginForm {
     email: string;
@@ -28,8 +22,8 @@ interface ILoginFormError {
     message: string;
 }
 
-class SigninForm extends React.Component<RouteComponentProps<{}>
-    & ISigninFormDispatch & WithStyles<'signInButton' |
+class SigninForm extends React.Component<RouteComponentProps<{}> & WithStyles<
+    'signInButton' |
     'buttonContainer' |
     'formContainer' |
     'forgotPasswordContainer' |
@@ -39,7 +33,7 @@ class SigninForm extends React.Component<RouteComponentProps<{}>
     'formSection'>> {
     auth: AuthService;
 
-    constructor(props: RouteComponentProps<{}> & ISigninFormDispatch & WithStyles<'signInButton' |
+    constructor(props: RouteComponentProps<{}> & WithStyles<'signInButton' |
         'buttonContainer' | 'formContainer' | 'forgotPasswordContainer' | 'link' | 'linkText' | 'fieldIconContainer'>) {
         super(props);
 
@@ -49,8 +43,7 @@ class SigninForm extends React.Component<RouteComponentProps<{}>
 
     componentDidMount() {
         if (this.auth.loggedIn()) {
-            this.props.history.push('/main');
-            this.props.authorize();
+            this.props.history.push('/app/main');
         }
     }
 
@@ -161,8 +154,7 @@ class SigninForm extends React.Component<RouteComponentProps<{}>
     private onSubmit(values: ILoginForm): Promise<void | { [x: string]: string; }> {
         return this.auth.login(values.email, values.password)
             .then(() => {
-                this.props.authorize();
-                this.props.history.push('/main');
+                this.props.history.push('/app/main');
             })
             .catch((err: ILoginFormError) => {
                 return { password: err.message };
@@ -210,10 +202,4 @@ const decorate = withStyles(theme => ({
     }
 } as React.CSSProperties));
 
-const mapDispatchToProps = (dispatch: Dispatch<IAuthorizeAction>): ISigninFormDispatch => {
-    return {
-        authorize: () => dispatch(AuthorizeAction()),
-    };
-};
-
-export default withRouter<any>(decorate<{}>(connect(null, mapDispatchToProps)(SigninForm))); // tslint:disable-line
+export default withRouter<any>(decorate<{}>(SigninForm)); // tslint:disable-line

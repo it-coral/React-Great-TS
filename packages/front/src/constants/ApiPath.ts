@@ -1,5 +1,6 @@
 export default {
     'auth': {
-        'loginLocal': '/auth/local'
+        'loginLocal': '/auth/local',
+        'userInfo': '/api/users/me'
     }
 };
