@@ -13,6 +13,7 @@ import { connect, Dispatch } from 'react-redux';
 import { AuthorizeAction, IAuthorizeAction } from '../../actions/authAction';
 import TextFieldControl from '../../components/common/form-elements/TextFieldControl';
 import FormValidators from '../../helpers/form-validators';
+import AuthService from '../../services/AuthService';
 
 interface ISigninFormDispatch {
     authorize(): void;
@@ -141,9 +142,16 @@ class SigninForm extends React.Component<RouteComponentProps<{}>
     }
 
     private onSubmit(values: any): void { //tslint:disable-line
-        console.log('on submit', values); // tslint:disable-line
-        this.props.authorize();
-        this.props.history.push('/main');
+        const auth = new AuthService();
+        auth.login(values.email, values.password)
+            .then((res: any) => { // tslint:disable-line
+                this.props.history.push('/main');
+            })
+            .catch((err: any) => { // tslint:disable-line
+                console.log('err', err); // tslint:disable-line
+            });
+
+        // this.props.authorize();
     }
 }
 
