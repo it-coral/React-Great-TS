@@ -3,7 +3,6 @@ import { Theme, withStyles, WithStyles } from 'material-ui/styles';
 import Divider from 'material-ui/Divider';
 import { SvgIconProps } from 'material-ui/SvgIcon';
 import UserOptionsList from './UserOptionsList';
-// import AdminOptionsList from './AdminOptionsList';
 
 import HomeIcon from 'material-ui-icons/Home';
 import ForwardIcon from 'material-ui-icons/Forward';
@@ -38,26 +37,7 @@ const SampleUserOptions: Array<ListItemDescriptor> = [
         label: 'Monitoring',
         link: AppRoutes.Monitoring
     },
-    // {
-    //     icon: ForwardIcon,
-    //     label: 'Test run history',
-    //     link: '/testRun'
-    // },
-    // 'Monitoring',
-    // 'Monitor run history',
-    // 'Analyze webrtc dump',
-    // 'Help'
 ];
-
-// const SampleAdminOptions: Array<string> = [
-//     'Users Accounts',
-//     'Projects',
-//     'Docker Shortcuts',
-//     'Probes Setup',
-//     'Dynamic Probe',
-//     'Admin Utils',
-//     'Usage Graphs'
-// ];
 
 export class DrawerList extends React.Component<WithStyles<'toolbar'>> {
     render() {
@@ -65,7 +45,6 @@ export class DrawerList extends React.Component<WithStyles<'toolbar'>> {
             <React.Fragment>
                 <UserOptionsList options={SampleUserOptions} />
                 <Divider />
-                {/* <AdminOptionsList options={SampleAdminOptions} /> */}
             </React.Fragment>
         );
     }
