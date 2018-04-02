@@ -5,4 +5,4 @@ import ThemeProvider from '../src/testHelpers/ThemeProvider';
 
 storiesOf('AppLayout', module)
   .addDecorator((story: RenderFunction) => <ThemeProvider story={story()} />)
-  .add('Default', () => <AppLayout />);
+  .add('Default', () => React.createElement(AppLayout));

@@ -18,3 +18,8 @@ interface User {
     company: string;
     email: string;
 }
+
+interface NavBarProps {
+    a: string;
+    handleDrawerToggle(): void;
+}

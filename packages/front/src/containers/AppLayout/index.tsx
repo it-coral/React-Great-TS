@@ -1,19 +1,37 @@
 import * as React from 'react';
 import Navbar from './components/Navbar';
 import Sidebar from './components/Sidebar';
+import AppContent from './components/AppContent';
+import withStyles from 'material-ui/styles/withStyles';
+import { Theme, WithStyles } from 'material-ui/styles';
 import { Redirect, Route, Switch } from 'react-router';
-import Main from '../../containers/Main';
+import withAuth from '../../components/common/auth/withAuth';
+import { connect, Dispatch } from 'react-redux';
+import { FetchUser } from '../../actions/authAction';
+import Main from '../Main';
+import Tests from '../TestsPage';
+import TestRunHistory from '../TestRunHistory';
+import { App as AppRoutes, NotFound } from '../../constants/RoutesNames';
+import { CircularProgress } from 'material-ui/Progress';
+
+interface IAppProps {
+    user: User;
+}
 
 interface AppLayoutState {
     mobileOpen: boolean;
 }
 
-export default class AppLayout extends React.Component<{}, AppLayoutState> {
+interface IAppDispatch {
+    authorize(): void;
+}
+
+class AppLayout extends React.Component<IAppProps & IAppDispatch & WithStyles<'root'>, AppLayoutState> {
     private initialState: AppLayoutState = {
         mobileOpen: false,
     };
 
-    constructor(props: AppLayoutState) {
+    constructor(props: IAppProps & IAppDispatch & WithStyles<'root'>) {
         super(props);
 
         this.state = this.initialState;
@@ -21,25 +39,65 @@ export default class AppLayout extends React.Component<{}, AppLayoutState> {
         this.handleDrawerToggle = this.handleDrawerToggle.bind(this);
     }
 
-    handleDrawerToggle(): void {
+    componentDidMount() {
+        this.props.authorize();
+    }
+
+    public handleDrawerToggle(): void {
         this.setState({ mobileOpen: !this.state.mobileOpen });
     }
 
     render() {
-        return (
-            <React.Fragment>
-                <Navbar />
+        const { classes } = this.props;
+
+        return this.props.user === null ?
+            <CircularProgress size={80}/> :
+            (
+                <div className={classes.root}>
+                <Navbar handleDrawerToggle={this.handleDrawerToggle} />
                 <Sidebar
                     mobileOpen={this.state.mobileOpen}
                     handleDrawerToggle={this.handleDrawerToggle}
                 />
-                <div>
+                <AppContent>
                     <Switch>
-                        <Route path="/app/main" component={Main} />
-                        <Redirect from="*" to="/404"/>
+                        <Redirect exact={true} from="/" to={AppRoutes.Main} />
+                        <Route exact={true} path={AppRoutes.Main} component={Main}/>
+                        <Route exact={true} path={AppRoutes.Tests} component={Tests}/>
+                        <Route exact={true} path={AppRoutes.TestRun} component={TestRunHistory}/>
+                        <Redirect from="*" to={NotFound} />
                     </Switch>
-                </div>
-            </React.Fragment>
+                </AppContent>
+            </div>
         );
     }
 }
+
+const styles = (theme: Theme) => ({
+    root: {
+        flexGrow: 1,
+        zIndex: 1,
+        overflow: 'hidden',
+        position: 'relative',
+        display: 'flex',
+        height: '100%',
+        width: '100%',
+    }
+}) as React.CSSProperties;
+
+const mapDispatchToProps = (dispatch: Dispatch<IStore>): IAppDispatch => ({
+    authorize: () => dispatch(FetchUser()),
+});
+
+const mapStateToProps = (state: IStore) => ({
+    user: state.userAuth.user,
+});
+
+const decorate = withStyles(styles);
+
+// tslint:disable-next-line:no-any
+export default withAuth(
+    connect<IAppProps, IAppDispatch, IAppProps & IAppDispatch>(mapStateToProps, mapDispatchToProps)(
+        decorate<IAppProps & IAppDispatch>(AppLayout)
+    )
+);

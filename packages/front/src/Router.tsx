@@ -1,12 +1,12 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
-import { Router, Route, Switch } from 'react-router-dom';
+import { Router, Route, Switch, Redirect } from 'react-router-dom';
 import { createBrowserHistory } from 'history';
 import AppLayout from './containers/AppLayout';
 import LoginLayout from './containers/LoginLayout';
+import NotFoundPage from './containers/NotFoundPage';
+
 import AuthService from './services/AuthService';
-import { Redirect } from 'react-router';
-import NotFoundPage from './containers/NotFoundPage/index';
 
 const history = createBrowserHistory();
 

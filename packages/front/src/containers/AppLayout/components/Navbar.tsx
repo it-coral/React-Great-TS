@@ -4,24 +4,36 @@ import IconButton from 'material-ui/IconButton';
 import MenuIcon from 'material-ui-icons/Menu';
 import AppBar from 'material-ui/AppBar';
 import withStyles from 'material-ui/styles/withStyles';
-import { WithStyles } from 'material-ui/styles';
+import { Theme, WithStyles } from 'material-ui/styles';
 import { withRouter, RouteComponentProps } from 'react-router-dom';
 
-class NavBar extends React.Component<RouteComponentProps<{}> & WithStyles<'root' | 'flex' | 'menuButton'>> {
+interface NavBarProps {
+    handleDrawerToggle(): void;
+}
+
+class NavBar extends React.Component<NavBarProps & RouteComponentProps<{}>
+& WithStyles<'appBar' | 'navIconHide' | 'menuIcon'>> {
     public render(): JSX.Element {
-        const { classes } = this.props;
+        const {
+            classes,
+            handleDrawerToggle
+        } = this.props;
         return (
-            <AppBar position="static">
+            <AppBar
+                position="static"
+                className={classes.appBar}
+            >
                 <Toolbar>
                     <IconButton
-                        className={classes.menuButton}
+                        className={classes.navIconHide}
                         color="inherit"
                         aria-label="Menu"
+                        onClick={handleDrawerToggle}
                     >
-                        <MenuIcon/>
+                        <MenuIcon className={classes.menuIcon} />
                     </IconButton>
-                    <div className={classes.flex}>
-                        <img height="55" src="assets/images/logo_text2.png"/>
+                    <div>
+                        <img height="55" src="assets/images/logo_text2.png" />
                     </div>
                 </Toolbar>
             </AppBar>
@@ -29,17 +41,27 @@ class NavBar extends React.Component<RouteComponentProps<{}> & WithStyles<'root'
     }
 }
 
-const decorate = withStyles(() => ({
-    root: {
-        flexGrow: 1,
+const styles = (theme: Theme) => ({
+    appBar: {
+        backgroundColor: '#FDFDFD',
+        position: 'absolute',
+        zIndex: theme.zIndex.drawer + 1,
+        top: 0,
+        left: 0,
+        width: '100%'
     },
-    flex: {
-        flex: 1,
+    navIconHide: {
+        [theme.breakpoints.up('md')]: {
+            display: 'none',
+        },
     },
-    menuButton: {
-        marginLeft: -12,
-        marginRight: 20,
-    },
-}));
+    menuIcon: {
+        color: 'black'
+    }
+} as React.CSSProperties);
 
-export default withRouter<any>(decorate<{}>(NavBar)); // tslint:disable-line
+const decorate = withStyles(styles);
+
+export default withRouter<RouteComponentProps<{}> & NavBarProps>(
+    decorate<RouteComponentProps<{}> & NavBarProps>(NavBar)
+);

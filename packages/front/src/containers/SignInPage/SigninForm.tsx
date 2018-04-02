@@ -159,7 +159,6 @@ class SigninForm extends React.Component<RouteComponentProps<{}> & WithStyles<
             .catch((err: ILoginFormError) => {
                 return { password: err.message };
             });
-
     }
 }
 
@@ -202,4 +201,4 @@ const decorate = withStyles(theme => ({
     }
 } as React.CSSProperties));
 
-export default withRouter<any>(decorate<{}>(SigninForm)); // tslint:disable-line
+export default withRouter<RouteComponentProps<{}>>(decorate<RouteComponentProps<{}>>(SigninForm));
