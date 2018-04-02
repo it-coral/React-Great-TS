@@ -45,13 +45,21 @@ class SignInPage extends React.Component<WithStyles<'root' |
                                     Login to testRTC
                                 </Typography>
                             </div>
-                            <SigninForm />
-                            <div className={classes.orText}>
-                                <Typography>
-                                    Or
+                            <Grid container={true}>
+                                <Grid item={true} xs={12}>
+                                    <SigninForm />
+                                </Grid>
+                                <Grid item={true} xs={12}>
+                                    <div className={classes.orText}>
+                                        <Typography>
+                                            Or
                                 </Typography>
-                            </div>
-                            <LoginSocialButtons />
+                                    </div>
+                                </Grid>
+                            </Grid>
+                            <Grid item={true} xs={12}>
+                                <LoginSocialButtons />
+                            </Grid>
                         </Paper>
                     </Slide>
                 </Grid>
@@ -73,7 +81,7 @@ const decorate = withStyles((theme) => ({
         padding: theme.spacing.unit * 5,
     },
     orText: {
-        margin: `${theme.spacing.unit * 2}px 0`,
+        margin: `0 0 ${theme.spacing.unit * 2}px 0`,
         padding: '0 10px',
         textAlign: 'center',
         textTransform: 'uppercase'

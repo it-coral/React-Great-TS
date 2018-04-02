@@ -18,7 +18,7 @@ const styles = {
         paddingTop: 25,
         height: 'calc(100% - 70px)',
         backgroundColor: '#F3F3F4',
-        overflow: 'hidden'
+        overflowX: 'hidden'
     } as React.CSSProperties
 };
 

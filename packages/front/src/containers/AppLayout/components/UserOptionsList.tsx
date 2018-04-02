@@ -2,7 +2,14 @@ import * as React from 'react';
 import { NavLink } from 'react-router-dom';
 import List, { ListItem, ListItemIcon, ListItemText } from 'material-ui/List';
 import { Theme, withStyles, WithStyles } from 'material-ui/styles';
-import { ListLink, ListLinkActive, ListItemStyle, ListItemTextStyle, ListItemIconStyle } from '../../../styles/Sidebar';
+import {
+    ListLink,
+    ListLinkActive,
+    ListItemStyle,
+    ListItemTextStyle,
+    ListItemIconStyle,
+    ListItemStyleDisabled
+} from '../../../styles/Sidebar';
 import { ListItemDescriptor } from './DrawerList';
 
 interface UserOptionsListProps {
@@ -10,7 +17,12 @@ interface UserOptionsListProps {
 }
 
 export class UserOptionsList extends React.Component<UserOptionsListProps
-    & WithStyles<'ListItemTextStyle' | 'ListItemStyle' | 'listItemIcon'| 'ListItemIconStyle'>> {
+    & WithStyles<
+    'ListItemTextStyle' |
+    'ListItemStyle' |
+    'listItemIcon' |
+    'ListItemIconStyle' |
+    'ListItemStyleDisabled'>> {
     render() {
         const { options, classes } = this.props;
 
@@ -18,10 +30,14 @@ export class UserOptionsList extends React.Component<UserOptionsListProps
             <List>
                 {options.map((option: ListItemDescriptor) => (
                     <ListItem
+                        key={option.link + option.label}
                         // TODO: remove hardcoded disable
                         disabled={option.label !== 'Tests' && option.label !== 'Home'}
                         button={true}
-                        className={classes.ListItemStyle}
+                        classes={{
+                            root: classes.ListItemStyle,
+                            disabled: classes.ListItemStyleDisabled
+                        }}
                     >
                         <NavLink
                             exact={true}
@@ -29,7 +45,6 @@ export class UserOptionsList extends React.Component<UserOptionsListProps
                             activeStyle={ListLinkActive}
                             style={ListLink}
                         >
-                            {/* TODO: Custom icon to be added here */}
                             <ListItemIcon>
                                 <option.icon className={classes.ListItemIconStyle} />
                             </ListItemIcon>
@@ -50,7 +65,8 @@ export class UserOptionsList extends React.Component<UserOptionsListProps
 const styles = (theme: Theme) => ({
     ListItemStyle,
     ListItemTextStyle,
-    ListItemIconStyle
+    ListItemIconStyle,
+    ListItemStyleDisabled
 });
 
 const decorate = withStyles(styles);

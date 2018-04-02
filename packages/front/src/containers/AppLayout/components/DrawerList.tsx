@@ -9,6 +9,7 @@ import HomeIcon from 'material-ui-icons/Home';
 import ForwardIcon from 'material-ui-icons/Forward';
 import HistoryIcon from 'material-ui-icons/History';
 import WatchLaterIcon from 'material-ui-icons/WatchLater';
+import { App as AppRoutes } from '../../../constants/RoutesNames';
 
 export interface ListItemDescriptor {
     icon: React.ComponentType<SvgIconProps>;
@@ -20,22 +21,22 @@ const SampleUserOptions: Array<ListItemDescriptor> = [
     {
         icon: HomeIcon,
         label: 'Home',
-        link: '/'
+        link: AppRoutes.Main
     },
     {
         icon: ForwardIcon,
         label: 'Tests',
-        link: '/testDefinition'
+        link: AppRoutes.Tests
     },
     {
         icon: HistoryIcon,
         label: 'Test run history',
-        link: '/testRun'
+        link: AppRoutes.TestRun
     },
     {
         icon: WatchLaterIcon,
         label: 'Monitoring',
-        link: '/monitoring'
+        link: AppRoutes.Monitoring
     },
     // {
     //     icon: ForwardIcon,

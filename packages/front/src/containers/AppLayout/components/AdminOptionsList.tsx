@@ -12,8 +12,8 @@ export class UserOptionsList extends React.Component<UserOptionsListProps> {
 
         return (
             <List>
-                {options.map((option: string) => (
-                    <ListItem button={true}>
+                {options.map((option: string, i: number) => (
+                    <ListItem button={true} key={i}>
                         {/* TODO: Custom icon to be added here */}
                         <ListItemIcon>
                             <MailIcon />

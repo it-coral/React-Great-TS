@@ -31,3 +31,7 @@ export const ListLinkActive = {
     textDecoration: 'none',
     borderLeft: '4px solid rgb(81, 142, 69)'
 };
+
+export const ListItemStyleDisabled = {
+    cursor: 'not-allowed'
+};
