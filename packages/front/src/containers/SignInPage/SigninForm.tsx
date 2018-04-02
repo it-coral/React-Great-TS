@@ -9,17 +9,20 @@ import Typography from 'material-ui/Typography';
 import Email from 'material-ui-icons/Email';
 import Lock from 'material-ui-icons/Lock';
 import { RouteComponentProps, withRouter } from 'react-router';
-import { connect, Dispatch } from 'react-redux';
-import { AuthorizeAction, IAuthorizeAction } from '../../actions/authAction';
 import TextFieldControl from '../../components/common/form-elements/TextFieldControl';
 import FormValidators from '../../helpers/form-validators';
+import AuthService from '../../services/AuthService';
 
-interface ISigninFormDispatch {
-    authorize(): void;
+interface ILoginForm {
+    email: string;
+    password: string;
 }
 
-class SigninForm extends React.Component<RouteComponentProps<{}>
-    & ISigninFormDispatch & WithStyles<
+interface ILoginFormError {
+    message: string;
+}
+
+class SigninForm extends React.Component<RouteComponentProps<{}> & WithStyles<
     'signInButton' |
     'buttonContainer' |
     'formContainer' |
@@ -27,28 +30,36 @@ class SigninForm extends React.Component<RouteComponentProps<{}>
     'link' |
     'linkText' |
     'fieldIconContainer' |
-    'formSection'
-    >> {
-    constructor(props: RouteComponentProps<{}> & ISigninFormDispatch & WithStyles<'signInButton' |
+    'formSection'>> {
+    auth: AuthService;
+
+    constructor(props: RouteComponentProps<{}> & WithStyles<'signInButton' |
         'buttonContainer' | 'formContainer' | 'forgotPasswordContainer' | 'link' | 'linkText' | 'fieldIconContainer'>) {
         super(props);
 
         this.onSubmit = this.onSubmit.bind(this);
+        this.auth = new AuthService();
+    }
+
+    componentDidMount() {
+        if (this.auth.loggedIn()) {
+            this.props.history.push('/app/main');
+        }
     }
 
     public render(): JSX.Element {
-        const { classes } = this.props;
+        const {classes} = this.props;
         return (
             <Form
                 onSubmit={this.onSubmit}
-                render={({ handleSubmit }) => (
+                render={({handleSubmit, submitError}) => (
                     <form
                         className={classes.formContainer}
                         onSubmit={handleSubmit}
                     >
                         <Grid container={true}>
                             <Grid className={classes.fieldIconContainer} item={true} xs={1}>
-                                <Email />
+                                <Email/>
                             </Grid>
                             <Grid item={true} xs={11}>
                                 <Field
@@ -61,7 +72,7 @@ class SigninForm extends React.Component<RouteComponentProps<{}>
                                 />
                             </Grid>
                             <Grid className={classes.fieldIconContainer} item={true} xs={1}>
-                                <Lock />
+                                <Lock/>
                             </Grid>
                             <Grid item={true} xs={11}>
                                 <Field
@@ -86,7 +97,7 @@ class SigninForm extends React.Component<RouteComponentProps<{}>
                                         <Link className={classes.link} to="/forgot">
                                             <Typography align="right" className={classes.linkText}>
                                                 Forgot password?
-                                    </Typography>
+                                            </Typography>
                                         </Link>
                                     </Grid>
                                     <Grid
@@ -115,7 +126,7 @@ class SigninForm extends React.Component<RouteComponentProps<{}>
                                         <Link className={classes.link} to="/signup">
                                             <Typography color="textSecondary" className={classes.linkText}>
                                                 Create an account
-                                        </Typography>
+                                            </Typography>
                                         </Link>
                                     </Grid>
                                     <Grid item={true} xs={6}>
@@ -140,10 +151,15 @@ class SigninForm extends React.Component<RouteComponentProps<{}>
         );
     }
 
-    private onSubmit(values: any): void { //tslint:disable-line
-        console.log('on submit', values); // tslint:disable-line
-        this.props.authorize();
-        this.props.history.push('/main');
+    private onSubmit(values: ILoginForm): Promise<void | { [x: string]: string; }> {
+        return this.auth.login(values.email, values.password)
+            .then(() => {
+                this.props.history.push('/app/main');
+            })
+            .catch((err: ILoginFormError) => {
+                return { password: err.message };
+            });
+
     }
 }
 
@@ -186,10 +202,4 @@ const decorate = withStyles(theme => ({
     }
 } as React.CSSProperties));
 
-const mapDispatchToProps = (dispatch: Dispatch<IAuthorizeAction>): ISigninFormDispatch => {
-    return {
-        authorize: () => dispatch(AuthorizeAction()),
-    };
-};
-
-export default withRouter<any>(decorate<{}>(connect(null, mapDispatchToProps)(SigninForm))); // tslint:disable-line
+export default withRouter<any>(decorate<{}>(SigninForm)); // tslint:disable-line

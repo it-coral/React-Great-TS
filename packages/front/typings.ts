@@ -13,6 +13,8 @@ interface UserAuth {
 }
 
 interface User {
-    name: string;
+    role: string;
+    phone: string;
+    company: string;
     email: string;
 }

@@ -8,21 +8,16 @@ import withStyles from 'material-ui/styles/withStyles';
 import { Link } from 'react-router-dom';
 import Typography from 'material-ui/Typography';
 import { RouteComponentProps, withRouter } from 'react-router';
-import { connect, Dispatch } from 'react-redux';
-import { AuthorizeAction, IAuthorizeAction } from '../../actions/authAction';
 import FormValidators from '../../helpers/form-validators';
 
-interface ISigninFormDispatch {
-    authorize(): void;
-}
-
-class SignupForm extends React.Component<RouteComponentProps<{}> & ISigninFormDispatch & WithStyles<'signInButton' |
+class SignupForm extends React.Component<RouteComponentProps<{}> & WithStyles<'signInButton' |
     'buttonContainer' |
     'formContainer' |
     'forgotPasswordContainer' |
     'link' |
     'linkText'>> {
-    constructor(props: RouteComponentProps<{}> & ISigninFormDispatch & WithStyles<'signInButton' |
+    constructor(props: RouteComponentProps<{}> & WithStyles<
+        'signInButton' |
         'buttonContainer' |
         'formContainer' |
         'forgotPasswordContainer' |
@@ -113,8 +108,7 @@ class SignupForm extends React.Component<RouteComponentProps<{}> & ISigninFormDi
 
     private onSubmit(values: any): void { //tslint:disable-line
         console.log('on submit', values); // tslint:disable-line
-        this.props.authorize();
-        this.props.history.push('/main');
+        this.props.history.push('/app/main');
     }
 }
 
@@ -148,10 +142,4 @@ const decorate = withStyles(theme => ({
     }
 } as React.CSSProperties));
 
-const mapDispatchToProps = (dispatch: Dispatch<IAuthorizeAction>): ISigninFormDispatch => {
-    return {
-        authorize: () => dispatch(AuthorizeAction()),
-    };
-};
-
-export default withRouter<any>(decorate<{}>(connect(null, mapDispatchToProps)(SignupForm))); // tslint:disable-line
+export default withRouter<any>(decorate<{}>(SignupForm)); // tslint:disable-line
