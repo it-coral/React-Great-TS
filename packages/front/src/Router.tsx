@@ -8,6 +8,8 @@ import SignInPage from './containers/SignInPage';
 import SignUpPage from './containers/SignUpPage';
 import NotFoundPage from './containers/NotFoundPage';
 import Main from './containers/Main';
+import Tests from './containers/TestsPage';
+import TestRunHistory from './containers/TestRunHistory';
 
 const history = createBrowserHistory();
 
@@ -15,13 +17,14 @@ class RouterContainer extends React.Component<RouterProps> {
     public render() {
         let MainRouteHanlder = (
             <AppLayout>
-                <Route path="/app">
-                    <Switch>
-                        <Route exact={true} path="/main" component={Main} />
-                    </Switch>
-                </Route>
-                <Route path="/404" component={NotFoundPage} />
-                <Redirect from="*" to="/404" />
+                <Switch>
+                    <Redirect exact={true} from="/" to="/main" />
+                    <Route path="/main" component={Main}/>
+                    <Route path="/testDefinition" component={Tests}/>
+                    <Route path="/testRun" component={TestRunHistory}/>
+                    <Route path="/404" component={NotFoundPage} />
+                    <Redirect from="*" to="/404" />
+                </Switch>
             </AppLayout>
         );
 
