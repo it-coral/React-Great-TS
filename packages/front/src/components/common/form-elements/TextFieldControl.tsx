@@ -6,11 +6,28 @@ import { WithStyles } from 'material-ui/styles';
 
 interface ITextFielControl {
     label?: string;
+    multiline?: boolean;
+    rows?: string;
+    rowsMax?: string;
 }
 
 class TextFieldControl extends React.Component<FieldRenderProps & ITextFielControl & WithStyles<'root'>> {
     public render(): JSX.Element {
-        const {classes, input: { name, onChange, value, ...restInput }, meta, ...rest} = this.props;
+        const {
+            classes,
+            multiline,
+            rowsMax,
+            rows,
+            input: {
+                name,
+                onChange,
+                value,
+                ...restInput
+            },
+            meta,
+            ...rest
+        } = this.props;
+
         return (
             <TextField
                 {...rest}
@@ -22,6 +39,9 @@ class TextFieldControl extends React.Component<FieldRenderProps & ITextFielContr
                 error={(meta.error || meta.submitError) && meta.touched}
                 inputProps={restInput}
                 onChange={onChange}
+                multiline={multiline}
+                rows={rows}
+                rowsMax={rowsMax}
                 margin="normal"
             />
         );

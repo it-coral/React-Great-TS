@@ -10,19 +10,17 @@ import Typography from 'material-ui/Typography';
 import { RouteComponentProps, withRouter } from 'react-router';
 import FormValidators from '../../helpers/form-validators';
 
-class SignupForm extends React.Component<RouteComponentProps<{}> & WithStyles<'signInButton' |
+type StyledComponent = WithStyles<
+    'signInButton' |
     'buttonContainer' |
     'formContainer' |
     'forgotPasswordContainer' |
     'link' |
-    'linkText'>> {
-    constructor(props: RouteComponentProps<{}> & WithStyles<
-        'signInButton' |
-        'buttonContainer' |
-        'formContainer' |
-        'forgotPasswordContainer' |
-        'link' |
-        'linkText'>) {
+    'linkText'
+>;
+
+class SignupForm extends React.Component<RouteComponentProps<{}> & StyledComponent> {
+    constructor(props: RouteComponentProps<{}> & StyledComponent) {
         super(props);
 
         this.onSubmit = this.onSubmit.bind(this);
