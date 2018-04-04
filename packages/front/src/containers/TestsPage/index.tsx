@@ -1,11 +1,12 @@
 import * as React from 'react';
+import GridControl from './GridControl';
 
 export default class Tests extends React.Component {
     render() {
         return (
-            <div>
-                <h1>Tests</h1>
-            </div>
+            <React.Fragment>
+                <GridControl />
+            </React.Fragment>
         );
     }
 }

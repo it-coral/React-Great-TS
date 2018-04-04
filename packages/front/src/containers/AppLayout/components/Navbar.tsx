@@ -6,6 +6,7 @@ import AppBar from 'material-ui/AppBar';
 import withStyles from 'material-ui/styles/withStyles';
 import { Theme, WithStyles } from 'material-ui/styles';
 import { withRouter, RouteComponentProps } from 'react-router-dom';
+import LOGO_IMG from '../../../assets/images/logo_text2.png';
 
 interface NavBarProps {
     handleDrawerToggle(): void;
@@ -33,7 +34,7 @@ class NavBar extends React.Component<NavBarProps & RouteComponentProps<{}>
                         <MenuIcon className={classes.menuIcon} />
                     </IconButton>
                     <div>
-                        <img height="55" src="assets/images/logo_text2.png" />
+                        <img height="55" src={LOGO_IMG} />
                     </div>
                 </Toolbar>
             </AppBar>
