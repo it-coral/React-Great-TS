@@ -5,13 +5,10 @@ import {
     TableSortLabel,
     TableRow,
 } from 'material-ui/Table';
-// import Toolbar from 'material-ui/Toolbar';
-// import Typography from 'material-ui/Typography';
 import Tooltip from 'material-ui/Tooltip';
 
 interface EnhancedTableHeadProps {
-    // tslint:disable-next-line:no-any
-    onRequestSort: (e: any, property: string) => void;
+    onRequestSort: (e: React.MouseEvent<HTMLInputElement>, property: string) => void;
     order?: SortValueType;
     orderBy?: string;
     selectable?: string;

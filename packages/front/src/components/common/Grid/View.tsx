@@ -5,17 +5,9 @@ import Table, {
     TableBody,
     TableCell,
     TableHead,
-    // TableFooter,
-    // TablePagination,
-    // TableSortLabel,
     TablePagination,
     TableRow,
 } from 'material-ui/Table';
-// import IconButton from 'material-ui/IconButton';
-// import FirstPageIcon from 'material-ui-icons/FirstPage';
-// import KeyboardArrowLeft from 'material-ui-icons/KeyboardArrowLeft';
-// import KeyboardArrowRight from 'material-ui-icons/KeyboardArrowRight';
-// import LastPageIcon from 'material-ui-icons/LastPage';
 import EnhancedTableHead from './EnhancedTableHead';
 import { GridProps, GridState, GridHandlers } from './index';
 
@@ -53,8 +45,6 @@ class GridView<T extends GridModel> extends React.Component<GridViewProps<T>> {
                                     page={data.page > 0 ? --data.page : data.page}
                                     onChangePage={onChangePage}
                                     onChangeRowsPerPage={onChangeRowsPerPage}
-                                    // onChangeRowsPerPage={this.handleChangeRowsPerPage}
-                                    // Actions={TablePaginationActionsWrapped}
                                 />
                             </TableRow>
                         </TableHead>
