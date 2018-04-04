@@ -10,6 +10,7 @@ import { connect, Dispatch } from 'react-redux';
 import { FetchUser } from '../../actions/authAction';
 import Main from '../Main';
 import Tests from '../TestsPage';
+import TestProperty from '../TestProperty';
 import TestRunHistory from '../TestRunHistory';
 import { App as AppRoutes, NotFound } from '../../constants/RoutesNames';
 import { CircularProgress } from 'material-ui/Progress';
@@ -65,6 +66,7 @@ class AppLayout extends React.Component<IAppProps & IAppDispatch & WithStyles<'r
                         <Route exact={true} path={AppRoutes.Main} component={Main}/>
                         <Route exact={true} path={AppRoutes.Tests} component={Tests}/>
                         <Route exact={true} path={AppRoutes.TestRun} component={TestRunHistory}/>
+                        <Route exact={true} path={AppRoutes.NewTestProperty} component={TestProperty}/>
                         <Redirect from="*" to={NotFound} />
                     </Switch>
                 </AppContent>

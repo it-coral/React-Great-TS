@@ -2,8 +2,7 @@ import * as React from 'react';
 import Grid from 'material-ui/Grid';
 import { Field, Form } from 'react-final-form';
 import Button from 'material-ui/Button';
-import { WithStyles } from 'material-ui';
-import withStyles from 'material-ui/styles/withStyles';
+import { withStyles, WithStyles } from 'material-ui/styles';
 import { Link } from 'react-router-dom';
 import Typography from 'material-ui/Typography';
 import Email from 'material-ui-icons/Email';
@@ -12,6 +11,7 @@ import { RouteComponentProps, withRouter } from 'react-router';
 import TextFieldControl from '../../components/common/form-elements/TextFieldControl';
 import FormValidators from '../../helpers/form-validators';
 import AuthService from '../../services/AuthService';
+import { Main } from '../../constants/RoutesNames';
 
 interface ILoginForm {
     email: string;
@@ -22,7 +22,7 @@ interface ILoginFormError {
     message: string;
 }
 
-class SigninForm extends React.Component<RouteComponentProps<{}> & WithStyles<
+type StyledComponent = WithStyles<
     'signInButton' |
     'buttonContainer' |
     'formContainer' |
@@ -30,11 +30,13 @@ class SigninForm extends React.Component<RouteComponentProps<{}> & WithStyles<
     'link' |
     'linkText' |
     'fieldIconContainer' |
-    'formSection'>> {
+    'formSection'
+>;
+
+class SigninForm extends React.Component<RouteComponentProps<{}> & StyledComponent> {
     auth: AuthService;
 
-    constructor(props: RouteComponentProps<{}> & WithStyles<'signInButton' |
-        'buttonContainer' | 'formContainer' | 'forgotPasswordContainer' | 'link' | 'linkText' | 'fieldIconContainer'>) {
+    constructor(props: RouteComponentProps<{}> & StyledComponent) {
         super(props);
 
         this.onSubmit = this.onSubmit.bind(this);
@@ -43,23 +45,23 @@ class SigninForm extends React.Component<RouteComponentProps<{}> & WithStyles<
 
     componentDidMount() {
         if (this.auth.loggedIn()) {
-            this.props.history.push('/app/main');
+            this.props.history.push(Main);
         }
     }
 
     public render(): JSX.Element {
-        const {classes} = this.props;
+        const { classes } = this.props;
         return (
             <Form
                 onSubmit={this.onSubmit}
-                render={({handleSubmit, submitError}) => (
+                render={({ handleSubmit, submitError }) => (
                     <form
                         className={classes.formContainer}
                         onSubmit={handleSubmit}
                     >
                         <Grid container={true}>
                             <Grid className={classes.fieldIconContainer} item={true} xs={1}>
-                                <Email/>
+                                <Email />
                             </Grid>
                             <Grid item={true} xs={11}>
                                 <Field
@@ -72,7 +74,7 @@ class SigninForm extends React.Component<RouteComponentProps<{}> & WithStyles<
                                 />
                             </Grid>
                             <Grid className={classes.fieldIconContainer} item={true} xs={1}>
-                                <Lock/>
+                                <Lock />
                             </Grid>
                             <Grid item={true} xs={11}>
                                 <Field
