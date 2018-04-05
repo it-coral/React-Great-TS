@@ -3,13 +3,14 @@ import Hidden from 'material-ui/Hidden';
 import { Theme, withStyles, WithStyles } from 'material-ui/styles';
 import Drawer from 'material-ui/Drawer';
 import DrawerList from './DrawerList';
+import { DrawerWidth, NavbarHeight } from '../../../styles/Constants';
 
 interface SidebarProps {
     mobileOpen: boolean;
     handleDrawerToggle(): void;
 }
 
-export class Sidebar extends React.Component<SidebarProps & WithStyles<'drawerPaper'>> {
+export class Sidebar extends React.Component<SidebarProps & WithStyles<'drawerPaper' | 'drawerDocked'>> {
     render() {
         const {
             classes,
@@ -26,6 +27,7 @@ export class Sidebar extends React.Component<SidebarProps & WithStyles<'drawerPa
                         open={mobileOpen}
                         onClose={handleDrawerToggle}
                         classes={{
+                            docked: classes.drawerDocked,
                             paper: classes.drawerPaper,
                         }}
                         ModalProps={{
@@ -40,6 +42,7 @@ export class Sidebar extends React.Component<SidebarProps & WithStyles<'drawerPa
                         variant="permanent"
                         open={true}
                         classes={{
+                            docked: classes.drawerDocked,
                             paper: classes.drawerPaper,
                         }}
                     >
@@ -51,11 +54,15 @@ export class Sidebar extends React.Component<SidebarProps & WithStyles<'drawerPa
     }
 }
 
-const drawerWidth = 240;
-
 const styles = (theme: Theme) => ({
+    drawerDocked: {
+        height: `calc(100% - ${NavbarHeight}px)`,
+        marginTop: NavbarHeight,
+    },
     drawerPaper: {
-        width: drawerWidth,
+        backgroundColor: '#273238',
+        width: DrawerWidth,
+        height: '100%',
         [theme.breakpoints.up('md')]: {
             position: 'relative',
         },

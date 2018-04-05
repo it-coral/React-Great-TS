@@ -13,6 +13,7 @@ import AxiosFactory from '../../services/AxiosFactory';
 import ApiPath from '../../constants/ApiPath';
 import CheckboxControl from '../../components/common/form-elements/CheckboxControl';
 import { CircularProgress } from 'material-ui/Progress';
+import { Login as LoginRoutes } from '../../constants/RoutesNames';
 
 interface ISignupForm {
     email: string;
@@ -51,7 +52,7 @@ class SignupForm extends React.Component<RouteComponentProps<{}> & WithStyles<'s
     }
 
     usernameAvailable = async (value: string) => {
-        return await this.axiosFactory.axios.get(`${ApiPath.auth.emailUnique}/${value}`)
+        return await this.axiosFactory.axios.get(`${ApiPath.api.emailUnique}/${value}`)
             .then((res: IValidateEmail) => {
                 if (res.data.length > 0) {
                     return 'User name is already used.';
@@ -172,9 +173,9 @@ class SignupForm extends React.Component<RouteComponentProps<{}> & WithStyles<'s
         let signUpValues = values;
         signUpValues.termsDate = new Date();
 
-        return this.axiosFactory.axios.post(ApiPath.auth.signup, signUpValues)
+        return this.axiosFactory.axios.post(ApiPath.api.signup, signUpValues)
             .then(() => {
-                this.props.history.push('/signup-confirm');
+                this.props.history.push(`${LoginRoutes.SignUpConfirm}/${signUpValues.email}`);
             });
     }
 }

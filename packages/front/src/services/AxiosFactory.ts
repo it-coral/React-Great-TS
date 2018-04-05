@@ -12,6 +12,7 @@ export default class AxiosFactory {
             let token = authService.getToken();
             headers = {'Authorization': `Bearer ${token}`};
         }
+
         this.axios = axios.create({
             baseURL: `${process.env.REACT_APP_API_PATH}/`,
             headers: headers

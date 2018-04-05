@@ -1,5 +1,7 @@
 declare module '*';
 
+type SortValueType = 'asc' | 'desc';
+
 interface RouterProps {
     user: User;
 }
@@ -17,4 +19,49 @@ interface User {
     phone: string;
     company: string;
     email: string;
+}
+
+interface NavBarProps {
+    a: string;
+    handleDrawerToggle(): void;
+}
+
+interface GridModel {
+    _id: string;
+}
+
+interface TestModel extends GridModel {
+    info: string;
+    isRemote: boolean;
+    lastRunDate: Date;
+    name: string;
+    runCount: number;
+    serviceUrl: string;
+}
+
+interface SortDescriptor {
+    order: SortValueType;
+    orderBy: string;
+}
+
+interface ColumnSchema {
+    id: string;
+    numeric: boolean;
+    disablePadding: boolean;
+    label: string;
+    sortable?: boolean;
+}
+
+interface DataDescriptor<T extends GridModel> {
+    docs: Array<T>;
+    limit: number;
+    page: number;
+    pages?: number;
+    total: number;
+}
+
+interface DataFetchDescriptor {
+    limit: number;
+    page: number;
+    order: string;
 }

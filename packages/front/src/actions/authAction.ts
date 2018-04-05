@@ -17,10 +17,10 @@ export const SetUserAction = (data: User): ISetUserAction => {
 };
 
 export const FetchUser = (): ThunkAction<void, IStore, null> => (dispatch: Dispatch<IStore>) => {
-        let axiosFactory = new AxiosFactory();
+    let axiosFactory = new AxiosFactory();
 
-        return axiosFactory.axios.get(ApiPath.auth.userInfo)
-            .then(res => {
-                dispatch(SetUserAction(res.data));
-            });
-    };
+    return axiosFactory.axios.get(ApiPath.api.userInfo)
+        .then(res => {
+            dispatch(SetUserAction(res.data));
+        });
+};

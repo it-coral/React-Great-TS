@@ -21,6 +21,9 @@ class LoginSocialButtons extends React.Component<WithStyles<
                     className={classes.buttonContainer}
                     item={true}
                     xs={4}
+                    style={{
+                        justifyContent: 'flex-end'
+                    }}
                 >
                     <Button
                         classes={{
@@ -49,6 +52,9 @@ class LoginSocialButtons extends React.Component<WithStyles<
                     className={classes.buttonContainer}
                     item={true}
                     xs={4}
+                    style={{
+                        justifyContent: 'flex-start'
+                    }}
                 >
                     <Button
                         classes={{
