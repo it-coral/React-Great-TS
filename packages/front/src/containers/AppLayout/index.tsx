@@ -27,12 +27,17 @@ interface IAppDispatch {
     authorize(): void;
 }
 
-class AppLayout extends React.Component<IAppProps & IAppDispatch & WithStyles<'root'>, AppLayoutState> {
+type StyledComponent = WithStyles<
+    'root' |
+    'circularProgress'
+>;
+
+class AppLayout extends React.Component<IAppProps & IAppDispatch & StyledComponent, AppLayoutState> {
     private initialState: AppLayoutState = {
         mobileOpen: false,
     };
 
-    constructor(props: IAppProps & IAppDispatch & WithStyles<'root'>) {
+    constructor(props: IAppProps & IAppDispatch & StyledComponent) {
         super(props);
 
         this.state = this.initialState;
@@ -52,7 +57,7 @@ class AppLayout extends React.Component<IAppProps & IAppDispatch & WithStyles<'r
         const { classes } = this.props;
 
         return this.props.user === null ?
-            <CircularProgress size={80}/> :
+            <CircularProgress className={classes.circularProgress} size={80} /> :
             (
                 <div className={classes.root}>
                 <Navbar handleDrawerToggle={this.handleDrawerToggle} />
@@ -84,6 +89,12 @@ const styles = (theme: Theme) => ({
         display: 'flex',
         height: '100%',
         width: '100%',
+    },
+    circularProgress: {
+        position: 'fixed',
+        transform: 'translate(-50%, -50%)',
+        left: '50%',
+        top: '50%'
     }
 }) as React.CSSProperties;
 
