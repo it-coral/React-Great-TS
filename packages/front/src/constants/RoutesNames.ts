@@ -14,10 +14,12 @@ export const App = {
 
 export const SignIn: string = '/signin';
 export const SignUp: string = '/signup';
+export const SignUpConfirm: string = '/signup-confirm';
 
 export const Login = {
     SignIn,
-    SignUp
+    SignUp,
+    SignUpConfirm
 };
 
 export const NotFound: string = '/404';

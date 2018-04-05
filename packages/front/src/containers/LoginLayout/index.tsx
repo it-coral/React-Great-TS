@@ -5,6 +5,7 @@ import { Redirect, Route, Switch } from 'react-router';
 import SignInPage from '../../containers/SignInPage';
 import SignUpPage from '../../containers/SignUpPage';
 import { Login as LoginRoutes } from '../../constants/RoutesNames';
+import SignUpConfirmPage from '../SignUpConfirmPage';
 
 export default class LoginLayout extends React.Component {
     render() {
@@ -15,6 +16,7 @@ export default class LoginLayout extends React.Component {
                     <Switch>
                         <Route exact={true} path={LoginRoutes.SignIn} component={SignInPage}/>
                         <Route exact={true} path={LoginRoutes.SignUp} component={SignUpPage}/>
+                        <Route exact={true} path={`${LoginRoutes.SignUpConfirm}/:email`} component={SignUpConfirmPage}/>
                         <Redirect exact={true} from="/" to="/signin"/>
                     </Switch>
                 </WorkingSection>
