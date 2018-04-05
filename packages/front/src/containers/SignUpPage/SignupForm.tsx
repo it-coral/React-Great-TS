@@ -9,6 +9,23 @@ import { Link } from 'react-router-dom';
 import Typography from 'material-ui/Typography';
 import { RouteComponentProps, withRouter } from 'react-router';
 import FormValidators from '../../helpers/form-validators';
+import AxiosFactory from '../../services/AxiosFactory';
+import ApiPath from '../../constants/ApiPath';
+import CheckboxControl from '../../components/common/form-elements/CheckboxControl';
+import { CircularProgress } from 'material-ui/Progress';
+
+interface ISignupForm {
+    email: string;
+    password: string;
+    phone: string;
+    company: string;
+    acceptTerms: boolean;
+    termsDate?: Date;
+}
+
+interface IValidateEmail {
+    data: object[];
+}
 
 class SignupForm extends React.Component<RouteComponentProps<{}> & WithStyles<'signInButton' |
     'buttonContainer' |
@@ -16,6 +33,9 @@ class SignupForm extends React.Component<RouteComponentProps<{}> & WithStyles<'s
     'forgotPasswordContainer' |
     'link' |
     'linkText'>> {
+
+    axiosFactory: AxiosFactory;
+
     constructor(props: RouteComponentProps<{}> & WithStyles<
         'signInButton' |
         'buttonContainer' |
@@ -25,7 +45,20 @@ class SignupForm extends React.Component<RouteComponentProps<{}> & WithStyles<'s
         'linkText'>) {
         super(props);
 
+        this.axiosFactory = new AxiosFactory();
+
         this.onSubmit = this.onSubmit.bind(this);
+    }
+
+    usernameAvailable = async (value: string) => {
+        return await this.axiosFactory.axios.get(`${ApiPath.auth.emailUnique}/${value}`)
+            .then((res: IValidateEmail) => {
+                if (res.data.length > 0) {
+                    return 'User name is already used.';
+                } else {
+                    return undefined;
+                }
+            });
     }
 
     public render(): JSX.Element {
@@ -33,7 +66,7 @@ class SignupForm extends React.Component<RouteComponentProps<{}> & WithStyles<'s
         return (
             <Form
                 onSubmit={this.onSubmit}
-                render={({ handleSubmit }) => (
+                render={({ handleSubmit, submitting }) => (
                     <form
                         className={classes.formContainer}
                         onSubmit={handleSubmit}
@@ -45,8 +78,11 @@ class SignupForm extends React.Component<RouteComponentProps<{}> & WithStyles<'s
                                     type="text"
                                     name="email"
                                     label="Email Address"
-                                    validate={FormValidators.composeValidators(FormValidators.required,
-                                                                               FormValidators.isEmail)}
+                                    validate={FormValidators.composeValidators(
+                                        FormValidators.required(),
+                                        FormValidators.isEmail,
+                                        this.usernameAvailable
+                                    )}
                                 />
                             </Grid>
                             <Grid item={true} xs={12}>
@@ -55,16 +91,22 @@ class SignupForm extends React.Component<RouteComponentProps<{}> & WithStyles<'s
                                     type="password"
                                     name="password"
                                     label="Password"
-                                    validate={FormValidators.required}
+                                    validate={FormValidators.composeValidators(
+                                        FormValidators.required(),
+                                        FormValidators.minValue(6, 'Password must be at least 6 characters.')
+                                    )}
                                 />
                             </Grid>
                             <Grid item={true} xs={12}>
                                 <Field
                                     component={TextFieldControl}
                                     type="text"
-                                    name="phoneNumber"
+                                    name="phone"
                                     label="Phone Number"
-                                    validate={FormValidators.required}
+                                    validate={FormValidators.composeValidators(
+                                        FormValidators.required(),
+                                        FormValidators.minValue(7, 'Phone must be at least 7 characters.')
+                                    )}
                                 />
                             </Grid>
                             <Grid item={true} xs={12}>
@@ -73,7 +115,18 @@ class SignupForm extends React.Component<RouteComponentProps<{}> & WithStyles<'s
                                     type="text"
                                     name="company"
                                     label="Company"
-                                    validate={FormValidators.required}
+                                    validate={FormValidators.required()}
+                                />
+                            </Grid>
+                            <Grid item={true} xs={12}>
+                                <Field
+                                    name="acceptTerms"
+                                    component={CheckboxControl}
+                                    type="checkbox"
+                                    label={<span>I agree to the <a target="_blank" href="app-terms/">
+                                            Terms of Service</a></span>}
+                                    validate={FormValidators.required(`To open an account on testRTC you
+                                                                       must agree to our terms of service.`)}
                                 />
                             </Grid>
                             <Grid
@@ -81,8 +134,17 @@ class SignupForm extends React.Component<RouteComponentProps<{}> & WithStyles<'s
                                 item={true}
                                 xs={12}
                             >
-                                <Button type="submit" variant="raised" color="primary" className={classes.signInButton}>
-                                    Sign up
+                                <Button
+                                    type="submit"
+                                    variant="raised"
+                                    color="primary"
+                                    className={classes.signInButton}
+                                    disabled={submitting}
+                                >
+                                    {!submitting ?
+                                        <React.Fragment>Sign Up</React.Fragment> :
+                                        <CircularProgress size={14}/>
+                                    }
                                 </Button>
                             </Grid>
                             <Grid item={true} xs={6}>
@@ -106,9 +168,14 @@ class SignupForm extends React.Component<RouteComponentProps<{}> & WithStyles<'s
         );
     }
 
-    private onSubmit(values: any): void { //tslint:disable-line
-        console.log('on submit', values); // tslint:disable-line
-        this.props.history.push('/app/main');
+    private onSubmit(values: ISignupForm): Promise<void | { [x: string]: string; }> {
+        let signUpValues = values;
+        signUpValues.termsDate = new Date();
+
+        return this.axiosFactory.axios.post(ApiPath.auth.signup, signUpValues)
+            .then(() => {
+                this.props.history.push('/signup-confirm');
+            });
     }
 }
 

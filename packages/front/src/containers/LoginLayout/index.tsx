@@ -4,6 +4,7 @@ import WorkingSection from './components/WorkingSection';
 import { Redirect, Route, Switch } from 'react-router';
 import SignInPage from '../../containers/SignInPage';
 import SignUpPage from '../../containers/SignUpPage';
+import SignUpConfirmPage from '../SignUpConfirmPage';
 
 export default class LoginLayout extends React.Component {
     render() {
@@ -14,6 +15,7 @@ export default class LoginLayout extends React.Component {
                     <Switch>
                         <Route path="/signin" component={SignInPage}/>
                         <Route path="/signup" component={SignUpPage}/>
+                        <Route path="/signup-confirm" component={SignUpConfirmPage}/>
                         <Redirect from="/" to="/signin"/>
                     </Switch>
                 </WorkingSection>
