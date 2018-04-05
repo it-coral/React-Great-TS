@@ -4,6 +4,7 @@ export default {
     },
     'api': {
         'userInfo': '/api/users/me',
-        'testDefinitions': '/api/test_definitions'
+        'testDefinitions': '/api/test_definitions',
+        'userConfig': '/api/config-datas/user-config'
     }
 };
