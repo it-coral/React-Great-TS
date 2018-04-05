@@ -5,6 +5,8 @@ export default {
     'api': {
         'userInfo': '/api/users/me',
         'testDefinitions': '/api/test_definitions',
-        'userConfig': '/api/config-datas/user-config'
+        'userConfig': '/api/config-datas/user-config',
+        'emailUnique': '/api/users/unique',
+        'signup': 'api/users',
     }
 };

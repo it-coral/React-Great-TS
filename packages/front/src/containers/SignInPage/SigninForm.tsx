@@ -69,7 +69,7 @@ class SigninForm extends React.Component<RouteComponentProps<{}> & StyledCompone
                                     type="text"
                                     name="email"
                                     label="Email Address"
-                                    validate={FormValidators.composeValidators(FormValidators.required,
+                                    validate={FormValidators.composeValidators(FormValidators.required(),
                                                                                FormValidators.isEmail)}
                                 />
                             </Grid>
@@ -82,7 +82,7 @@ class SigninForm extends React.Component<RouteComponentProps<{}> & StyledCompone
                                     type="password"
                                     name="password"
                                     label="Password"
-                                    validate={FormValidators.required}
+                                    validate={FormValidators.required()}
                                 />
                             </Grid>
                             <Grid
