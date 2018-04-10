@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { Link } from 'react-router-dom';
 import Grid from 'material-ui/Grid';
 import Typography from 'material-ui/Typography';
 import { Login as LoginRoutes } from '../../constants/RoutesNames';
@@ -28,13 +27,13 @@ class SignUpConfirmPage extends React.Component<RouteComponentProps<IRouterProps
                             Please follow the instruction in your email.
                         </Typography>
                         <br/>
-                            <Link to={LoginRoutes.SignIn}>
+
                                 <Button
                                     variant="raised"
+                                    onClick={() => this.props.history.push(LoginRoutes.SignIn)}
                                 >
                                     Back to login
                                 </Button>
-                            </Link>
                     </div>
                 </Grid>
             </Grid>

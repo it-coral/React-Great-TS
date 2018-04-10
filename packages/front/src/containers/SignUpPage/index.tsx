@@ -8,6 +8,7 @@ import AnalyzerBanner from '../common/AnalyzerBanner';
 import LoginSocialButtons from '../common/LoginSocialButtons';
 import SignupForm from './SignupForm';
 import Slide from 'material-ui/transitions/Slide';
+import FooterColors from '../common/FooterColors';
 
 class SignUpPage extends React.Component<WithStyles<'root' |
     'title' |
@@ -57,6 +58,7 @@ class SignUpPage extends React.Component<WithStyles<'root' |
                                 </Typography>
                             </div>
                             <SignupForm />
+                            <FooterColors/>
                         </Paper>
                     </Slide>
                 </Grid>

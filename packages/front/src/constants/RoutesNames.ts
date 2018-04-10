@@ -15,11 +15,13 @@ export const App = {
 export const SignIn: string = '/signin';
 export const SignUp: string = '/signup';
 export const SignUpConfirm: string = '/signup-confirm';
+export const ForgotPassword: string = '/forgot-password';
 
 export const Login = {
     SignIn,
     SignUp,
-    SignUpConfirm
+    SignUpConfirm,
+    ForgotPassword
 };
 
 export const NotFound: string = '/404';

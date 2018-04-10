@@ -26,6 +26,7 @@ class LoginSocialButtons extends React.Component<WithStyles<
                     }}
                 >
                     <Button
+                        onClick={() => this.LoginOAuth('google')}
                         classes={{
                             root: classes.socialButtonRoot,
                             label: classes.socialButtonLabel
@@ -40,6 +41,7 @@ class LoginSocialButtons extends React.Component<WithStyles<
                     xs={4}
                 >
                     <Button
+                        onClick={() => this.LoginOAuth('facebook')}
                         classes={{
                             root: classes.socialButtonRoot,
                             label: classes.socialButtonLabel
@@ -57,6 +59,7 @@ class LoginSocialButtons extends React.Component<WithStyles<
                     }}
                 >
                     <Button
+                        onClick={() => this.LoginOAuth('linkedin')}
                         classes={{
                             root: classes.socialButtonRoot,
                             label: classes.socialButtonLabel
@@ -67,6 +70,11 @@ class LoginSocialButtons extends React.Component<WithStyles<
                 </Grid>
             </Grid>
         );
+    }
+
+    private LoginOAuth(provider: string) {
+        console.log("navigate to", `${process.env.REACT_APP_API_PATH}/auth/${provider}`); // tslint:disable-line
+        window.location.href = `${process.env.REACT_APP_API_PATH}/auth/${provider}`;
     }
 }
 

@@ -138,7 +138,7 @@ class SignupForm extends React.Component<RouteComponentProps<{}> & WithStyles<'s
                                 <Button
                                     type="submit"
                                     variant="raised"
-                                    color="primary"
+                                    color="secondary"
                                     className={classes.signInButton}
                                     disabled={submitting}
                                 >

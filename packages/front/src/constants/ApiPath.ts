@@ -7,6 +7,7 @@ export default {
         'testDefinitions': '/api/test_definitions',
         'userConfig': '/api/config-datas/user-config',
         'emailUnique': '/api/users/unique',
+        'requestPassword': '/api/users/request-password',
         'signup': 'api/users',
     }
 };

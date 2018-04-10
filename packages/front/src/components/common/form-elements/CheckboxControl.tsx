@@ -28,6 +28,7 @@ class CheckboxControl extends React.Component<FieldRenderProps & ICheckboxFieldC
                             checked={value}
                             onChange={this.handleChange}
                             value={valueStr}
+                            color="primary"
                         />
                     }
                     label={this.props.label}

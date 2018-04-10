@@ -8,12 +8,43 @@ import AnalyzerBanner from '../common/AnalyzerBanner';
 import Typography from 'material-ui/Typography';
 import Slide from 'material-ui/transitions/Slide';
 import LoginSocialButtons from '../common/LoginSocialButtons';
+import FooterColors from '../common/FooterColors';
+import RemindPasswordModal from './RemindPasswordModal';
+import { RouteComponentProps } from 'react-router';
+import { Login as LoginRoutes } from '../../constants/RoutesNames';
 
-class SignInPage extends React.Component<WithStyles<'root' |
+type SignInPageStyles = WithStyles<'root' |
     'title' |
     'orWrapper' |
     'orText' |
-    'titleContainer'>> {
+    'titleContainer'>;
+
+interface ISignInPageState {
+    remindOpened: boolean;
+    emailRemind: string;
+}
+
+class SignInPage extends React.Component<RouteComponentProps<{}> & SignInPageStyles, ISignInPageState> {
+    constructor(props: RouteComponentProps<{}> & SignInPageStyles) {
+        super(props);
+
+        this.state = {
+            remindOpened: false,
+            emailRemind: '',
+        };
+
+        this.closeModal = this.closeModal.bind(this);
+    }
+    componentWillMount() {
+        if (this.props.location.state !== undefined && this.props.location.state.isPasswordRemind) {
+            this.setState({
+                remindOpened: true,
+                emailRemind: this.props.location.state.emailRemind,
+            });
+        }
+        this.props.history.replace({pathname: LoginRoutes.SignIn, state: {}});
+    }
+
     public render(): JSX.Element {
         const { classes } = this.props;
         return (
@@ -36,6 +67,11 @@ class SignInPage extends React.Component<WithStyles<'root' |
                         unmountOnExit={true}
                     >
                         <Paper className={classes.root} elevation={4}>
+                            <RemindPasswordModal
+                                emailRemind={this.state.emailRemind}
+                                isOpen={this.state.remindOpened}
+                                onClose={() => this.closeModal()}
+                            />
                             <div className={classes.titleContainer}>
                                 <Typography
                                     className={classes.title}
@@ -60,6 +96,7 @@ class SignInPage extends React.Component<WithStyles<'root' |
                             <Grid item={true} xs={12}>
                                 <LoginSocialButtons />
                             </Grid>
+                            <FooterColors/>
                         </Paper>
                     </Slide>
                 </Grid>
@@ -73,6 +110,12 @@ class SignInPage extends React.Component<WithStyles<'root' |
                 </Grid>
             </Grid>
         );
+    }
+
+    private closeModal(): void {
+        this.setState({
+            remindOpened: false,
+        });
     }
 }
 

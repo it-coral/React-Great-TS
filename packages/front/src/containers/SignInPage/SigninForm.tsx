@@ -11,7 +11,7 @@ import { RouteComponentProps, withRouter } from 'react-router';
 import TextFieldControl from '../../components/common/form-elements/TextFieldControl';
 import FormValidators from '../../helpers/form-validators';
 import AuthService from '../../services/AuthService';
-import { Main } from '../../constants/RoutesNames';
+import { Main, Login as LoginRoutes } from '../../constants/RoutesNames';
 
 interface ILoginForm {
     email: string;
@@ -96,7 +96,7 @@ class SigninForm extends React.Component<RouteComponentProps<{}> & StyledCompone
                                         xs={6}
                                         className={classes.forgotPasswordContainer}
                                     >
-                                        <Link className={classes.link} to="/forgot">
+                                        <Link className={classes.link} to={LoginRoutes.ForgotPassword}>
                                             <Typography align="right" className={classes.linkText}>
                                                 Forgot password?
                                             </Typography>
@@ -110,7 +110,7 @@ class SigninForm extends React.Component<RouteComponentProps<{}> & StyledCompone
                                         <Button
                                             type="submit"
                                             variant="raised"
-                                            color="primary"
+                                            color="secondary"
                                             className={classes.signInButton}
                                         >
                                             Sign in
