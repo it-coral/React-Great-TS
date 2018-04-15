@@ -5,14 +5,17 @@ import AppBar from 'material-ui/AppBar';
 import Toolbar from 'material-ui/Toolbar';
 import Typography from 'material-ui/Typography';
 import { NavbarHeight, DrawerWidth } from '../../../styles/Constants';
+import { withRouter, RouteComponentProps } from 'react-router-dom';
+import PageStateDictionary from '../../../constants/PageStateDictionary';
 
 class AppContent extends React.Component<WithStyles<
 'content' |
 'toolbar' |
 'contentWrapper' |
-'appBar'>> {
+'headText' |
+'appBar'> & RouteComponentProps<{}>> {
     public render(): JSX.Element {
-        const { classes } = this.props;
+        const { classes, location } = this.props;
         return (
             <main className={classes.content}>
                 <AppBar
@@ -21,8 +24,8 @@ class AppContent extends React.Component<WithStyles<
                     color="default"
                 >
                     <Toolbar className={classes.toolbar}>
-                        <Typography variant="title" color="inherit">
-                            Title
+                        <Typography className={classes.headText} variant="title" color="inherit">
+                            {PageStateDictionary[location.pathname]}
                         </Typography>
                     </Toolbar>
                 </AppBar>
@@ -40,6 +43,9 @@ const styles = (theme: Theme) => ({
         color: '#83807D'
     },
     toolbar: theme.mixins.toolbar,
+    headText: {
+        fontWeight: 400
+    },
     content: {
         width: '100%',
         height: `calc(100% - ${NavbarHeight}px)`,
@@ -60,4 +66,4 @@ const styles = (theme: Theme) => ({
 
 const decorate = withStyles(styles);
 
-export default decorate<{}>(AppContent);
+export default withRouter<RouteComponentProps<{}>>(decorate<RouteComponentProps<{}>>(AppContent));

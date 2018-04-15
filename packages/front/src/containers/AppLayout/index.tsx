@@ -9,7 +9,7 @@ import withAuth from '../../components/common/auth/withAuth';
 import { connect, Dispatch } from 'react-redux';
 import { FetchUser } from '../../actions/authAction';
 import Main from '../Main';
-import Tests from '../TestsPage';
+import Tests from '../Tests';
 import TestProperty from '../TestProperty';
 import TestRunHistory from '../TestRunHistory';
 import { App as AppRoutes, NotFound } from '../../constants/RoutesNames';
@@ -72,6 +72,7 @@ class AppLayout extends React.Component<IAppProps & IAppDispatch & StyledCompone
                         <Route exact={true} path={AppRoutes.Tests} component={Tests}/>
                         <Route exact={true} path={AppRoutes.TestRun} component={TestRunHistory}/>
                         <Route exact={true} path={AppRoutes.NewTestProperty} component={TestProperty}/>
+                        <Route exact={true} path={AppRoutes.TestProperty + '/:objectId'} component={TestProperty}/>
                         <Redirect from="*" to={NotFound} />
                     </Switch>
                 </AppContent>
