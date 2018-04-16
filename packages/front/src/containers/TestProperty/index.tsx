@@ -1,10 +1,11 @@
 import * as React from 'react';
 import TestPropertyForm from './TestPropertyForm';
 import { AxiosResponse } from 'axios';
-import * as H from 'history';
 import AxiosFactory from '../../services/AxiosFactory';
 import ApiPath from '../../constants/ApiPath';
 import { Tests } from '../../constants/RoutesNames';
+import { RouteComponentProps } from 'react-router';
+import { NewTestProperty } from '../../constants/RoutesNames';
 
 interface TestParameters {
   concurrentUsers: number;
@@ -22,16 +23,19 @@ interface TestProfile {
 }
 
 interface TestPropertyProps {
-  history: H.History;
 }
 
 interface TestPropertyState {
   // TODO: remove any
   // tslint:disable-next-line:no-any
   userConfig: any;
+  newMode: boolean;
+  // tslint:disable-next-line:no-any
+  initialValues: any;
 }
 
 export interface ITestPropertyForm {
+  _id: string;
   name: string;
   info?: string;
   parameters: TestParameters;
@@ -42,19 +46,47 @@ export interface ITestPropertyForm {
   serviceUrl: string;
 }
 
-export default class TestProperty extends React.Component<TestPropertyProps, TestPropertyState> {
-  constructor(props: TestPropertyProps) {
+export default class TestProperty extends React.Component<
+  // tslint:disable-next-line:no-any
+  TestPropertyProps & RouteComponentProps<any>, TestPropertyState> {
+  // tslint:disable-next-line:no-any
+  constructor(props: TestPropertyProps & RouteComponentProps<any>) {
     super(props);
 
     this.state = {
-      userConfig: null
+      newMode: true,
+      userConfig: null,
+      initialValues: {
+        testProfiles: [{
+          browser: 'linux-chrome-stable',
+          location: 'any',
+          network: 'No throttling',
+          firewall: 'FW_NO_FW',
+          media: 'KrankyGeek-2-1080p'
+        }]
+      }
     };
 
     this.onSubmit = this.onSubmit.bind(this);
   }
 
   componentDidMount() {
-    this.fetchUserConfig();
+    this.setState({
+      newMode: this.props.location.pathname.includes(NewTestProperty)
+    },            () => {
+      this.fetchItemValues();
+      this.fetchUserConfig();
+    });
+  }
+
+  fetchItemValues() {
+    let axiosFactory = new AxiosFactory();
+    return axiosFactory.axios.get(`${ApiPath.api.testDefinitions}/${this.props.match.params.objectId}`)
+      .then((res: AxiosResponse) => {
+        this.setState({
+          initialValues: res.data
+        });
+    });
   }
 
   fetchUserConfig() {
@@ -67,14 +99,12 @@ export default class TestProperty extends React.Component<TestPropertyProps, Tes
   }
 
   render() {
-    const { userConfig } = this.state;
-
     return (
       <React.Fragment>
         {
-          userConfig && <TestPropertyForm
+          this.state.userConfig && <TestPropertyForm
             onSubmit={this.onSubmit}
-            userConfig={userConfig}
+            {...this.state}
           />
         }
       </React.Fragment>
@@ -83,9 +113,13 @@ export default class TestProperty extends React.Component<TestPropertyProps, Tes
 
   private onSubmit(values: ITestPropertyForm) {
     let axiosFactory = new AxiosFactory();
-    return axiosFactory.axios.post(ApiPath.api.testDefinitions, {
-      ...values,
-      browserType: 'Chrome'
+    return axiosFactory.axios({
+      url: this.state.newMode ? `${ApiPath.api.testDefinitions}` : `${ApiPath.api.testDefinitions}/${values._id}`,
+      method: this.state.newMode ? 'POST' : 'PUT',
+      data: {
+        ...values,
+        browserType: 'Chrome'
+      }
     }).then(() => {
       this.props.history.push(Tests);
     });

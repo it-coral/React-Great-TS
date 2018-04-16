@@ -1,15 +1,21 @@
 export const Main: string = '/app/main';
 export const Tests: string = '/app/testDefinition';
 export const TestRun: string = '/app/testRun';
+export const TestProperty: string = '/app/testProperties';
 export const NewTestProperty: string = '/app/new-testProperties';
 export const Monitoring: string = '/app/monitoring';
+export const MonitorRun: string = '/app/monitor-run';
+export const AnalyzeDump: string = '/app/analyzeDump';
 
 export const App = {
     Main,
     Tests,
     TestRun,
     Monitoring,
-    NewTestProperty
+    MonitorRun,
+    TestProperty,
+    NewTestProperty,
+    AnalyzeDump
 };
 
 export const SignIn: string = '/signin';

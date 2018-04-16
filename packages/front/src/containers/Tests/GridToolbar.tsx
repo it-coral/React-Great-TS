@@ -35,6 +35,7 @@ export class GridControl extends React.Component<RouteComponentProps<{}> & Style
                 </Button>
                 <Button
                     variant="raised"
+                    color="primary"
                     className={classes.newTestButton}
                     onClick={this.toNewTestDefinition}
                 >
@@ -50,12 +51,7 @@ const styles = (theme: Theme) => ({
         justifyContent: 'flex-end'
     },
     newTestButton: {
-        color: 'white',
-        backgroundColor: '#559542',
-        marginLeft: theme.spacing.unit * 2,
-        '&:hover': {
-            backgroundColor: '#518E45',
-        }
+        marginLeft: theme.spacing.unit * 2
     }
 } as React.CSSProperties);
 

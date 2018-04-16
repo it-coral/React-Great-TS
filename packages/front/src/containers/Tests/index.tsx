@@ -5,7 +5,7 @@ export default class Tests extends React.Component {
     render() {
         return (
             <React.Fragment>
-                <GridControl />
+                <GridControl {...this.props} />
             </React.Fragment>
         );
     }

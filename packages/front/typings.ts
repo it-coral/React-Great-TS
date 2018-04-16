@@ -50,6 +50,9 @@ interface ColumnSchema {
     disablePadding: boolean;
     label: string;
     sortable?: boolean;
+    style?: object;
+    // tslint:disable-next-line:no-any
+    render?: (data: object | string) => any;
 }
 
 interface DataDescriptor<T extends GridModel> {
@@ -64,4 +67,5 @@ interface DataFetchDescriptor {
     limit: number;
     page: number;
     order: string;
+    search?: string;
 }
