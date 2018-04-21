@@ -71,7 +71,6 @@ class TestPropertyForm extends React.Component<TestPropertyFormProps & StyledCom
                         type="text"
                         name="name"
                         label="Test Name"
-                        validate={FormValidators.required()}
                       />
                     </Grid>
                     <Grid item={true} xs={12}>
