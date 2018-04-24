@@ -41,6 +41,7 @@ export class GridControl extends React.Component<RouteComponentProps<{}> & WithS
         <Grid
           onRowClick={this.onRowClick}
           search={true}
+          remoteDataBound={true}
           searchByLabel={'name/description'}
           apiRoute={ApiPath.api.testDefinitions}
           columnSchema={columnSchema}

@@ -23,9 +23,9 @@ type StyledComponent = WithStyles<
   'searchBtn'
   >;
 
-type GridViewProps<T extends GridModel> = GridProps & GridState<T> & GridHandlers & StyledComponent;
+type GridViewProps<T extends GridModel> = GridProps<T> & GridState<T> & GridHandlers;
 
-class GridView<T extends GridModel> extends React.Component<GridViewProps<T>> {
+class GridView<T extends GridModel> extends React.Component<GridViewProps<T> & StyledComponent> {
   render() {
     const {
       columnSchema,
@@ -142,4 +142,5 @@ const styles = (theme: Theme) => ({
 
 const decorate = withStyles(styles);
 
-export default decorate<GridProps & GridHandlers>(GridView);
+// tslint:disable-next-line:no-any
+export default decorate<GridViewProps<GridModel>>(GridView);
