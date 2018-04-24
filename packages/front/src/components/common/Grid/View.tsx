@@ -7,14 +7,10 @@ import Table, {
   TablePagination,
   TableRow,
 } from 'material-ui/Table';
-import TextField from 'material-ui/TextField';
 import EnhancedTableHead from './EnhancedTableHead';
 import { GridProps, GridState, GridHandlers } from './index';
-import IconButton from 'material-ui/IconButton';
-import { InputAdornment } from 'material-ui/Input';
-import Search from 'material-ui-icons/Search';
-import Cancel from 'material-ui-icons/Cancel';
 import Typography from 'material-ui/Typography';
+import SearchToolbar from './SearchToolbar';
 
 type StyledComponent = WithStyles<
   'tableWrapper' |
@@ -54,37 +50,13 @@ class GridView<T extends GridModel> extends React.Component<GridViewProps<T>> {
           <TableHead>
             <TableRow>
               {search &&
-                <TableCell
-                  className={classes.searchCell}
-                >
-                  <form onSubmit={onApplySearch}>
-                    <TextField
-                      value={searchValue}
-                      onChange={onSearchChange}
-                      className={classes.searchField}
-                      placeholder={`Search by ${searchByLabel}`}
-                      InputProps={{
-                        endAdornment: <InputAdornment position="end">
-                          {searchValue &&
-                            <IconButton
-                              className={classes.searchBtn}
-                              aria-label="clear"
-                              onClick={onResetSearch}
-                            >
-                              <Cancel />
-                            </IconButton>}
-                          <IconButton
-                            className={classes.searchBtn}
-                            type="submit"
-                            aria-label="search"
-                          >
-                            <Search />
-                          </IconButton>
-                        </InputAdornment>
-                      }}
-                    />
-                  </form>
-                </TableCell>
+                <SearchToolbar
+                  onSubmit={onApplySearch}
+                  value={searchValue}
+                  onResetSearch={onResetSearch}
+                  onSearchChange={onSearchChange}
+                  placeholder={`Search by ${searchByLabel}`}
+                />
               }
               <TablePagination
                 colSpan={columnSchema.length}
