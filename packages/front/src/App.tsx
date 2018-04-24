@@ -7,14 +7,14 @@ import Router from './Router';
 const theme = createMuiTheme({
     palette: {
         primary: {
-            light: green[500],
-            main: '#559542',
-            dark: green[800],
+            light: '#6598d1',
+            main: '#4682C3',
+            dark: '#3e76b2',
             contrastText: '#ffffff'
         },
         secondary: {
             light: green[500],
-            main: green[700],
+            main: '#559542',
             dark: green[800],
             contrastText: '#ffffff'
         }
