@@ -3,9 +3,9 @@ import Grid from 'material-ui/Grid';
 import Button from 'material-ui/Button';
 import withStyles from 'material-ui/styles/withStyles';
 import { WithStyles } from 'material-ui/styles';
-import * as GOOGLE_IMAGE from '../../assets/socials/google.svg';
-import FACEBOOK_IMAGE from '../../assets/socials/facebook.svg';
-import LINKEDIN_IMAGE from '../../assets/socials/linkedin.svg';
+import * as GOOGLE_IMAGE from '../../../assets/socials/google.svg';
+import FACEBOOK_IMAGE from '../../../assets/socials/facebook.svg';
+import LINKEDIN_IMAGE from '../../../assets/socials/linkedin.svg';
 
 class LoginSocialButtons extends React.Component<WithStyles<
     'buttonContainer' |

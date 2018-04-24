@@ -1,17 +1,17 @@
 import * as React from 'react';
+import { RouteComponentProps } from 'react-router';
 import Grid from 'material-ui/Grid';
 import Paper from 'material-ui/Paper';
 import { WithStyles } from 'material-ui/styles';
 import withStyles from 'material-ui/styles/withStyles';
-import SigninForm from './SigninForm';
-import AnalyzerBanner from '../common/AnalyzerBanner';
 import Typography from 'material-ui/Typography';
 import Slide from 'material-ui/transitions/Slide';
-import LoginSocialButtons from '../common/LoginSocialButtons';
-import FooterColors from '../common/FooterColors';
+import SigninForm from './SigninForm';
+import AnalyzerBanner from '../../../components/common/auth/AnalyzerBanner';
+import LoginSocialButtons from '../../../components/common/auth/LoginSocialButtons';
+import FooterColors from '../../../components/common/auth/FooterColors';
 import RemindPasswordModal from './RemindPasswordModal';
-import { RouteComponentProps } from 'react-router';
-import { Login as LoginRoutes } from '../../constants/RoutesNames';
+import { Login as LoginRoutes } from '../../../constants/RoutesNames';
 
 type SignInPageStyles = WithStyles<'root' |
     'title' |

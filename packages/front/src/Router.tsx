@@ -2,8 +2,8 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 import { Router, Route, Switch, Redirect } from 'react-router-dom';
 import { createBrowserHistory } from 'history';
-import AppLayout from './containers/AppLayout';
-import LoginLayout from './containers/LoginLayout';
+import AppLayout from './containers/Layout';
+import LoginLayout from './containers/Auth/LoginLayout';
 import NotFoundPage from './containers/NotFoundPage';
 
 import AuthService from './services/AuthService';
