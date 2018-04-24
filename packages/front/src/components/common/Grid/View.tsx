@@ -10,7 +10,8 @@ import Table, {
 import TextField from 'material-ui/TextField';
 import EnhancedTableHead from './EnhancedTableHead';
 import { GridProps, GridState, GridHandlers } from './index';
-import Button from 'material-ui/Button';
+import IconButton from 'material-ui/IconButton';
+import { InputAdornment } from 'material-ui/Input';
 import Search from 'material-ui-icons/Search';
 import Cancel from 'material-ui-icons/Cancel';
 import Typography from 'material-ui/Typography';
@@ -22,8 +23,9 @@ type StyledComponent = WithStyles<
   'margin' |
   'searchCell' |
   'noRowsCell' |
-  'tableRowItem'
->;
+  'tableRowItem' |
+  'searchBtn'
+  >;
 
 type GridViewProps<T extends GridModel> = GridProps & GridState<T> & GridHandlers & StyledComponent;
 
@@ -61,28 +63,26 @@ class GridView<T extends GridModel> extends React.Component<GridViewProps<T>> {
                       onChange={onSearchChange}
                       className={classes.searchField}
                       placeholder={`Search by ${searchByLabel}`}
+                      InputProps={{
+                        endAdornment: <InputAdornment position="end">
+                          {searchValue &&
+                            <IconButton
+                              className={classes.searchBtn}
+                              aria-label="clear"
+                              onClick={onResetSearch}
+                            >
+                              <Cancel />
+                            </IconButton>}
+                          <IconButton
+                            className={classes.searchBtn}
+                            type="submit"
+                            aria-label="search"
+                          >
+                            <Search />
+                          </IconButton>
+                        </InputAdornment>
+                      }}
                     />
-                    {searchValue &&
-                    <Button
-                      className={classes.margin}
-                      mini={true}
-                      variant="fab"
-                      color="primary"
-                      aria-label="clear"
-                      onClick={onResetSearch}
-                    >
-                      <Cancel />
-                    </Button>}
-                    <Button
-                      className={classes.margin}
-                      mini={true}
-                      variant="fab"
-                      color="primary"
-                      type="submit"
-                      aria-label="search"
-                    >
-                      <Search />
-                    </Button>
                   </form>
                 </TableCell>
               }
@@ -125,8 +125,8 @@ class GridView<T extends GridModel> extends React.Component<GridViewProps<T>> {
                 }
               </TableRow>
             )) : <td className={classes.noRowsCell} colSpan={columnSchema.length}>
-              <Typography align="center">No rows to show</Typography>
-            </td>}
+                <Typography align="center">No rows to show</Typography>
+              </td>}
           </TableBody>
         </Table>
       </div>
@@ -161,6 +161,10 @@ const styles = (theme: Theme) => ({
   searchCell: {
     paddingRight: 0,
     minWidth: 373
+  },
+  searchBtn: {
+    width: 30,
+    height: 30
   }
 } as React.CSSProperties);
 
