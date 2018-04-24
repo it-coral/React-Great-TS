@@ -2,7 +2,6 @@ import * as React from 'react';
 import { storiesOf, RenderFunction } from '@storybook/react';
 import ThemeProvider from '../src/testHelpers/ThemeProvider';
 import { Grid } from '../src/components/common/Grid';
-// import ApiPath from '../src/constants/ApiPath';
 
 const columnSchema: Array<ColumnSchema> = [
   { id: 'Column1', numeric: false, disablePadding: false, label: 'Column 1' },
