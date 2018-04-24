@@ -51,7 +51,7 @@ class TestPropertyForm extends React.Component<TestPropertyFormProps & StyledCom
     } = this.props;
     return (
       <Grid container={true}>
-        <Grid item={true} lg={6} md={8} xs={12}>
+        <Grid item={true} xs={12}>
           <Paper className={classes.root}>
             <Form
               onSubmit={onSubmit}
@@ -65,6 +65,16 @@ class TestPropertyForm extends React.Component<TestPropertyFormProps & StyledCom
                   onSubmit={handleSubmit}
                 >
                   <Grid container={true}>
+                    <Grid item={true} xs={12} className={classes.saveBtnContainer}>
+                      <Button
+                        variant="raised"
+                        type="submit"
+                        color="secondary"
+                        className={classes.greenBtn}
+                      >
+                        Save
+                      </Button>
+                    </Grid>
                     <Grid item={true} xs={12}>
                       <Field
                         component={TextFieldControl}
@@ -85,7 +95,7 @@ class TestPropertyForm extends React.Component<TestPropertyFormProps & StyledCom
                     </Grid>
                     <Grid item={true} xs={12}>
                       <Grid container={true}>
-                        <Grid item={true} lg={4} sm={6} xs={12}>
+                        <Grid item={true} md={3} xs={12}>
                           <Field
                             component={TextFieldControl}
                             type="number"
@@ -93,7 +103,7 @@ class TestPropertyForm extends React.Component<TestPropertyFormProps & StyledCom
                             label="Concurrent probes"
                           />
                         </Grid>
-                        <Grid item={true} lg={4} sm={6} xs={12}>
+                        <Grid item={true} md={3} xs={12}>
                           <Field
                             component={TextFieldControl}
                             type="number"
@@ -111,7 +121,7 @@ class TestPropertyForm extends React.Component<TestPropertyFormProps & StyledCom
                         label="Run Options"
                       />
                     </Grid>
-                    <Grid item={true} lg={3} sm={4} xs={12}>
+                    <Grid item={true} lg={2} sm={3} xs={12}>
                       <Field
                         name="serviceUrlOpen"
                         component={CheckboxControl}
@@ -119,20 +129,20 @@ class TestPropertyForm extends React.Component<TestPropertyFormProps & StyledCom
                         label={
                           <div>
                             <span>Auto </span>
-                              <Tooltip
-                                title="Make sure to enable popup windows"
-                                placement="top"
+                            <Tooltip
+                              title="Make sure to enable popup windows"
+                              placement="top"
+                            >
+                              <span
+                                className={classes.tooltipLabel}
                               >
-                                <span
-                                  className={classes.tooltipLabel}
-                                >
-                                  Save
-                                </span>
-                              </Tooltip>
+                                Save
+                              </span>
+                            </Tooltip>
                           </div>}
                       />
                     </Grid>
-                    <Grid item={true} lg={9} sm={8} xs={12}>
+                    <Grid item={true} lg={10} sm={9} xs={12}>
                       <Field
                         component={TextFieldControl}
                         type="text"
@@ -145,14 +155,14 @@ class TestPropertyForm extends React.Component<TestPropertyFormProps & StyledCom
                     <Grid item={true} xs={12}>
                       <Button
                         variant="raised"
-                        color="primary"
+                        color="secondary"
                         onClick={() => alert('not yet ready')}
                       >
                         Upload
                       </Button>
                       <Button
                         variant="raised"
-                        color="primary"
+                        color="secondary"
                         className={classes.editBtn}
                         onClick={() => alert('not yet ready')}
                       >
@@ -178,123 +188,126 @@ class TestPropertyForm extends React.Component<TestPropertyFormProps & StyledCom
                             <Grid item={true} xs={12}>
                               <Divider />
                             </Grid>
-                            <Grid item={true} sm={6} xs={12}>
-                              <Field
-                                component={TextFieldControl}
-                                select={true}
-                                SelectProps={{
-                                  autoWidth: true
-                                }}
-                                name={`${name}.browser`}
-                                label="Browser"
-                              >
-                                {userConfig.data['docker-machines'].map(
-                                  // tslint:disable-next-line:no-any
-                                  (option: any, i: number) => (
-                                    <MenuItem
-                                      key={i}
-                                      value={option.id}
-                                    >
-                                      {option.name}
-                                    </MenuItem>
-                                  ))}
-                              </Field>
-                            </Grid>
-                            <Grid item={true} sm={6} xs={12}>
-                              <Field
-                                component={TextFieldControl}
-                                select={true}
-                                SelectProps={{
-                                  autoWidth: true
-                                }}
-                                name={`${name}.location`}
-                                label="Location"
-                              >
-                                {userConfig.data['agent-locations'].map(
-                                  // tslint:disable-next-line:no-any
-                                  (option: any, i: number) => (
-                                    <MenuItem
-                                      key={i}
-                                      value={option.id}
-                                    >
-                                      {option.name}
-                                    </MenuItem>
-                                  ))}
-                              </Field>
-                            </Grid>
-                            <Grid item={true} sm={6} xs={12}>
-                              <Field
-                                component={TextFieldControl}
-                                select={true}
-                                SelectProps={{
-                                  autoWidth: true
-                                }}
-                                name={`${name}.network`}
-                                label="Network Profile"
-                              >
-                                {userConfig.data['network-profiles'].map(
-                                  // tslint:disable-next-line:no-any
-                                  (option: any, i: number) => (
-                                    <MenuItem
-                                      key={i}
-                                      value={option.id}
-                                    >
-                                      {option.name}
-                                    </MenuItem>
-                                  ))}
-                              </Field>
-                            </Grid>
-                            <Grid item={true} sm={6} xs={12}>
-                              <Field
-                                component={TextFieldControl}
-                                select={true}
-                                SelectProps={{
-                                  autoWidth: true
-                                }}
-                                name={`${name}.firewall`}
-                                label="Firewall Profile"
-                              >
-                                {userConfig.data['firewall-profiles'].map(
-                                  // TODO: remove any
-                                  // tslint:disable-next-line:no-any
-                                  (option: any, i: number) => (
-                                    <MenuItem
-                                      key={i}
-                                      value={option.id}
-                                    >
-                                      {option.name}
-                                    </MenuItem>
-                                  ))}
-                              </Field>
-                            </Grid>
-                            <Grid item={true} sm={6} xs={12}>
-                              <Field
-                                component={TextFieldControl}
-                                select={true}
-                                SelectProps={{
-                                  autoWidth: true
-                                }}
-                                name={`${name}.media`}
-                                label="Media"
-                              >
-                                {userConfig.data['media-list'].map(
-                                  // TODO: remove any
-                                  // tslint:disable-next-line:no-any
-                                  (option: any, i: number) => (
-                                    <MenuItem
-                                      key={i}
-                                      value={option.id}
-                                    >
-                                      {option.displayName}
-                                    </MenuItem>
-                                  ))}
-                              </Field>
+                            <Grid item={true} xs={12} md={6}>
+                              <Grid container={true}>
+                                <Grid item={true} sm={6} xs={12}>
+                                  <Field
+                                    component={TextFieldControl}
+                                    select={true}
+                                    SelectProps={{
+                                      autoWidth: true
+                                    }}
+                                    name={`${name}.browser`}
+                                    label="Browser"
+                                  >
+                                    {userConfig.data['docker-machines'].map(
+                                      // tslint:disable-next-line:no-any
+                                      (option: any, i: number) => (
+                                        <MenuItem
+                                          key={i}
+                                          value={option.id}
+                                        >
+                                          {option.name}
+                                        </MenuItem>
+                                      ))}
+                                  </Field>
+                                </Grid>
+                                <Grid item={true} sm={6} xs={12}>
+                                  <Field
+                                    component={TextFieldControl}
+                                    select={true}
+                                    SelectProps={{
+                                      autoWidth: true
+                                    }}
+                                    name={`${name}.location`}
+                                    label="Location"
+                                  >
+                                    {userConfig.data['agent-locations'].map(
+                                      // tslint:disable-next-line:no-any
+                                      (option: any, i: number) => (
+                                        <MenuItem
+                                          key={i}
+                                          value={option.id}
+                                        >
+                                          {option.name}
+                                        </MenuItem>
+                                      ))}
+                                  </Field>
+                                </Grid>
+                                <Grid item={true} sm={6} xs={12}>
+                                  <Field
+                                    component={TextFieldControl}
+                                    select={true}
+                                    SelectProps={{
+                                      autoWidth: true
+                                    }}
+                                    name={`${name}.network`}
+                                    label="Network Profile"
+                                  >
+                                    {userConfig.data['network-profiles'].map(
+                                      // tslint:disable-next-line:no-any
+                                      (option: any, i: number) => (
+                                        <MenuItem
+                                          key={i}
+                                          value={option.id}
+                                        >
+                                          {option.name}
+                                        </MenuItem>
+                                      ))}
+                                  </Field>
+                                </Grid>
+                                <Grid item={true} sm={6} xs={12}>
+                                  <Field
+                                    component={TextFieldControl}
+                                    select={true}
+                                    SelectProps={{
+                                      autoWidth: true
+                                    }}
+                                    name={`${name}.firewall`}
+                                    label="Firewall Profile"
+                                  >
+                                    {userConfig.data['firewall-profiles'].map(
+                                      // TODO: remove any
+                                      // tslint:disable-next-line:no-any
+                                      (option: any, i: number) => (
+                                        <MenuItem
+                                          key={i}
+                                          value={option.id}
+                                        >
+                                          {option.name}
+                                        </MenuItem>
+                                      ))}
+                                  </Field>
+                                </Grid>
+                                <Grid item={true} sm={6} xs={12}>
+                                  <Field
+                                    component={TextFieldControl}
+                                    select={true}
+                                    SelectProps={{
+                                      autoWidth: true
+                                    }}
+                                    name={`${name}.media`}
+                                    label="Media"
+                                  >
+                                    {userConfig.data['media-list'].map(
+                                      // TODO: remove any
+                                      // tslint:disable-next-line:no-any
+                                      (option: any, i: number) => (
+                                        <MenuItem
+                                          key={i}
+                                          value={option.id}
+                                        >
+                                          {option.displayName}
+                                        </MenuItem>
+                                      ))}
+                                  </Field>
+                                </Grid>
+                              </Grid>
                             </Grid>
                             <Grid
                               className={classes.removeBtnContainer}
                               item={true}
-                              md={2}
-                              sm={4}
+                              md={6}
                               xs={12}
                             >
                               {index > 0 && <IconButton
@@ -308,7 +321,8 @@ class TestPropertyForm extends React.Component<TestPropertyFormProps & StyledCom
                             {index === (fields.length ? fields.length - 1 : -1) && <Grid
                               className={classes.addProfileBtnContainer}
                               item={true}
-                              xs={6}
+                              md={6}
+                              xs={12}
                             >
                               <Button
                                 variant="raised"
@@ -325,7 +339,7 @@ class TestPropertyForm extends React.Component<TestPropertyFormProps & StyledCom
                       <Button
                         variant="raised"
                         type="submit"
-                        color="primary"
+                        color="secondary"
                         className={classes.greenBtn}
                       >
                         Save
@@ -366,7 +380,7 @@ const decorate = withStyles(theme => ({
   },
   removeBtnContainer: {
     display: 'flex',
-    alignItems: 'flex-end',
+    alignItems: 'flex-start',
     justifyContent: 'flex-start'
   },
   removeBtn: {

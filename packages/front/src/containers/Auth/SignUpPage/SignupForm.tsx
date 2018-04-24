@@ -1,19 +1,19 @@
 import * as React from 'react';
 import Grid from 'material-ui/Grid';
 import { Field, Form } from 'react-final-form';
-import TextFieldControl from '../../components/common/form-elements/TextFieldControl';
+import TextFieldControl from '../../../components/common/form-elements/TextFieldControl';
 import Button from 'material-ui/Button';
 import { WithStyles } from 'material-ui';
 import withStyles from 'material-ui/styles/withStyles';
 import { Link } from 'react-router-dom';
 import Typography from 'material-ui/Typography';
 import { RouteComponentProps, withRouter } from 'react-router';
-import FormValidators from '../../helpers/form-validators';
-import AxiosFactory from '../../services/AxiosFactory';
-import ApiPath from '../../constants/ApiPath';
-import CheckboxControl from '../../components/common/form-elements/CheckboxControl';
+import FormValidators from '../../../helpers/form-validators';
+import AxiosFactory from '../../../services/AxiosFactory';
+import ApiPath from '../../../constants/ApiPath';
+import { Login as LoginRoutes } from '../../../constants/RoutesNames';
+import CheckboxControl from '../../../components/common/form-elements/CheckboxControl';
 import { CircularProgress } from 'material-ui/Progress';
-import { Login as LoginRoutes } from '../../constants/RoutesNames';
 
 interface ISignupForm {
     email: string;

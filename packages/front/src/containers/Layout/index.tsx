@@ -1,10 +1,11 @@
 import * as React from 'react';
+import { Redirect, Route, Switch } from 'react-router';
+import withStyles from 'material-ui/styles/withStyles';
+import { Theme, WithStyles } from 'material-ui/styles';
+import { CircularProgress } from 'material-ui/Progress';
 import Navbar from './components/Navbar';
 import Sidebar from './components/Sidebar';
 import AppContent from './components/AppContent';
-import withStyles from 'material-ui/styles/withStyles';
-import { Theme, WithStyles } from 'material-ui/styles';
-import { Redirect, Route, Switch } from 'react-router';
 import withAuth from '../../components/common/auth/withAuth';
 import { connect, Dispatch } from 'react-redux';
 import { FetchUser } from '../../actions/authAction';
@@ -13,7 +14,6 @@ import Tests from '../Tests';
 import TestProperty from '../TestProperty';
 import TestRunHistory from '../TestRunHistory';
 import { App as AppRoutes, NotFound } from '../../constants/RoutesNames';
-import { CircularProgress } from 'material-ui/Progress';
 
 interface IAppProps {
     user: User;

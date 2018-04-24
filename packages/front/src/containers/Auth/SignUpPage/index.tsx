@@ -4,11 +4,11 @@ import Paper from 'material-ui/Paper';
 import { WithStyles } from 'material-ui/styles';
 import withStyles from 'material-ui/styles/withStyles';
 import Typography from 'material-ui/Typography';
-import AnalyzerBanner from '../common/AnalyzerBanner';
-import LoginSocialButtons from '../common/LoginSocialButtons';
-import SignupForm from './SignupForm';
 import Slide from 'material-ui/transitions/Slide';
-import FooterColors from '../common/FooterColors';
+import AnalyzerBanner from '../../../components/common/auth/AnalyzerBanner';
+import LoginSocialButtons from '../../../components/common/auth/LoginSocialButtons';
+import FooterColors from '../../../components/common/auth/FooterColors';
+import SignupForm from './SignupForm';
 
 class SignUpPage extends React.Component<WithStyles<'root' |
     'title' |

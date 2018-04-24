@@ -27,7 +27,7 @@ interface NavBarProps {
 }
 
 interface GridModel {
-    _id: string;
+    _id: string | number;
 }
 
 interface TestModel extends GridModel {

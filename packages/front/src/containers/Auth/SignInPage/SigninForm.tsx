@@ -8,10 +8,10 @@ import Typography from 'material-ui/Typography';
 import Email from 'material-ui-icons/Email';
 import Lock from 'material-ui-icons/Lock';
 import { RouteComponentProps, withRouter } from 'react-router';
-import TextFieldControl from '../../components/common/form-elements/TextFieldControl';
-import FormValidators from '../../helpers/form-validators';
-import AuthService from '../../services/AuthService';
-import { Main, Login as LoginRoutes } from '../../constants/RoutesNames';
+import TextFieldControl from '../../../components/common/form-elements/TextFieldControl';
+import FormValidators from '../../../helpers/form-validators';
+import AuthService from '../../../services/AuthService';
+import { Main, Login as LoginRoutes } from '../../../constants/RoutesNames';
 
 interface ILoginForm {
     email: string;

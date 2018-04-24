@@ -1,9 +1,9 @@
 import * as React from 'react';
+import { RouteComponentProps } from 'react-router';
 import Grid from 'material-ui/Grid';
 import Typography from 'material-ui/Typography';
-import { Login as LoginRoutes } from '../../constants/RoutesNames';
 import Button from 'material-ui/Button';
-import { RouteComponentProps } from 'react-router';
+import { Login as LoginRoutes } from '../../../constants/RoutesNames';
 
 interface IRouterProps {
     email: string;

@@ -2,9 +2,9 @@ import * as React from 'react';
 import NavBar from './components/NavBar';
 import WorkingSection from './components/WorkingSection';
 import { Redirect, Route, Switch } from 'react-router';
-import SignInPage from '../../containers/SignInPage';
-import SignUpPage from '../../containers/SignUpPage';
-import { Login as LoginRoutes } from '../../constants/RoutesNames';
+import SignInPage from '../SignInPage';
+import SignUpPage from '../SignUpPage';
+import { Login as LoginRoutes } from '../../../constants/RoutesNames';
 import SignUpConfirmPage from '../SignUpConfirmPage';
 import ForgotPasswordPage from '../ForgotPasswordPage/index';
 

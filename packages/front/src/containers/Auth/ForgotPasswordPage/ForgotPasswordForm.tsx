@@ -1,11 +1,11 @@
 import * as React from 'react';
 import { Field, Form } from 'react-final-form';
-import TextFieldControl from '../../components/common/form-elements/TextFieldControl';
-import FormValidators from '../../helpers/form-validators';
+import TextFieldControl from '../../../components/common/form-elements/TextFieldControl';
+import FormValidators from '../../../helpers/form-validators';
 import { RouteComponentProps, withRouter } from 'react-router';
-import { Login as LoginRoutes } from '../../constants/RoutesNames';
-import AxiosFactory from '../../services/AxiosFactory';
-import ApiPath from '../../constants/ApiPath';
+import { Login as LoginRoutes } from '../../../constants/RoutesNames';
+import AxiosFactory from '../../../services/AxiosFactory';
+import ApiPath from '../../../constants/ApiPath';
 import Grid from 'material-ui/Grid';
 import Button from 'material-ui/Button';
 

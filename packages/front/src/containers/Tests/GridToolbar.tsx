@@ -35,7 +35,7 @@ export class GridControl extends React.Component<RouteComponentProps<{}> & Style
                 </Button>
                 <Button
                     variant="raised"
-                    color="primary"
+                    color="secondary"
                     className={classes.newTestButton}
                     onClick={this.toNewTestDefinition}
                 >

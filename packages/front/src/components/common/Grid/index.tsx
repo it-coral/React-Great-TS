@@ -3,13 +3,15 @@ import View from './View';
 import AxiosFactory from '../../../services/AxiosFactory';
 import { AxiosResponse } from 'axios';
 
-export interface GridProps {
+export interface GridProps<T extends GridModel> {
   columnSchema: Array<ColumnSchema>;
-  apiRoute: string;
-  defaultSort: SortDescriptor;
+  apiRoute?: string;
+  defaultSort?: SortDescriptor;
+  remoteDataBound?: boolean;
   search?: boolean;
   searchByLabel?: string;
-  onRowClick: (e: React.MouseEvent<HTMLTableRowElement>, dataItem: GridModel) => void;
+  localData?: Array<T>;
+  onRowClick?: (e: React.MouseEvent<HTMLTableRowElement>, dataItem: T) => void;
 }
 
 export interface GridState<T extends GridModel> {
@@ -28,23 +30,23 @@ export interface GridHandlers {
   onRowClick: (e: React.MouseEvent<HTMLTableRowElement>, dataItem: GridModel) => void;
 }
 
-export class Grid<T extends GridModel> extends React.Component<GridProps, GridState<T>> {
+export class Grid<T extends GridModel> extends React.Component<GridProps<T>, GridState<T>> {
   handlers: GridHandlers;
   defaultState: GridState<T>;
 
-  constructor(props: GridProps) {
+  constructor(props: GridProps<T>) {
     super(props);
 
     this.defaultState = {
       data: {
-        docs: [],
+        docs: props.localData ? props.localData : [],
         total: 0,
         limit: 50,
         page: 0,
       },
       sort: {
-        order: props.defaultSort.order || '',
-        orderBy: props.defaultSort.orderBy || ''
+        order: props.defaultSort ? props.defaultSort.order : 'asc',
+        orderBy: props.defaultSort ? props.defaultSort.orderBy : '_id'
       },
       searchValue: ''
     };
@@ -71,16 +73,18 @@ export class Grid<T extends GridModel> extends React.Component<GridProps, GridSt
   }
 
   componentDidMount() {
-    this.fetchListInfo({
-      page: this.state.data.page,
-      limit: this.state.data.limit,
-      order: this.getSortOrder()
-    });
+    if (this.props.remoteDataBound) {
+      this.fetchListInfo({
+        page: this.state.data.page,
+        limit: this.state.data.limit,
+        order: this.getSortOrder()
+      });
+    }
   }
 
   fetchListInfo(config: DataFetchDescriptor) {
     let axiosFactory = new AxiosFactory();
-    return axiosFactory.axios.get(this.props.apiRoute, {
+    return this.props.apiRoute && axiosFactory.axios.get(this.props.apiRoute, {
       params: {
         order: config.order,
         limit: config.limit,
@@ -102,12 +106,14 @@ export class Grid<T extends GridModel> extends React.Component<GridProps, GridSt
       ...this.defaultState,
       searchValue
     },            () => {
-      this.fetchListInfo({
-        page: this.state.data.page,
-        limit: this.state.data.limit,
-        order: this.getSortOrder(),
-        search: this.state.searchValue
-      });
+      if (this.props.remoteDataBound) {
+        this.fetchListInfo({
+          page: this.state.data.page,
+          limit: this.state.data.limit,
+          order: this.getSortOrder(),
+          search: this.state.searchValue
+        });
+      }
     });
   }
 
@@ -172,7 +178,9 @@ export class Grid<T extends GridModel> extends React.Component<GridProps, GridSt
   }
 
   onRowClick(e: React.MouseEvent<HTMLTableRowElement>, dataItem: T) {
-    this.props.onRowClick(e, dataItem);
+    if (this.props.onRowClick) {
+      this.props.onRowClick(e, dataItem);
+    }
   }
 
   render() {
