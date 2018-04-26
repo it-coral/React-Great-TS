@@ -18,7 +18,8 @@ interface ISelectFieldControl {
     options: Array<ISelectOption>;
 }
 
-class SelectFieldControl extends React.Component<FieldRenderProps & ISelectFieldControl & WithStyles<'root'>> {
+class SelectFieldControl extends React.Component<FieldRenderProps & ISelectFieldControl &
+    WithStyles<'root' | 'select'>> {
     public render(): JSX.Element {
         const {
             classes,
@@ -40,22 +41,22 @@ class SelectFieldControl extends React.Component<FieldRenderProps & ISelectField
                 {...rest}
                 className={classes.root}
             >
-                <InputLabel>{label}</InputLabel>
+                <InputLabel className={classes.select}>{label}</InputLabel>
                 <Select
                     inputProps={restInput}
                     value={value}
                     name={name}
                     onChange={onChange}
-
+                    className={classes.select}
                 >
                     {emptyOption &&
                         <MenuItem value="">
                             <em>{label}</em>
                         </MenuItem>
                     }
-                    {options.map((o, index) => {
+                    {options.map((o, index) => (
                         <MenuItem key={index} value={o.value}>{o.label}</MenuItem>
-                    })}
+                    ))}
                 </Select>
                 {((meta.error || meta.submitError) && meta.touched) &&
                     <FormHelperText>{(meta.error || meta.submitError)}</FormHelperText>
@@ -69,7 +70,11 @@ const decorate = withStyles(() => ({
     root: {
         width: '100%',
         marginTop: 0,
-        marginBottom: 0
+        marginBottom: 0,
+        fontSize: '0.95em'
+    },
+    select: {
+        fontSize: '0.95em'
     }
 }));
 

@@ -1,7 +1,7 @@
 import * as React from 'react';
 import Paper from 'material-ui/Paper';
 import { Theme, withStyles, WithStyles } from 'material-ui/styles';
-import { Grid } from '../../components/common/Grid';
+import { FilterValue, Grid, GridFilter } from '../../components/common/Grid';
 import ApiPath from '../../constants/ApiPath';
 import { RouteComponentProps } from 'react-router';
 import { TestRunDetails } from '../../constants/RoutesNames';
@@ -19,6 +19,21 @@ import Timer from 'material-ui-icons/Timer';
 import * as moment from 'moment';
 import { ReactNode } from 'react';
 import Tooltip from 'material-ui/Tooltip';
+import { connect, Dispatch } from 'react-redux';
+import { FetchTestsDistinct } from '../../actions/dictionaryAction';
+
+interface ITestHistoryState {
+    filters: Array<GridFilter>;
+    testRuns: Array<FilterValue>;
+}
+
+interface ITestsHistoryDispatch {
+    fetchTestsDistinct(): void;
+}
+
+interface ITestHistoryProps {
+    testRuns: Array<string>;
+}
 
 const tooltipHelper = (title: string, icon: ReactNode): ReactNode => {
     return <Tooltip title={title}>{React.createElement('div', null, icon)}</Tooltip>;
@@ -70,11 +85,34 @@ const columnSchema: Array<ColumnSchema> = [
     {id: 'textError', numeric: false, disablePadding: false, label: 'Reason'},
 ];
 
-export class GridControl extends React.Component<RouteComponentProps<{}> & WithStyles<'root'>> {
-    constructor(props: RouteComponentProps<{}> & WithStyles<'root'>) {
+export class GridControl extends React.Component<ITestHistoryProps & ITestsHistoryDispatch & RouteComponentProps<{}> &
+    WithStyles<'root'>, ITestHistoryState> {
+    constructor(props: ITestHistoryProps & ITestsHistoryDispatch & RouteComponentProps<{}> & WithStyles<'root'>) {
         super(props);
 
+        this.state = {
+            filters: [],
+            testRuns: [],
+        };
+
         this.onRowClick = this.onRowClick.bind(this);
+    }
+
+    componentDidMount() {
+        this.props.fetchTestsDistinct();
+    }
+
+    componentWillReceiveProps(nextProps: ITestHistoryProps) {
+        if (nextProps.testRuns.length !== 0) {
+            let testRunsFilter: Array<FilterValue> = [{value: '', label: 'Any test'}];
+            nextProps.testRuns.map(tr => {
+                let testRunFilterSingle: FilterValue = {value: tr, label: tr};
+                testRunsFilter.push(testRunFilterSingle);
+            });
+            this.setState({
+                testRuns: testRunsFilter,
+            });
+        }
     }
 
     onRowClick(e: React.MouseEvent<HTMLTableRowElement>, dataItem: GridModel) {
@@ -83,6 +121,25 @@ export class GridControl extends React.Component<RouteComponentProps<{}> & WithS
 
     render() {
         const {classes} = this.props;
+
+        let statusFilterValues = [
+            {value: 'warnings', label: 'Warnings'},
+            {value: 'error', label: 'Error'},
+            {value: 'failure', label: 'Failure'},
+            {value: 'timeout', label: 'Timeout'},
+            {value: 'completed', label: 'Completed'},
+            {value: 'service-failure', label: 'Service failure'},
+            {value: 'terminated', label: 'Terminated'},
+            {value: 'started', label: 'Started'},
+            {value: 'retry', label: 'Retry'},
+            {value: 'dismissed', label: 'Dismissed'},
+        ];
+
+        let createDateFilterValues = [
+            {value: '0', label: 'Today'},
+            {value: '7', label: 'Last 7 days'},
+            {value: '30', label: 'Last 30 days'},
+        ];
 
         return (
             <Paper className={classes.root}>
@@ -97,6 +154,24 @@ export class GridControl extends React.Component<RouteComponentProps<{}> & WithS
                         order: 'asc',
                         orderBy: 'createDate'
                     }}
+                    filters={[
+                        {
+                            fieldName: 'status',
+                            filterValues: statusFilterValues,
+                            value: '',
+
+                        },
+                        {
+                            fieldName: 'name',
+                            filterValues: this.state.testRuns,
+                            value: '',
+                        },
+                        {
+                            fieldName: 'createDate',
+                            filterValues: createDateFilterValues,
+                            value: '',
+                        }
+                    ]}
                 />
             </Paper>
         );
@@ -111,4 +186,14 @@ const styles = (theme: Theme) => ({
 
 const decorate = withStyles(styles);
 
-export default decorate<{}>(GridControl);
+const mapDispatchToProps = (dispatch: Dispatch<IStore>): ITestsHistoryDispatch => ({
+    fetchTestsDistinct: () => dispatch(FetchTestsDistinct()),
+});
+
+const mapStateToProps = (state: IStore) => ({
+    testRuns: state.dictionary.testRuns,
+});
+
+export default connect<ITestHistoryProps, ITestsHistoryDispatch>
+(mapStateToProps, mapDispatchToProps)
+(decorate<ITestHistoryProps & ITestsHistoryDispatch>(GridControl));

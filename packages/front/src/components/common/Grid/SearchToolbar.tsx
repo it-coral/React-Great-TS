@@ -8,18 +8,17 @@ import IconButton from 'material-ui/IconButton';
 import { InputAdornment } from 'material-ui/Input';
 import Search from 'material-ui-icons/Search';
 import Cancel from 'material-ui-icons/Cancel';
-import { FormControl } from 'material-ui/Form';
-import Select from 'material-ui/Select';
-import { InputLabel } from 'material-ui/Input';
-import { MenuItem } from 'material-ui/Menu';
 import { Field, FieldRenderProps, Form } from 'react-final-form';
 import arrayMutators from 'final-form-arrays';
 import { FieldArray } from 'react-final-form-arrays';
-import TextFieldControl from '../form-elements/TextFieldControl';
+import SelectFieldControl from '../form-elements/SelectFieldControl';
+import { GridFilter } from './index';
 
 type StyledComponent = WithStyles<'searchField' |
     'searchCell' |
-    'searchBtn'>;
+    'searchBtn' |
+    'filterField'
+    >;
 
 export interface SearchToolbarProps {
     value: string;
@@ -27,6 +26,16 @@ export interface SearchToolbarProps {
     onSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
     onResetSearch: () => void;
     onSearchChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+    colSpan: number;
+    filters?: Array<GridFilter>;
+}
+
+interface IFilterValue {
+    [key: string]: string | number;
+}
+
+interface ISearchToolbarInitialValues {
+    filter?: Array<IFilterValue>;
 }
 
 class SearchToolbar extends React.Component<SearchToolbarProps & StyledComponent> {
@@ -36,14 +45,33 @@ class SearchToolbar extends React.Component<SearchToolbarProps & StyledComponent
             onResetSearch,
             onSubmit,
             placeholder,
+            colSpan,
+            filters
         } = this.props;
+
+        let initialValues: ISearchToolbarInitialValues = {};
+
+        if (filters !== undefined) {
+            initialValues = {filter: []};
+            filters.forEach(filter => {
+                if (filter.value === undefined && initialValues.filter !== undefined) {
+                    initialValues.filter.push({});
+                } else if (initialValues.filter !== undefined) {
+                    let filterInitialValue = {};
+                    filterInitialValue[filter.fieldName] = filter.value;
+                    initialValues.filter.push(filterInitialValue);
+                }
+            });
+        }
+
         return (
             <TableCell
+                colSpan={colSpan}
                 className={classes.searchCell}
             >
                 <Form
                     onSubmit={onSubmit}
-                    initialValues={{filter: [{}]}}
+                    initialValues={initialValues}
                     mutators={{
                         ...arrayMutators
                     }}
@@ -51,34 +79,25 @@ class SearchToolbar extends React.Component<SearchToolbarProps & StyledComponent
                         <form
                             onSubmit={handleSubmit}
                         >
-                            <FieldArray name="filter">
-                                {({ fields }) =>
-                                    fields.map((name, index) => (
-                                        <React.Fragment key={index}>
-                                            <Field
-                                                component={TextFieldControl}
-                                                type="number"
-                                                name={`${name}.field`}
-                                                label="Filed"
-                                            />
-                                        </React.Fragment>
-                                    ))}
-                            </FieldArray>
+                            {filters !== undefined &&
+                                <FieldArray name="filter">
+                                    {({fields}) =>
+                                        fields.map((name, index) => (
+                                            <React.Fragment key={index}>
+                                                <div className={classes.filterField}>
+                                                    <Field
+                                                        component={SelectFieldControl}
+                                                        name={`${name}.${filters[index].fieldName}`}
+                                                        label="Filter"
+                                                        emptyOption={false}
+                                                        options={filters[index].filterValues}
+                                                    />
+                                                </div>
+                                            </React.Fragment>
+                                        ))}
+                                </FieldArray>
+                            }
 
-                            <FormControl>
-                                <InputLabel>Age</InputLabel>
-                                <Select
-                                    value={20}
-                                    inputProps={{
-                                        name: 'age',
-                                        id: 'age-simple',
-                                    }}
-                                >
-                                    <MenuItem value={10}>Ten</MenuItem>
-                                    <MenuItem value={20}>Twenty</MenuItem>
-                                    <MenuItem value={30}>Thirty</MenuItem>
-                                </Select>
-                            </FormControl>
                             <Field
                                 type="text"
                                 name={`searchField`}
@@ -92,21 +111,21 @@ class SearchToolbar extends React.Component<SearchToolbarProps & StyledComponent
                                         InputProps={{
                                             endAdornment: <InputAdornment position="end">
                                                 {props.input.value &&
-                                                    <IconButton
-                                                        className={classes.searchBtn}
-                                                        aria-label="clear"
-                                                        onClick={onResetSearch}
-                                                    >
-                                                        <Cancel/>
-                                                    </IconButton>
+                                                <IconButton
+                                                    className={classes.searchBtn}
+                                                    aria-label="clear"
+                                                    onClick={onResetSearch}
+                                                >
+                                                    <Cancel/>
+                                                </IconButton>
                                                 }
-                                                    <IconButton
-                                                        className={classes.searchBtn}
-                                                        type="submit"
-                                                        aria-label="search"
-                                                    >
+                                                <IconButton
+                                                    className={classes.searchBtn}
+                                                    type="submit"
+                                                    aria-label="search"
+                                                >
                                                     <Search/>
-                                                    </IconButton>
+                                                </IconButton>
                                             </InputAdornment>
                                         }}
                                     />
@@ -123,7 +142,13 @@ class SearchToolbar extends React.Component<SearchToolbarProps & StyledComponent
 const styles = (theme: Theme) => ({
     searchField: {
         width: 245,
-        marginRight: theme.spacing.unit
+        marginRight: theme.spacing.unit,
+        display: 'inline-flex'
+    },
+    filterField: {
+        display: 'inline-flex',
+        width: 100,
+        marginRight: theme.spacing.unit,
     },
     searchCell: {
         paddingRight: 0,

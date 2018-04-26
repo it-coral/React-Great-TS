@@ -3,6 +3,17 @@ import View from './View';
 import AxiosFactory from '../../../services/AxiosFactory';
 import { AxiosResponse } from 'axios';
 
+export interface FilterValue {
+  value: number | string;
+  label: string;
+}
+
+export interface GridFilter {
+  fieldName: string;
+  filterValues: Array<FilterValue>;
+  value?: string | number;
+}
+
 export interface GridProps<T extends GridModel> {
   columnSchema: Array<ColumnSchema>;
   apiRoute?: string;
@@ -11,7 +22,8 @@ export interface GridProps<T extends GridModel> {
   search?: boolean;
   searchByLabel?: string;
   localData?: Array<T>;
-  onRowClick?: (e: React.MouseEvent<HTMLTableRowElement>, dataItem: T) => void;
+    filters?: Array<GridFilter>;
+    onRowClick?: (e: React.MouseEvent<HTMLTableRowElement>, dataItem: T) => void;
 }
 
 export interface GridState<T extends GridModel> {

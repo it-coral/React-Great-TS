@@ -8,6 +8,7 @@ interface RouterProps {
 
 interface IStore {
     userAuth: UserAuth;
+    dictionary: DictionaryReducerModel;
 }
 
 interface UserAuth {
@@ -19,6 +20,10 @@ interface User {
     phone: string;
     company: string;
     email: string;
+}
+
+interface DictionaryReducerModel {
+    testRuns: Array<string>;
 }
 
 interface NavBarProps {

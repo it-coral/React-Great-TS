@@ -41,7 +41,8 @@ class GridView<T extends GridModel> extends React.Component<GridViewProps<T> & S
       onChangeRowsPerPage,
       onResetSearch,
       onApplySearch,
-      onRowClick
+      onRowClick,
+      filters
     } = this.props;
 
     return (
@@ -56,10 +57,12 @@ class GridView<T extends GridModel> extends React.Component<GridViewProps<T> & S
                   onResetSearch={onResetSearch}
                   onSearchChange={onSearchChange}
                   placeholder={`Search by ${searchByLabel}`}
+                  colSpan={(columnSchema.length / 2) + 1}
+                  filters={filters}
                 />
               }
               <TablePagination
-                colSpan={columnSchema.length}
+                colSpan={(columnSchema.length / 2) - 1}
                 count={data.total}
                 rowsPerPage={data.limit}
                 rowsPerPageOptions={[50, 100, 500]}
