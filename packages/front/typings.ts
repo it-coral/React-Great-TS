@@ -47,8 +47,10 @@ interface SortDescriptor {
 interface ColumnSchema {
     id: string;
     numeric: boolean;
+    isObject?: boolean;
     disablePadding: boolean;
     label: string;
+    labelRender?: () => any; // tslint:disable-line
     sortable?: boolean;
     style?: object;
     // tslint:disable-next-line:no-any

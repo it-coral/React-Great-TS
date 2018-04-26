@@ -31,8 +31,6 @@ export class UserOptionsList extends React.Component<UserOptionsListProps
                 {options.map((option: ListItemDescriptor) => (
                     <ListItem
                         key={option.link + option.label}
-                        // TODO: remove hardcoded disable
-                        disabled={option.label !== 'Tests' && option.label !== 'Home'}
                         button={true}
                         classes={{
                             root: classes.ListItemStyle,

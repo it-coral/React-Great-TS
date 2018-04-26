@@ -5,6 +5,7 @@ export default {
     'api': {
         'userInfo': '/api/users/me',
         'testDefinitions': '/api/test_definitions',
+        'testRuns': '/api/test_runs',
         'userConfig': '/api/config-datas/user-config',
         'emailUnique': '/api/users/unique',
         'requestPassword': '/api/users/request-password',
