@@ -1,7 +1,7 @@
 import * as React from 'react';
 import Toolbar from 'material-ui/Toolbar';
 import IconButton from 'material-ui/IconButton';
-import MenuIcon from 'material-ui-icons/Menu';
+import MenuIcon from '@material-ui/icons/Menu';
 import AppBar from 'material-ui/AppBar';
 import withStyles from 'material-ui/styles/withStyles';
 import { Theme, WithStyles } from 'material-ui/styles';

@@ -66,7 +66,7 @@ const styles = (theme: Theme) => ({
         [theme.breakpoints.up('md')]: {
             position: 'relative',
         },
-    },
+    } as React.CSSProperties,
 });
 
 const decorate = withStyles(styles);

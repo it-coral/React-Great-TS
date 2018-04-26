@@ -13,7 +13,7 @@ import Button from 'material-ui/Button';
 import { ITestPropertyForm } from './index';
 import Divider from 'material-ui/Divider';
 import IconButton from 'material-ui/IconButton';
-import RemoveCircleOutline from 'material-ui-icons/RemoveCircleOutline';
+import RemoveCircleOutline from '@material-ui/icons/RemoveCircleOutline';
 import Tooltip from 'material-ui/Tooltip';
 
 interface TestPropertyFormProps {
@@ -50,7 +50,10 @@ class TestPropertyForm extends React.Component<TestPropertyFormProps & StyledCom
       // newMode
     } = this.props;
     return (
-      <Grid container={true}>
+      <Grid
+        container={true}
+        spacing={16}
+      >
         <Grid item={true} xs={12}>
           <Paper className={classes.root}>
             <Form
@@ -64,7 +67,10 @@ class TestPropertyForm extends React.Component<TestPropertyFormProps & StyledCom
                   className={classes.formRoot}
                   onSubmit={handleSubmit}
                 >
-                  <Grid container={true}>
+                  <Grid
+                    container={true}
+                    spacing={16}
+                  >
                     <Grid item={true} xs={12} className={classes.saveBtnContainer}>
                       <Button
                         variant="raised"
@@ -94,7 +100,10 @@ class TestPropertyForm extends React.Component<TestPropertyFormProps & StyledCom
                       />
                     </Grid>
                     <Grid item={true} xs={12}>
-                      <Grid container={true}>
+                      <Grid
+                        container={true}
+                        spacing={16}
+                      >
                         <Grid item={true} md={3} xs={12}>
                           <Field
                             component={TextFieldControl}
@@ -189,7 +198,10 @@ class TestPropertyForm extends React.Component<TestPropertyFormProps & StyledCom
                               <Divider />
                             </Grid>
                             <Grid item={true} xs={12} md={6}>
-                              <Grid container={true}>
+                              <Grid
+                                container={true}
+                                spacing={16}
+                              >
                                 <Grid item={true} sm={6} xs={12}>
                                   <Field
                                     component={TextFieldControl}

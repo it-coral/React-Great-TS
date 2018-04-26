@@ -4,10 +4,10 @@ import Divider from 'material-ui/Divider';
 import { SvgIconProps } from 'material-ui/SvgIcon';
 import UserOptionsList from './UserOptionsList';
 
-import HomeIcon from 'material-ui-icons/Home';
-import ForwardIcon from 'material-ui-icons/Forward';
-import HistoryIcon from 'material-ui-icons/History';
-import WatchLaterIcon from 'material-ui-icons/WatchLater';
+import HomeIcon from '@material-ui/icons/Home';
+import ForwardIcon from '@material-ui/icons/Forward';
+import HistoryIcon from '@material-ui/icons/History';
+import WatchLaterIcon from '@material-ui/icons/WatchLater';
 import { App as AppRoutes } from '../../../constants/RoutesNames';
 
 export interface ListItemDescriptor {

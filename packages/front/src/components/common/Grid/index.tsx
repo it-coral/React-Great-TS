@@ -10,6 +10,8 @@ export interface GridProps<T extends GridModel> {
   remoteDataBound?: boolean;
   search?: boolean;
   searchByLabel?: string;
+  // tslint:disable-next-line:no-any
+  rowProps?: any;
   localData?: Array<T>;
   onRowClick?: (e: React.MouseEvent<HTMLTableRowElement>, dataItem: T) => void;
 }
@@ -18,6 +20,7 @@ export interface GridState<T extends GridModel> {
   data: DataDescriptor<T>;
   sort: SortDescriptor;
   searchValue: string;
+  dataPending: boolean;
 }
 
 export interface GridHandlers {
@@ -48,7 +51,8 @@ export class Grid<T extends GridModel> extends React.Component<GridProps<T>, Gri
         order: props.defaultSort ? props.defaultSort.order : 'asc',
         orderBy: props.defaultSort ? props.defaultSort.orderBy : '_id'
       },
-      searchValue: ''
+      searchValue: '',
+      dataPending: false
     };
 
     this.state = this.defaultState;
@@ -84,16 +88,25 @@ export class Grid<T extends GridModel> extends React.Component<GridProps<T>, Gri
 
   fetchListInfo(config: DataFetchDescriptor) {
     let axiosFactory = new AxiosFactory();
-    return this.props.apiRoute && axiosFactory.axios.get(this.props.apiRoute, {
-      params: {
-        order: config.order,
-        limit: config.limit,
-        page: config.page,
-        search: this.state.searchValue
-      }
-    }).then((res: AxiosResponse) => {
-      this.setState({
-        data: res.data
+    this.setState({
+      dataPending: true
+    },            () => {
+      return this.props.apiRoute && axiosFactory.axios.get(this.props.apiRoute, {
+        params: {
+          order: config.order,
+          limit: config.limit,
+          page: config.page,
+          search: this.state.searchValue
+        }
+      }).then((res: AxiosResponse) => {
+        this.setState({
+          data: res.data,
+          dataPending: false
+        });
+      }).catch((err) => {
+        this.setState({
+          dataPending: false
+        });
       });
     });
   }
