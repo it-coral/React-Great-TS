@@ -21,11 +21,10 @@ type StyledComponent = WithStyles<'searchField' |
     >;
 
 export interface SearchToolbarProps {
-    value: string;
     placeholder: string;
-    onSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
-    colSpan: number;
+    onSubmit: (e: any) => void; // tslint:disable-line
     filters?: Array<GridFilter>;
+    colSpan: number;
 }
 
 interface IFilterValue {

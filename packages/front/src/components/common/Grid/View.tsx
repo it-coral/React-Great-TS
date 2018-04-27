@@ -33,7 +33,6 @@ class GridView<T extends GridModel> extends React.Component<GridViewProps<T> & S
       sort,
       search,
       searchByLabel,
-      searchValue,
       classes,
       onRequestSort,
       onChangePage,
@@ -50,10 +49,7 @@ class GridView<T extends GridModel> extends React.Component<GridViewProps<T> & S
             <TableRow>
               {search &&
                 <SearchToolbar
-                  onSubmit={(values) => {
-                      onSubmitFilterSearch(values);
-                  }}
-                  value={searchValue}
+                  onSubmit={onSubmitFilterSearch}
                   placeholder={`Search by ${searchByLabel}`}
                   colSpan={(columnSchema.length / 2) + 1}
                   filters={filters}
