@@ -23,175 +23,177 @@ import { connect, Dispatch } from 'react-redux';
 import { FetchTestsDistinct } from '../../actions/dictionaryAction';
 
 interface ITestHistoryState {
-    filters: Array<GridFilter>;
-    testRuns: Array<FilterValue>;
+  filters: Array<GridFilter>;
+  testRuns: Array<FilterValue>;
 }
 
 interface ITestsHistoryDispatch {
-    fetchTestsDistinct(): void;
+  fetchTestsDistinct(): void;
 }
 
 interface ITestHistoryProps {
-    testRuns: Array<string>;
+  testRuns: Array<string>;
 }
 
 const tooltipHelper = (title: string, icon: ReactNode): ReactNode => {
-    return <Tooltip title={title}>{React.createElement('div', null, icon)}</Tooltip>;
+  return <Tooltip title={title}>{React.createElement('div', null, icon)}</Tooltip>;
 };
 
 const columnSchema: Array<ColumnSchema> = [
-    {id: 'manual', numeric: false, disablePadding: false, label: 'Manual'},
-    {
-        id: 'status', numeric: false, disablePadding: false, label: 'Status',
-        labelRender: () => <Flag/>,
-        render: (status: string) => {
-            switch (status) {
-                case 'warnings':
-                    return tooltipHelper('Warnings', <Warning/>);
-                case 'error':
-                    return tooltipHelper('Error', <RemoveCircle/>);
-                case 'failure':
-                    return tooltipHelper('Failure', <Error/>);
-                case 'timeout':
-                    return tooltipHelper('Timeout', <Timer/>);
-                case 'completed':
-                    return tooltipHelper('Completed', <DoneAll/>);
-                case 'service-failure':
-                    return tooltipHelper('Service failure', <Build/>);
-                case 'terminated':
-                    return tooltipHelper('Done', <Done/>);
-                case 'started':
-                    return tooltipHelper('Started', <PlayArrow/>);
-                case 'retry':
-                    return tooltipHelper('Replay', <Replay/>);
-                case 'dismissed':
-                    return tooltipHelper('Dismissed', <ExitToApp/>);
-                default:
-                    return <div>{status}</div>;
-            }
-        }
-    },
-    {id: 'name', numeric: false, disablePadding: true, label: 'Name'},
-    {id: 'runName', numeric: false, disablePadding: false, label: 'Machines'},
-    {id: 'parameters.loopCount', numeric: true, disablePadding: false, label: 'Iterations', isObject: true},
-    {id: 'parameters.concurrentUsers', numeric: true, disablePadding: false, label: 'Probes', isObject: true},
-    {
-        id: 'createDate', numeric: false, disablePadding: false, label: 'Time',
-        render: (date) => date ? moment(date).format('MMM DD, YYYY - HH:mm') : 'never',
-        style: {
-            whiteSpace: 'nowrap'
-        }
-    },
-    {id: 'textError', numeric: false, disablePadding: false, label: 'Reason'},
+  {id: 'manual', numeric: false, disablePadding: false, label: 'Manual'},
+  {
+    id: 'status', numeric: false, disablePadding: false, label: 'Status',
+    labelRender: () => <Flag/>,
+    render: (status: string) => {
+      switch (status) {
+        case 'warnings':
+          return tooltipHelper('Warnings', <Warning/>);
+        case 'error':
+          return tooltipHelper('Error', <RemoveCircle/>);
+        case 'failure':
+          return tooltipHelper('Failure', <Error/>);
+        case 'timeout':
+          return tooltipHelper('Timeout', <Timer/>);
+        case 'completed':
+          return tooltipHelper('Completed', <DoneAll/>);
+        case 'service-failure':
+          return tooltipHelper('Service failure', <Build/>);
+        case 'terminated':
+          return tooltipHelper('Done', <Done/>);
+        case 'started':
+          return tooltipHelper('Started', <PlayArrow/>);
+        case 'retry':
+          return tooltipHelper('Replay', <Replay/>);
+        case 'dismissed':
+          return tooltipHelper('Dismissed', <ExitToApp/>);
+        default:
+          return <div>{status}</div>;
+      }
+    }
+  },
+  {id: 'name', numeric: false, disablePadding: true, label: 'Name'},
+  {id: 'runName', numeric: false, disablePadding: false, label: 'Machines'},
+  {id: 'parameters.loopCount', numeric: true, disablePadding: false, label: 'Iterations', isObject: true},
+  {id: 'parameters.concurrentUsers', numeric: true, disablePadding: false, label: 'Probes', isObject: true},
+  {
+    id: 'createDate', numeric: false, disablePadding: false, label: 'Time',
+    render: (date) => date ? moment(date).format('MMM DD, YYYY - HH:mm') : 'never',
+    style: {
+      whiteSpace: 'nowrap'
+    }
+  },
+  {id: 'textError', numeric: false, disablePadding: false, label: 'Reason'},
 ];
 
 export class GridControl extends React.Component<ITestHistoryProps & ITestsHistoryDispatch & RouteComponentProps<{}> &
-    WithStyles<'root'>, ITestHistoryState> {
-    constructor(props: ITestHistoryProps & ITestsHistoryDispatch & RouteComponentProps<{}> & WithStyles<'root'>) {
-        super(props);
+  WithStyles<'root'>, ITestHistoryState> {
+  constructor(props: ITestHistoryProps & ITestsHistoryDispatch & RouteComponentProps<{}> & WithStyles<'root'>) {
+    super(props);
 
-        this.state = {
-            filters: [],
-            testRuns: [],
-        };
+    this.state = {
+      filters: [],
+      testRuns: [],
+    };
 
-        this.onRowClick = this.onRowClick.bind(this);
+    this.onRowClick = this.onRowClick.bind(this);
+  }
+
+  componentDidMount() {
+    this.props.fetchTestsDistinct();
+  }
+
+  componentWillReceiveProps(nextProps: ITestHistoryProps) {
+    if (nextProps.testRuns.length !== 0) {
+      let testRunsFilter: Array<FilterValue> = [{value: '', label: 'Any test'}];
+      nextProps.testRuns.map(tr => {
+        let testRunFilterSingle: FilterValue = {value: tr, label: tr};
+        testRunsFilter.push(testRunFilterSingle);
+      });
+      this.setState({
+        testRuns: testRunsFilter,
+      });
     }
+  }
 
-    componentDidMount() {
-        this.props.fetchTestsDistinct();
-    }
+  onRowClick(e: React.MouseEvent<HTMLTableRowElement>, dataItem: GridModel) {
+    this.props.history.push(`${TestRunDetails}/${dataItem._id}`);
+  }
 
-    componentWillReceiveProps(nextProps: ITestHistoryProps) {
-        if (nextProps.testRuns.length !== 0) {
-            let testRunsFilter: Array<FilterValue> = [{value: '', label: 'Any test'}];
-            nextProps.testRuns.map(tr => {
-                let testRunFilterSingle: FilterValue = {value: tr, label: tr};
-                testRunsFilter.push(testRunFilterSingle);
-            });
-            this.setState({
-                testRuns: testRunsFilter,
-            });
-        }
-    }
+  render() {
+    const {classes} = this.props;
 
-    onRowClick(e: React.MouseEvent<HTMLTableRowElement>, dataItem: GridModel) {
-        this.props.history.push(`${TestRunDetails}/${dataItem._id}`);
-    }
+    let statusFilterValues = [
+      {value: '', label: 'Any Result'},
+      {value: 'warnings', label: 'Warnings'},
+      {value: 'error', label: 'Error'},
+      {value: 'failure', label: 'Failure'},
+      {value: 'timeout', label: 'Timeout'},
+      {value: 'completed', label: 'Completed'},
+      {value: 'service-failure', label: 'Service failure'},
+      {value: 'terminated', label: 'Terminated'},
+      {value: 'started', label: 'Started'},
+      {value: 'retry', label: 'Retry'},
+      {value: 'dismissed', label: 'Dismissed'},
+    ];
 
-    render() {
-        const {classes} = this.props;
+    let createDateFilterValues = [
+      {value: '', label: 'Any date'},
+      {value: '0', label: 'Today'},
+      {value: '7', label: 'Last 7 days'},
+      {value: '30', label: 'Last 30 days'},
+    ];
 
-        let statusFilterValues = [
-            {value: 'warnings', label: 'Warnings'},
-            {value: 'error', label: 'Error'},
-            {value: 'failure', label: 'Failure'},
-            {value: 'timeout', label: 'Timeout'},
-            {value: 'completed', label: 'Completed'},
-            {value: 'service-failure', label: 'Service failure'},
-            {value: 'terminated', label: 'Terminated'},
-            {value: 'started', label: 'Started'},
-            {value: 'retry', label: 'Retry'},
-            {value: 'dismissed', label: 'Dismissed'},
-        ];
+    return (
+      <Paper className={classes.root}>
+        <Grid
+          onRowClick={this.onRowClick}
+          search={true}
+          remoteDataBound={true}
+          searchByLabel={'name/machine'}
+          apiRoute={ApiPath.api.testRuns}
+          columnSchema={columnSchema}
+          defaultSort={{
+            order: 'asc',
+            orderBy: 'createDate'
+          }}
+          filters={[
+            {
+              fieldName: 'status',
+              filterValues: statusFilterValues,
+              value: '',
 
-        let createDateFilterValues = [
-            {value: '0', label: 'Today'},
-            {value: '7', label: 'Last 7 days'},
-            {value: '30', label: 'Last 30 days'},
-        ];
-
-        return (
-            <Paper className={classes.root}>
-                <Grid
-                    onRowClick={this.onRowClick}
-                    search={true}
-                    remoteDataBound={true}
-                    searchByLabel={'name/machine'}
-                    apiRoute={ApiPath.api.testRuns}
-                    columnSchema={columnSchema}
-                    defaultSort={{
-                        order: 'asc',
-                        orderBy: 'createDate'
-                    }}
-                    filters={[
-                        {
-                            fieldName: 'status',
-                            filterValues: statusFilterValues,
-                            value: '',
-
-                        },
-                        {
-                            fieldName: 'name',
-                            filterValues: this.state.testRuns,
-                            value: '',
-                        },
-                        {
-                            fieldName: 'createDate',
-                            filterValues: createDateFilterValues,
-                            value: '',
-                        }
-                    ]}
-                />
-            </Paper>
-        );
-    }
+            },
+            {
+              fieldName: 'name',
+              filterValues: this.state.testRuns,
+              value: '',
+            },
+            {
+              fieldName: 'createDate',
+              filterValues: createDateFilterValues,
+              value: '',
+            }
+          ]}
+        />
+      </Paper>
+    );
+  }
 }
 
 const styles = (theme: Theme) => ({
-    root: {
-        width: '100%'
-    }
+  root: {
+    width: '100%'
+  }
 } as React.CSSProperties);
 
 const decorate = withStyles(styles);
 
 const mapDispatchToProps = (dispatch: Dispatch<IStore>): ITestsHistoryDispatch => ({
-    fetchTestsDistinct: () => dispatch(FetchTestsDistinct()),
+  fetchTestsDistinct: () => dispatch(FetchTestsDistinct()),
 });
 
 const mapStateToProps = (state: IStore) => ({
-    testRuns: state.dictionary.testRuns,
+  testRuns: state.dictionary.testRuns,
 });
 
 export default connect<ITestHistoryProps, ITestsHistoryDispatch>

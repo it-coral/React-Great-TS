@@ -12,16 +12,14 @@ import { GridProps, GridState, GridHandlers } from './index';
 import Typography from 'material-ui/Typography';
 import SearchToolbar from './SearchToolbar';
 
-type StyledComponent = WithStyles<
-  'tableWrapper' |
+type StyledComponent = WithStyles<'tableWrapper' |
   'table' |
   'searchField' |
   'margin' |
   'searchCell' |
   'noRowsCell' |
   'tableRowItem' |
-  'searchBtn'
-  >;
+  'searchBtn'>;
 
 type GridViewProps<T extends GridModel> = GridProps<T> & GridState<T> & GridHandlers;
 
@@ -37,7 +35,7 @@ class GridView<T extends GridModel> extends React.Component<GridViewProps<T> & S
       onRequestSort,
       onChangePage,
       onChangeRowsPerPage,
-        onSubmitFilterSearch,
+      onSubmitFilterSearch,
       onRowClick,
       filters
     } = this.props;
@@ -48,12 +46,12 @@ class GridView<T extends GridModel> extends React.Component<GridViewProps<T> & S
           <TableHead>
             <TableRow>
               {search &&
-                <SearchToolbar
-                  onSubmit={onSubmitFilterSearch}
-                  placeholder={`Search by ${searchByLabel}`}
-                  colSpan={(columnSchema.length / 2) + 1}
-                  filters={filters}
-                />
+              <SearchToolbar
+                onSubmit={onSubmitFilterSearch}
+                placeholder={`Search by ${searchByLabel}`}
+                colSpan={(columnSchema.length / 2) + 1}
+                filters={filters}
+              />
               }
               <TablePagination
                 colSpan={(columnSchema.length / 2) - 1}
@@ -88,15 +86,15 @@ class GridView<T extends GridModel> extends React.Component<GridViewProps<T> & S
                       numeric={column.numeric}
                       style={column.style}
                     >
-                        {this.cellRender(model, column)}
+                      {this.cellRender(model, column)}
                     </TableCell>
                   ))
                 }
               </TableRow>
             )) : <tr>
-                    <td className={classes.noRowsCell} colSpan={columnSchema.length}>
-                      <Typography align="center">No rows to show</Typography>
-                    </td>
+              <td className={classes.noRowsCell} colSpan={columnSchema.length}>
+                <Typography align="center">No rows to show</Typography>
+              </td>
             </tr>}
           </TableBody>
         </Table>
@@ -108,8 +106,8 @@ class GridView<T extends GridModel> extends React.Component<GridViewProps<T> & S
     if (!column.isObject) {
       return column.render ? column.render(model[column.id]) : model[column.id];
     } else {
-        let value = column.id.split('.').reduce((a, b) => a ? a[b] : null, model);
-        return column.render ? column.render(value) : value;
+      let value = column.id.split('.').reduce((a, b) => a ? a[b] : null, model);
+      return column.render ? column.render(value) : value;
     }
   }
 }
