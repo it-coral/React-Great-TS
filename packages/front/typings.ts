@@ -70,9 +70,15 @@ interface DataDescriptor<T extends GridModel> {
     total: number;
 }
 
+interface IFilterServer {
+    field: string;
+    value: string;
+}
+
 interface DataFetchDescriptor {
     limit: number;
     page: number;
     order: string;
     search?: string;
+    filter?: Array<IFilterServer>;
 }

@@ -2,6 +2,7 @@ import * as React from 'react';
 import View from './View';
 import AxiosFactory from '../../../services/AxiosFactory';
 import { AxiosResponse } from 'axios';
+import { ISearchToolbarInitialValues } from './SearchToolbar';
 
 export interface FilterValue {
   value: number | string;
@@ -29,17 +30,20 @@ export interface GridProps<T extends GridModel> {
 export interface GridState<T extends GridModel> {
   data: DataDescriptor<T>;
   sort: SortDescriptor;
-  searchValue: string;
+  searchValue?: string | null;
+    filter?: Array<IFilterServer> | null;
 }
 
 export interface GridHandlers {
-  onSearchChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onRequestSort: (e: React.MouseEvent<HTMLInputElement>, property: string) => void;
   onChangePage: (e: React.MouseEvent<HTMLInputElement>, pageNumber: number) => void;
   onChangeRowsPerPage: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
-  onResetSearch: () => void;
-  onApplySearch: (e: React.FormEvent<HTMLFormElement>) => void;
   onRowClick: (e: React.MouseEvent<HTMLTableRowElement>, dataItem: GridModel) => void;
+    onSubmitFilterSearch: (e: React.FormEvent<HTMLFormElement>) => void;
+}
+
+export interface IFilterFormValues extends ISearchToolbarInitialValues {
+  searchField?: string;
 }
 
 export class Grid<T extends GridModel> extends React.Component<GridProps<T>, GridState<T>> {
@@ -60,7 +64,8 @@ export class Grid<T extends GridModel> extends React.Component<GridProps<T>, Gri
         order: props.defaultSort ? props.defaultSort.order : 'asc',
         orderBy: props.defaultSort ? props.defaultSort.orderBy : '_id'
       },
-      searchValue: ''
+      searchValue: '',
+        filter: []
     };
 
     this.state = this.defaultState;
@@ -68,19 +73,15 @@ export class Grid<T extends GridModel> extends React.Component<GridProps<T>, Gri
     this.onRequestSort = this.onRequestSort.bind(this);
     this.onChangePage = this.onChangePage.bind(this);
     this.onChangeRowsPerPage = this.onChangeRowsPerPage.bind(this);
-    this.onSearchChange = this.onSearchChange.bind(this);
-    this.onResetSearch = this.onResetSearch.bind(this);
-    this.onApplySearch = this.onApplySearch.bind(this);
     this.onRowClick = this.onRowClick.bind(this);
+    this.onSubmitFilterSearch = this.onSubmitFilterSearch.bind(this);
 
     this.handlers = {
       onRequestSort: this.onRequestSort,
       onChangePage: this.onChangePage,
       onChangeRowsPerPage: this.onChangeRowsPerPage,
-      onSearchChange: this.onSearchChange,
-      onResetSearch: this.onResetSearch,
-      onApplySearch: this.onApplySearch,
-      onRowClick: this.onRowClick
+      onRowClick: this.onRowClick,
+        onSubmitFilterSearch: this.onSubmitFilterSearch,
     };
   }
 
@@ -110,40 +111,39 @@ export class Grid<T extends GridModel> extends React.Component<GridProps<T>, Gri
     });
   }
 
-  onApplySearch(e: React.FormEvent<HTMLFormElement>) {
-    e.preventDefault();
+    onSubmitFilterSearch(values: React.FormEvent<HTMLFormElement>) {
+      let searchValues = values as IFilterFormValues;
+      let newFilters: Array<IFilterServer> = [];
 
-    const searchValue = this.state.searchValue;
-    this.setState({
-      ...this.defaultState,
-      searchValue
-    },            () => {
-      if (this.props.remoteDataBound) {
-        this.fetchListInfo({
-          page: this.state.data.page,
-          limit: this.state.data.limit,
-          order: this.getSortOrder(),
-          search: this.state.searchValue
+      if (searchValues.filter !== undefined) {
+        searchValues.filter.map(filterObj => {
+          let objKey = Object.keys(filterObj)[0];
+          let objValue = filterObj[objKey];
+
+          if (objValue !== '') {
+              newFilters.push({
+                  field: objKey,
+                  value: objValue.toString(),
+              });
+          }
         });
       }
-    });
-  }
 
-  onResetSearch() {
-    this.setState(this.defaultState, () => {
-      this.fetchListInfo({
-        page: this.state.data.page,
-        limit: this.state.data.limit,
-        order: this.getSortOrder()
+      this.setState({
+          searchValue: (searchValues.searchField !== '') ? searchValues.searchField : undefined,
+          filter: (newFilters.length !== 0) ? newFilters : undefined,
+      }, () => {
+          if (this.props.remoteDataBound) {
+              this.fetchListInfo({
+                  page: this.state.data.page,
+                  limit: this.state.data.limit,
+                  order: this.getSortOrder(),
+                  // search: (this.state.searchValue !== '') ? this.state.searchValue : undefined,
+                  // filter: (this.state.filter.length !== 0) ? this.state.filter : undefined,
+              });
+          }
       });
-    });
-  }
-
-  onSearchChange(e: React.ChangeEvent<HTMLInputElement>) {
-    this.setState({
-      searchValue: e.currentTarget.value
-    });
-  }
+    }
 
   onRequestSort(e: React.MouseEvent<HTMLInputElement>, property: string) {
     this.fetchListInfo({

@@ -34,13 +34,11 @@ class GridView<T extends GridModel> extends React.Component<GridViewProps<T> & S
       search,
       searchByLabel,
       searchValue,
-      onSearchChange,
       classes,
       onRequestSort,
       onChangePage,
       onChangeRowsPerPage,
-      onResetSearch,
-      onApplySearch,
+        onSubmitFilterSearch,
       onRowClick,
       filters
     } = this.props;
@@ -52,10 +50,10 @@ class GridView<T extends GridModel> extends React.Component<GridViewProps<T> & S
             <TableRow>
               {search &&
                 <SearchToolbar
-                  onSubmit={onApplySearch}
+                  onSubmit={(values) => {
+                      onSubmitFilterSearch(values);
+                  }}
                   value={searchValue}
-                  onResetSearch={onResetSearch}
-                  onSearchChange={onSearchChange}
                   placeholder={`Search by ${searchByLabel}`}
                   colSpan={(columnSchema.length / 2) + 1}
                   filters={filters}

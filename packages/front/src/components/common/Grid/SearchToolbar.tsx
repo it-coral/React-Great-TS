@@ -8,7 +8,7 @@ import IconButton from 'material-ui/IconButton';
 import { InputAdornment } from 'material-ui/Input';
 import Search from 'material-ui-icons/Search';
 import Cancel from 'material-ui-icons/Cancel';
-import { Field, FieldRenderProps, Form } from 'react-final-form';
+import { Field, FieldRenderProps, Form, FormSpy } from 'react-final-form';
 import arrayMutators from 'final-form-arrays';
 import { FieldArray } from 'react-final-form-arrays';
 import SelectFieldControl from '../form-elements/SelectFieldControl';
@@ -24,8 +24,6 @@ export interface SearchToolbarProps {
     value: string;
     placeholder: string;
     onSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
-    onResetSearch: () => void;
-    onSearchChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
     colSpan: number;
     filters?: Array<GridFilter>;
 }
@@ -34,7 +32,7 @@ interface IFilterValue {
     [key: string]: string | number;
 }
 
-interface ISearchToolbarInitialValues {
+export interface ISearchToolbarInitialValues {
     filter?: Array<IFilterValue>;
 }
 
@@ -42,12 +40,13 @@ class SearchToolbar extends React.Component<SearchToolbarProps & StyledComponent
     render() {
         const {
             classes,
-            onResetSearch,
             onSubmit,
             placeholder,
             colSpan,
             filters
         } = this.props;
+
+        let submit: () => void;
 
         let initialValues: ISearchToolbarInitialValues = {};
 
@@ -73,29 +72,31 @@ class SearchToolbar extends React.Component<SearchToolbarProps & StyledComponent
                     onSubmit={onSubmit}
                     initialValues={initialValues}
                     mutators={{
-                        ...arrayMutators
+                        ...arrayMutators,
                     }}
-                    render={({handleSubmit, submitError}) => (
-                        <form
+                    render={({handleSubmit, submitError, change}) => {
+                        submit = handleSubmit;
+
+                        return (<form
                             onSubmit={handleSubmit}
                         >
                             {filters !== undefined &&
-                                <FieldArray name="filter">
-                                    {({fields}) =>
-                                        fields.map((name, index) => (
-                                            <React.Fragment key={index}>
-                                                <div className={classes.filterField}>
-                                                    <Field
-                                                        component={SelectFieldControl}
-                                                        name={`${name}.${filters[index].fieldName}`}
-                                                        label="Filter"
-                                                        emptyOption={false}
-                                                        options={filters[index].filterValues}
-                                                    />
-                                                </div>
-                                            </React.Fragment>
-                                        ))}
-                                </FieldArray>
+                            <FieldArray name="filter">
+                                {({fields}) =>
+                                    fields.map((name, index) => (
+                                        <React.Fragment key={index}>
+                                            <div className={classes.filterField}>
+                                                <Field
+                                                    component={SelectFieldControl}
+                                                    name={`${name}.${filters[index].fieldName}`}
+                                                    label="Filter"
+                                                    emptyOption={false}
+                                                    options={filters[index].filterValues}
+                                                />
+                                            </div>
+                                        </React.Fragment>
+                                    ))}
+                            </FieldArray>
                             }
 
                             <Field
@@ -114,7 +115,7 @@ class SearchToolbar extends React.Component<SearchToolbarProps & StyledComponent
                                                 <IconButton
                                                     className={classes.searchBtn}
                                                     aria-label="clear"
-                                                    onClick={onResetSearch}
+                                                    onClick={() => change('searchField', '')}
                                                 >
                                                     <Cancel/>
                                                 </IconButton>
@@ -131,8 +132,14 @@ class SearchToolbar extends React.Component<SearchToolbarProps & StyledComponent
                                     />
                                 )}
                             />
-                        </form>
-                    )}
+                            <FormSpy
+                                subscription={{values: true}}
+                                onChange={(values) => {
+                                    submit();
+                                }}
+                            />
+                        </form>);
+                    }}
                 />
             </TableCell>
         );
