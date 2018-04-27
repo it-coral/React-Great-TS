@@ -11,6 +11,7 @@ import EnhancedTableHead from './EnhancedTableHead';
 import { GridProps, GridState, GridHandlers } from './index';
 import Typography from 'material-ui/Typography';
 import SearchToolbar from './SearchToolbar';
+import { CircularProgress } from 'material-ui/Progress';
 
 type StyledComponent = WithStyles<'tableWrapper' |
   'table' |
@@ -19,7 +20,8 @@ type StyledComponent = WithStyles<'tableWrapper' |
   'searchCell' |
   'noRowsCell' |
   'tableRowItem' |
-  'searchBtn'>;
+  'searchBtn' |
+  'progress'>;
 
 type GridViewProps<T extends GridModel> = GridProps<T> & GridState<T> & GridHandlers;
 
@@ -37,7 +39,9 @@ class GridView<T extends GridModel> extends React.Component<GridViewProps<T> & S
       onChangeRowsPerPage,
       onSubmitFilterSearch,
       onRowClick,
-      filters
+      filters,
+      dataPending,
+      rowProps
     } = this.props;
 
     return (
@@ -77,6 +81,7 @@ class GridView<T extends GridModel> extends React.Component<GridViewProps<T> & S
                 onClick={(e) => onRowClick ? onRowClick(e, model) : undefined}
                 className={classes.tableRowItem}
                 key={model._id}
+                {...rowProps}
               >
                 {
                   columnSchema.map(column => (
@@ -93,7 +98,10 @@ class GridView<T extends GridModel> extends React.Component<GridViewProps<T> & S
               </TableRow>
             )) : <tr>
               <td className={classes.noRowsCell} colSpan={columnSchema.length}>
-                <Typography align="center">No rows to show</Typography>
+                {!dataPending ?
+                  <Typography align="center">No rows to show</Typography> :
+                  <CircularProgress className={classes.progress}/>
+                }
               </td>
             </tr>}
           </TableBody>
@@ -143,6 +151,10 @@ const styles = (theme: Theme) => ({
   searchBtn: {
     width: 30,
     height: 30
+  },
+  progress: {
+    margin: `${theme.spacing.unit * 2}px auto`,
+    display: 'block'
   }
 } as React.CSSProperties);
 

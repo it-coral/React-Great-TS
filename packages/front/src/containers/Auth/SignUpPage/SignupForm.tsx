@@ -16,198 +16,201 @@ import CheckboxControl from '../../../components/common/form-elements/CheckboxCo
 import { CircularProgress } from 'material-ui/Progress';
 
 interface ISignupForm {
-    email: string;
-    password: string;
-    phone: string;
-    company: string;
-    acceptTerms: boolean;
-    termsDate?: Date;
+  email: string;
+  password: string;
+  phone: string;
+  company: string;
+  acceptTerms: boolean;
+  termsDate?: Date;
 }
 
 interface IValidateEmail {
-    data: object[];
+  data: object[];
 }
 
 class SignupForm extends React.Component<RouteComponentProps<{}> & WithStyles<'signInButton' |
+  'buttonContainer' |
+  'formContainer' |
+  'forgotPasswordContainer' |
+  'link' |
+  'linkText'>> {
+
+  axiosFactory: AxiosFactory;
+
+  constructor(props: RouteComponentProps<{}> & WithStyles<
+    'signInButton' |
     'buttonContainer' |
     'formContainer' |
     'forgotPasswordContainer' |
     'link' |
-    'linkText'>> {
+    'linkText'>) {
+    super(props);
 
-    axiosFactory: AxiosFactory;
+    this.axiosFactory = new AxiosFactory();
 
-    constructor(props: RouteComponentProps<{}> & WithStyles<
-        'signInButton' |
-        'buttonContainer' |
-        'formContainer' |
-        'forgotPasswordContainer' |
-        'link' |
-        'linkText'>) {
-        super(props);
+    this.onSubmit = this.onSubmit.bind(this);
+  }
 
-        this.axiosFactory = new AxiosFactory();
+  usernameAvailable = async (value: string) => {
+    return await this.axiosFactory.axios.get(`${ApiPath.api.emailUnique}/${value}`)
+      .then((res: IValidateEmail) => {
+        if (res.data.length > 0) {
+          return 'User name is already used.';
+        } else {
+          return undefined;
+        }
+      });
+  }
 
-        this.onSubmit = this.onSubmit.bind(this);
-    }
-
-    usernameAvailable = async (value: string) => {
-        return await this.axiosFactory.axios.get(`${ApiPath.api.emailUnique}/${value}`)
-            .then((res: IValidateEmail) => {
-                if (res.data.length > 0) {
-                    return 'User name is already used.';
-                } else {
-                    return undefined;
-                }
-            });
-    }
-
-    public render(): JSX.Element {
-        const { classes } = this.props;
-        return (
-            <Form
-                onSubmit={this.onSubmit}
-                render={({ handleSubmit, submitting }) => (
-                    <form
-                        className={classes.formContainer}
-                        onSubmit={handleSubmit}
-                    >
-                        <Grid container={true}>
-                            <Grid item={true} xs={12}>
-                                <Field
-                                    component={TextFieldControl}
-                                    type="text"
-                                    name="email"
-                                    label="Email Address"
-                                    validate={FormValidators.composeValidators(
-                                        FormValidators.required(),
-                                        FormValidators.isEmail,
-                                        this.usernameAvailable
-                                    )}
-                                />
-                            </Grid>
-                            <Grid item={true} xs={12}>
-                                <Field
-                                    component={TextFieldControl}
-                                    type="password"
-                                    name="password"
-                                    label="Password"
-                                    validate={FormValidators.composeValidators(
-                                        FormValidators.required(),
-                                        FormValidators.minValue(6, 'Password must be at least 6 characters.')
-                                    )}
-                                />
-                            </Grid>
-                            <Grid item={true} xs={12}>
-                                <Field
-                                    component={TextFieldControl}
-                                    type="text"
-                                    name="phone"
-                                    label="Phone Number"
-                                    validate={FormValidators.composeValidators(
-                                        FormValidators.required(),
-                                        FormValidators.minValue(7, 'Phone must be at least 7 characters.')
-                                    )}
-                                />
-                            </Grid>
-                            <Grid item={true} xs={12}>
-                                <Field
-                                    component={TextFieldControl}
-                                    type="text"
-                                    name="company"
-                                    label="Company"
-                                    validate={FormValidators.required()}
-                                />
-                            </Grid>
-                            <Grid item={true} xs={12}>
-                                <Field
-                                    name="acceptTerms"
-                                    component={CheckboxControl}
-                                    type="checkbox"
-                                    label={<span>I agree to the <a target="_blank" href="app-terms/">
-                                            Terms of Service</a></span>}
-                                    validate={FormValidators.required(`To open an account on testRTC you
+  public render(): JSX.Element {
+    const { classes } = this.props;
+    return (
+      <Form
+        onSubmit={this.onSubmit}
+        render={({ handleSubmit, submitting }) => (
+          <form
+            className={classes.formContainer}
+            onSubmit={handleSubmit}
+          >
+            <Grid
+              container={true}
+              spacing={16}
+            >
+              <Grid item={true} xs={12}>
+                <Field
+                  component={TextFieldControl}
+                  type="text"
+                  name="email"
+                  label="Email Address"
+                  validate={FormValidators.composeValidators(
+                    FormValidators.required(),
+                    FormValidators.isEmail,
+                    this.usernameAvailable
+                  )}
+                />
+              </Grid>
+              <Grid item={true} xs={12}>
+                <Field
+                  component={TextFieldControl}
+                  type="password"
+                  name="password"
+                  label="Password"
+                  validate={FormValidators.composeValidators(
+                    FormValidators.required(),
+                    FormValidators.minValue(6, 'Password must be at least 6 characters.')
+                  )}
+                />
+              </Grid>
+              <Grid item={true} xs={12}>
+                <Field
+                  component={TextFieldControl}
+                  type="text"
+                  name="phone"
+                  label="Phone Number"
+                  validate={FormValidators.composeValidators(
+                    FormValidators.required(),
+                    FormValidators.minValue(7, 'Phone must be at least 7 characters.')
+                  )}
+                />
+              </Grid>
+              <Grid item={true} xs={12}>
+                <Field
+                  component={TextFieldControl}
+                  type="text"
+                  name="company"
+                  label="Company"
+                  validate={FormValidators.required()}
+                />
+              </Grid>
+              <Grid item={true} xs={12}>
+                <Field
+                  name="acceptTerms"
+                  component={CheckboxControl}
+                  type="checkbox"
+                  label={<span>I agree to the <a target="_blank" href="app-terms/">
+                    Terms of Service</a></span>}
+                  validate={FormValidators.required(`To open an account on testRTC you
                                                                        must agree to our terms of service.`)}
-                                />
-                            </Grid>
-                            <Grid
-                                className={classes.buttonContainer}
-                                item={true}
-                                xs={12}
-                            >
-                                <Button
-                                    type="submit"
-                                    variant="raised"
-                                    color="secondary"
-                                    className={classes.signInButton}
-                                    disabled={submitting}
-                                >
-                                    {!submitting ?
-                                        <React.Fragment>Sign Up</React.Fragment> :
-                                        <CircularProgress size={14}/>
-                                    }
-                                </Button>
-                            </Grid>
-                            <Grid item={true} xs={6}>
-                                <Link className={classes.link} to="/signin">
-                                    <Typography color="textSecondary" className={classes.linkText}>
-                                        Already have an account?
+                />
+              </Grid>
+              <Grid
+                className={classes.buttonContainer}
+                item={true}
+                xs={12}
+              >
+                <Button
+                  type="submit"
+                  variant="raised"
+                  color="secondary"
+                  className={classes.signInButton}
+                  disabled={submitting}
+                >
+                  {!submitting ?
+                    <React.Fragment>Sign Up</React.Fragment> :
+                    <CircularProgress size={14} />
+                  }
+                </Button>
+              </Grid>
+              <Grid item={true} xs={6}>
+                <Link className={classes.link} to="/signin">
+                  <Typography color="textSecondary" className={classes.linkText}>
+                    Already have an account?
                                     </Typography>
-                                </Link>
-                            </Grid>
-                            <Grid item={true} xs={6}>
-                                <Link className={classes.link} to="/forgot">
-                                    <Typography color="textSecondary" align="right" className={classes.linkText}>
-                                        Subscribe
+                </Link>
+              </Grid>
+              <Grid item={true} xs={6}>
+                <Link className={classes.link} to="/forgot">
+                  <Typography color="textSecondary" align="right" className={classes.linkText}>
+                    Subscribe
                                     </Typography>
-                                </Link>
-                            </Grid>
-                        </Grid>
-                    </form>
-                )}
-            />
-        );
-    }
+                </Link>
+              </Grid>
+            </Grid>
+          </form>
+        )}
+      />
+    );
+  }
 
-    private onSubmit(values: ISignupForm): Promise<void | { [x: string]: string; }> {
-        let signUpValues = values;
-        signUpValues.termsDate = new Date();
+  private onSubmit(values: ISignupForm): Promise<void | { [x: string]: string; }> {
+    let signUpValues = values;
+    signUpValues.termsDate = new Date();
 
-        return this.axiosFactory.axios.post(ApiPath.api.signup, signUpValues)
-            .then(() => {
-                this.props.history.push(`${LoginRoutes.SignUpConfirm}/${signUpValues.email}`);
-            });
-    }
+    return this.axiosFactory.axios.post(ApiPath.api.signup, signUpValues)
+      .then(() => {
+        this.props.history.push(`${LoginRoutes.SignUpConfirm}/${signUpValues.email}`);
+      });
+  }
 }
 
 const decorate = withStyles(theme => ({
-    buttonContainer: {
-        display: 'flex',
-        justifyContent: 'flex-end'
+  buttonContainer: {
+    display: 'flex',
+    justifyContent: 'flex-end'
+  },
+  forgotPasswordContainer: {
+    display: 'flex',
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+  },
+  signInButton: {
+    width: 'auto'
+  },
+  formContainer: {
+    paddingTop: 0
+  },
+  link: {
+    textDecoration: 'none',
+    '&:hover': {
+      textDecoration: 'underline'
     },
-    forgotPasswordContainer: {
-        display: 'flex',
-        justifyContent: 'flex-start',
-        alignItems: 'center',
-    },
-    signInButton: {
-        width: 'auto'
-    },
-    formContainer: {
-        paddingTop: 0
-    },
-    link: {
-        textDecoration: 'none',
-        '&:hover': {
-            textDecoration: 'underline'
-        },
-        '&:active': {
-            textDecoration: 'none'
-        }
-    },
-    linkText: {
-        color: '#559542',
+    '&:active': {
+      textDecoration: 'none'
     }
+  },
+  linkText: {
+    color: '#559542',
+  }
 } as React.CSSProperties));
 
 export default withRouter<any>(decorate<{}>(SignupForm)); // tslint:disable-line

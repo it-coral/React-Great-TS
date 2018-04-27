@@ -6,8 +6,8 @@ import {
 import TextField from 'material-ui/TextField';
 import IconButton from 'material-ui/IconButton';
 import { InputAdornment } from 'material-ui/Input';
-import Search from 'material-ui-icons/Search';
-import Cancel from 'material-ui-icons/Cancel';
+import Search from '@material-ui/icons/Search';
+import Cancel from '@material-ui/icons/Cancel';
 import { Field, FieldRenderProps, Form, FormSpy } from 'react-final-form';
 import arrayMutators from 'final-form-arrays';
 import { FieldArray } from 'react-final-form-arrays';
