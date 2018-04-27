@@ -1,6 +1,6 @@
 import * as React from 'react';
 import List, { ListItem, ListItemIcon, ListItemText } from 'material-ui/List';
-import MailIcon from 'material-ui-icons/Mail';
+import MailIcon from '@material-ui/icons/Mail';
 
 interface UserOptionsListProps {
     options: Array<string>;
