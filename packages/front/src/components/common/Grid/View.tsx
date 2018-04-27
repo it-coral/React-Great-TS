@@ -112,7 +112,7 @@ class GridView<T extends GridModel> extends React.Component<GridViewProps<T> & S
 
   private cellRender(model: T, column: ColumnSchema) {
     if (!column.isObject) {
-      return column.render ? column.render(model[column.id]) : model[column.id];
+      return column.render ? column.render(model) : model[column.id];
     } else {
       let value = column.id.split('.').reduce((a, b) => a ? a[b] : null, model);
       return column.render ? column.render(value) : value;

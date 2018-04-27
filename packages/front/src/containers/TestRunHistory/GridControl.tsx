@@ -44,8 +44,9 @@ const columnSchema: Array<ColumnSchema> = [
   {
     id: 'status', numeric: false, disablePadding: false, label: 'Status',
     labelRender: () => <Flag/>,
-    render: (status: string) => {
-      switch (status) {
+    // tslint:disable-next-line:no-any
+    render: (dataItem: any) => {
+      switch (dataItem.status) {
         case 'warnings':
           return tooltipHelper('Warnings', <Warning/>);
         case 'error':
@@ -77,7 +78,10 @@ const columnSchema: Array<ColumnSchema> = [
   {id: 'parameters.concurrentUsers', numeric: true, disablePadding: false, label: 'Probes', isObject: true},
   {
     id: 'createDate', numeric: false, disablePadding: false, label: 'Time',
-    render: (date) => date ? moment(date).format('MMM DD, YYYY - HH:mm') : 'never',
+    // tslint:disable-next-line:no-any
+    render: (dataItem: any) => dataItem.createDate
+      ? moment(dataItem.createDate).format('MMM DD, YYYY - HH:mm')
+      : 'never',
     style: {
       whiteSpace: 'nowrap'
     }
