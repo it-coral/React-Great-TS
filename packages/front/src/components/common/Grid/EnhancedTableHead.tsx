@@ -58,10 +58,10 @@ export default class EnhancedTableHead extends React.Component<EnhancedTableHead
                                         direction={order}
                                         onClick={this.createSortHandler(column.id)}
                                     >
-                                        {column.label}
+                                        {column.labelRender ? column.labelRender() : column.label}
                                     </TableSortLabel>
                                 </Tooltip> :
-                                column.label
+                                    column.labelRender ? column.labelRender() : column.label
                                 }
                             </TableCell>
                         );

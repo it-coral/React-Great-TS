@@ -2,6 +2,18 @@ import * as React from 'react';
 import View from './View';
 import AxiosFactory from '../../../services/AxiosFactory';
 import { AxiosResponse } from 'axios';
+import { ISearchToolbarInitialValues } from './SearchToolbar';
+
+export interface FilterValue {
+  value: number | string;
+  label: string;
+}
+
+export interface GridFilter {
+  fieldName: string;
+  filterValues: Array<FilterValue>;
+  value?: string | number;
+}
 
 export interface GridProps<T extends GridModel> {
   columnSchema: Array<ColumnSchema>;
@@ -13,24 +25,28 @@ export interface GridProps<T extends GridModel> {
   // tslint:disable-next-line:no-any
   rowProps?: any;
   localData?: Array<T>;
+  filters?: Array<GridFilter>;
   onRowClick?: (e: React.MouseEvent<HTMLTableRowElement>, dataItem: T) => void;
 }
 
 export interface GridState<T extends GridModel> {
   data: DataDescriptor<T>;
   sort: SortDescriptor;
-  searchValue: string;
+  searchValue?: string;
+  filter?: Array<IFilterServer>;
   dataPending: boolean;
 }
 
 export interface GridHandlers {
-  onSearchChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onRequestSort: (e: React.MouseEvent<HTMLInputElement>, property: string) => void;
   onChangePage: (e: React.MouseEvent<HTMLInputElement>, pageNumber: number) => void;
   onChangeRowsPerPage: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
-  onResetSearch: () => void;
-  onApplySearch: (e: React.FormEvent<HTMLFormElement>) => void;
   onRowClick: (e: React.MouseEvent<HTMLTableRowElement>, dataItem: GridModel) => void;
+  onSubmitFilterSearch: (e: any) => void; //tslint:disable-line
+}
+
+export interface IFilterFormValues extends ISearchToolbarInitialValues {
+  searchField?: string;
 }
 
 export class Grid<T extends GridModel> extends React.Component<GridProps<T>, GridState<T>> {
@@ -52,7 +68,8 @@ export class Grid<T extends GridModel> extends React.Component<GridProps<T>, Gri
         orderBy: props.defaultSort ? props.defaultSort.orderBy : '_id'
       },
       searchValue: '',
-      dataPending: false
+      filter: [],
+      dataPending: false,
     };
 
     this.state = this.defaultState;
@@ -60,19 +77,15 @@ export class Grid<T extends GridModel> extends React.Component<GridProps<T>, Gri
     this.onRequestSort = this.onRequestSort.bind(this);
     this.onChangePage = this.onChangePage.bind(this);
     this.onChangeRowsPerPage = this.onChangeRowsPerPage.bind(this);
-    this.onSearchChange = this.onSearchChange.bind(this);
-    this.onResetSearch = this.onResetSearch.bind(this);
-    this.onApplySearch = this.onApplySearch.bind(this);
     this.onRowClick = this.onRowClick.bind(this);
+    this.onSubmitFilterSearch = this.onSubmitFilterSearch.bind(this);
 
     this.handlers = {
       onRequestSort: this.onRequestSort,
       onChangePage: this.onChangePage,
       onChangeRowsPerPage: this.onChangeRowsPerPage,
-      onSearchChange: this.onSearchChange,
-      onResetSearch: this.onResetSearch,
-      onApplySearch: this.onApplySearch,
-      onRowClick: this.onRowClick
+      onRowClick: this.onRowClick,
+      onSubmitFilterSearch: this.onSubmitFilterSearch,
     };
   }
 
@@ -88,15 +101,18 @@ export class Grid<T extends GridModel> extends React.Component<GridProps<T>, Gri
 
   fetchListInfo(config: DataFetchDescriptor) {
     let axiosFactory = new AxiosFactory();
-    this.setState({
+    this.setState(
+    {
       dataPending: true
-    },            () => {
+    },
+    () => {
       return this.props.apiRoute && axiosFactory.axios.get(this.props.apiRoute, {
         params: {
           order: config.order,
           limit: config.limit,
           page: config.page,
-          search: this.state.searchValue
+          search: config.search,
+          filter: config.filter,
         }
       }).then((res: AxiosResponse) => {
         this.setState({
@@ -111,39 +127,33 @@ export class Grid<T extends GridModel> extends React.Component<GridProps<T>, Gri
     });
   }
 
-  onApplySearch(e: React.FormEvent<HTMLFormElement>) {
-    e.preventDefault();
+  onSubmitFilterSearch(values: React.FormEvent<HTMLFormElement>) {
+    let searchValues = values as IFilterFormValues;
+    let newFilters: Array<IFilterServer> = [];
 
-    const searchValue = this.state.searchValue;
-    this.setState({
-      ...this.defaultState,
-      searchValue
-    },            () => {
-      if (this.props.remoteDataBound) {
-        this.fetchListInfo({
-          page: this.state.data.page,
-          limit: this.state.data.limit,
-          order: this.getSortOrder(),
-          search: this.state.searchValue
-        });
-      }
-    });
-  }
+    if (searchValues.filter !== undefined) {
+      searchValues.filter.map(filterObj => {
+        let objKey = Object.keys(filterObj)[0];
+        let objValue = filterObj[objKey];
 
-  onResetSearch() {
-    this.setState(this.defaultState, () => {
+        if (objValue !== '' && objValue !== undefined) {
+          newFilters.push({
+            field: objKey,
+            value: objValue.toString(),
+          });
+        }
+      });
+    }
+
+    if (this.props.remoteDataBound) {
       this.fetchListInfo({
         page: this.state.data.page,
         limit: this.state.data.limit,
-        order: this.getSortOrder()
+        order: this.getSortOrder(),
+        search: (searchValues.searchField !== '') ? searchValues.searchField : undefined,
+        filter: (newFilters.length !== 0) ? JSON.stringify(newFilters) : undefined,
       });
-    });
-  }
-
-  onSearchChange(e: React.ChangeEvent<HTMLInputElement>) {
-    this.setState({
-      searchValue: e.currentTarget.value
-    });
+    }
   }
 
   onRequestSort(e: React.MouseEvent<HTMLInputElement>, property: string) {

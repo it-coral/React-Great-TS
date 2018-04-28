@@ -2,6 +2,7 @@ export const Main: string = '/app/main';
 export const Tests: string = '/app/testDefinition';
 export const TestRun: string = '/app/testRun';
 export const TestProperty: string = '/app/testProperties';
+export const TestRunDetails: string = '/app/testRunDetails';
 export const NewTestProperty: string = '/app/new-testProperties';
 export const Monitoring: string = '/app/monitoring';
 export const MonitorRun: string = '/app/monitor-run';
@@ -11,6 +12,7 @@ export const App = {
     Main,
     Tests,
     TestRun,
+    TestRunDetails,
     Monitoring,
     MonitorRun,
     TestProperty,

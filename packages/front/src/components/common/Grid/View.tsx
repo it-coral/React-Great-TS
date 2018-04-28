@@ -13,8 +13,7 @@ import Typography from 'material-ui/Typography';
 import SearchToolbar from './SearchToolbar';
 import { CircularProgress } from 'material-ui/Progress';
 
-type StyledComponent = WithStyles<
-  'tableWrapper' |
+type StyledComponent = WithStyles<'tableWrapper' |
   'table' |
   'searchField' |
   'margin' |
@@ -22,8 +21,7 @@ type StyledComponent = WithStyles<
   'noRowsCell' |
   'tableRowItem' |
   'searchBtn' |
-  'progress'
-  >;
+  'progress'>;
 
 type GridViewProps<T extends GridModel> = GridProps<T> & GridState<T> & GridHandlers;
 
@@ -35,17 +33,15 @@ class GridView<T extends GridModel> extends React.Component<GridViewProps<T> & S
       sort,
       search,
       searchByLabel,
-      searchValue,
-      onSearchChange,
       classes,
       onRequestSort,
       onChangePage,
       onChangeRowsPerPage,
-      onResetSearch,
-      onApplySearch,
+      onSubmitFilterSearch,
       onRowClick,
-      rowProps,
-      dataPending
+      filters,
+      dataPending,
+      rowProps
     } = this.props;
 
     return (
@@ -54,16 +50,15 @@ class GridView<T extends GridModel> extends React.Component<GridViewProps<T> & S
           <TableHead>
             <TableRow>
               {search &&
-                <SearchToolbar
-                  onSubmit={onApplySearch}
-                  value={searchValue}
-                  onResetSearch={onResetSearch}
-                  onSearchChange={onSearchChange}
-                  placeholder={`Search by ${searchByLabel}`}
-                />
+              <SearchToolbar
+                onSubmit={onSubmitFilterSearch}
+                placeholder={`Search by ${searchByLabel}`}
+                colSpan={(columnSchema.length / 2) + 1}
+                filters={filters}
+              />
               }
               <TablePagination
-                colSpan={columnSchema.length}
+                colSpan={(columnSchema.length / 2) - 1}
                 count={data.total}
                 rowsPerPage={data.limit}
                 rowsPerPageOptions={[50, 100, 500]}
@@ -96,21 +91,32 @@ class GridView<T extends GridModel> extends React.Component<GridViewProps<T> & S
                       numeric={column.numeric}
                       style={column.style}
                     >
-                      {column.render ? column.render(model) : model[column.id]}
+                      {this.cellRender(model, column)}
                     </TableCell>
                   ))
                 }
               </TableRow>
-            )) : <td className={classes.noRowsCell} colSpan={columnSchema.length}>
+            )) : <tr>
+              <td className={classes.noRowsCell} colSpan={columnSchema.length}>
                 {!dataPending ?
                   <Typography align="center">No rows to show</Typography> :
-                  <CircularProgress className={classes.progress} />
+                  <CircularProgress className={classes.progress}/>
                 }
-              </td>}
+              </td>
+            </tr>}
           </TableBody>
         </Table>
       </div>
     );
+  }
+
+  private cellRender(model: T, column: ColumnSchema) {
+    if (!column.isObject) {
+      return column.render ? column.render(model) : model[column.id];
+    } else {
+      let value = column.id.split('.').reduce((a, b) => a ? a[b] : null, model);
+      return column.render ? column.render(value) : value;
+    }
   }
 }
 
