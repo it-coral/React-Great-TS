@@ -12,6 +12,7 @@ import { GridProps, GridState, GridHandlers } from './index';
 import Typography from 'material-ui/Typography';
 import SearchToolbar from './SearchToolbar';
 import { CircularProgress } from 'material-ui/Progress';
+import Grid from 'material-ui/Grid';
 
 type StyledComponent = WithStyles<'tableWrapper' |
   'table' |
@@ -49,23 +50,33 @@ class GridView<T extends GridModel> extends React.Component<GridViewProps<T> & S
         <Table className={classes.table}>
           <TableHead>
             <TableRow>
-              {search &&
-              <SearchToolbar
-                onSubmit={onSubmitFilterSearch}
-                placeholder={`Search by ${searchByLabel}`}
-                colSpan={(columnSchema.length / 2) + 1}
-                filters={filters}
-              />
-              }
-              <TablePagination
-                colSpan={(columnSchema.length / 2) - 1}
-                count={data.total}
-                rowsPerPage={data.limit}
-                rowsPerPageOptions={[50, 100, 500]}
-                page={data.page > 0 ? --data.page : data.page}
-                onChangePage={onChangePage}
-                onChangeRowsPerPage={onChangeRowsPerPage}
-              />
+              <TableCell colSpan={columnSchema.length}>
+                <Grid container={true}>
+                  <Grid item={true} md={7} xs={12}>
+                    {search &&
+                    <SearchToolbar
+                      onSubmit={onSubmitFilterSearch}
+                      placeholder={`Search by ${searchByLabel}`}
+                      colSpan={(columnSchema.length / 2) + 1}
+                      filters={filters}
+                    />
+                    }
+                  </Grid>
+
+                  <Grid item={true} md={5} xs={12}>
+                    <TablePagination
+                      colSpan={(columnSchema.length / 2) - 1}
+                      count={data.total}
+                      rowsPerPage={data.limit}
+                      rowsPerPageOptions={[50, 100, 500]}
+                      page={data.page > 0 ? --data.page : data.page}
+                      onChangePage={onChangePage}
+                      onChangeRowsPerPage={onChangeRowsPerPage}
+                      component={'div'}
+                    />
+                  </Grid>
+                </Grid>
+              </TableCell>
             </TableRow>
           </TableHead>
           <EnhancedTableHead

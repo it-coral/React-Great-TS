@@ -47,6 +47,7 @@ export default class EnhancedTableHead extends React.Component<EnhancedTableHead
                                 numeric={column.numeric}
                                 padding={column.disablePadding ? 'none' : 'default'}
                                 sortDirection={column.sortable !== false && orderBy === column.id ? order : false}
+                                style={column.style}
                             >
                                 {column.sortable !== false ? <Tooltip
                                     title="Sort"

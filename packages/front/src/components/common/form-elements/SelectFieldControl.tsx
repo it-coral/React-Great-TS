@@ -71,11 +71,7 @@ const decorate = withStyles(() => ({
         width: '100%',
         marginTop: 0,
         marginBottom: 0,
-        fontSize: '0.95em'
     },
-    select: {
-        fontSize: '0.95em'
-    }
 }));
 
 export default decorate<FieldRenderProps>(SelectFieldControl);

@@ -21,6 +21,8 @@ import { ReactNode } from 'react';
 import Tooltip from 'material-ui/Tooltip';
 import { connect, Dispatch } from 'react-redux';
 import { FetchTestsDistinct } from '../../actions/dictionaryAction';
+import IconButton from 'material-ui/IconButton';
+import OpenInNew from '@material-ui/icons/OpenInNew';
 
 interface ITestHistoryState {
   filters: Array<GridFilter>;
@@ -40,42 +42,73 @@ const tooltipHelper = (title: string, icon: ReactNode): ReactNode => {
 };
 
 const columnSchema: Array<ColumnSchema> = [
-  {id: 'manual', numeric: false, disablePadding: false, label: 'Manual'},
+  {id: 'manual', numeric: false, disablePadding: false, label: 'Manual',
+    style: { maxWidth: '5%', padding: '0px 5px' },
+    // tslint:disable-next-line:no-any
+    render: (dataItem: any) => { return (dataItem.manual !== 0) ? dataItem.manual : ''; }
+  },
   {
-    id: 'status', numeric: false, disablePadding: false, label: 'Status',
+    id: 'status', numeric: false, disablePadding: false, label: 'Status', style: { maxWidth: '5%', padding: '0px' },
     labelRender: () => <Flag/>,
     // tslint:disable-next-line:no-any
     render: (dataItem: any) => {
       switch (dataItem.status) {
         case 'warnings':
-          return tooltipHelper('Warnings', <Warning/>);
+          return tooltipHelper('Warnings', <Warning style={{color: '#dd7127'}}/>);
         case 'error':
-          return tooltipHelper('Error', <RemoveCircle/>);
+          return tooltipHelper('Error', <RemoveCircle style={{color: '#a22a21'}}/>);
         case 'failure':
-          return tooltipHelper('Failure', <Error/>);
+          return tooltipHelper('Failure', <Error style={{color: '#c4c4c4'}}/>);
         case 'timeout':
-          return tooltipHelper('Timeout', <Timer/>);
+          return tooltipHelper('Timeout', <Timer style={{color: '#c4c4c4'}}/>);
         case 'completed':
-          return tooltipHelper('Completed', <DoneAll/>);
+          return tooltipHelper('Completed', <DoneAll style={{color: '#599647'}}/>);
         case 'service-failure':
-          return tooltipHelper('Service failure', <Build/>);
+          return tooltipHelper('Service failure', <Build style={{color: '#c4c4c4'}}/>);
         case 'terminated':
-          return tooltipHelper('Done', <Done/>);
+          return tooltipHelper('Done', <Done style={{color: '#333333'}}/>);
         case 'started':
-          return tooltipHelper('Started', <PlayArrow/>);
+          return tooltipHelper('Started', <PlayArrow style={{color: '#c4c4c4'}}/>);
         case 'retry':
-          return tooltipHelper('Replay', <Replay/>);
+          return tooltipHelper('Replay', <Replay style={{color: '#c4c4c4'}}/>);
         case 'dismissed':
-          return tooltipHelper('Dismissed', <ExitToApp/>);
+          return tooltipHelper('Dismissed', <ExitToApp style={{color: '#c4c4c4'}}/>);
         default:
-          return <div>{status}</div>;
+          return <div>{dataItem.status}</div>;
       }
     }
   },
-  {id: 'name', numeric: false, disablePadding: true, label: 'Name'},
-  {id: 'runName', numeric: false, disablePadding: false, label: 'Machines'},
-  {id: 'parameters.loopCount', numeric: true, disablePadding: false, label: 'Iterations', isObject: true},
-  {id: 'parameters.concurrentUsers', numeric: true, disablePadding: false, label: 'Probes', isObject: true},
+  {id: 'name', numeric: false, disablePadding: true, label: 'Name', style: { maxWidth: '35%' },
+    render: (dataItem: any) => ( // tslint:disable-line
+      <div
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          pointerEvents: 'none'
+        }}
+      >
+        <span>{dataItem.name}</span>
+        <div>
+          <IconButton
+            style={{visibility: 'hidden'}}
+            onClick={(e: React.MouseEvent<HTMLElement>) => {
+              window.open(`${TestRunDetails}/${dataItem._id}`, '_blank');
+              e.stopPropagation();
+            }}
+          >
+            <OpenInNew />
+          </IconButton>
+        </div>
+      </div>
+    )
+  },
+  {id: 'runName', numeric: false, disablePadding: false, label: 'Machines',
+    style: {maxWidth: '15%', padding: '0px 5px'}},
+  {id: 'parameters.loopCount', numeric: true, disablePadding: false, label: 'Iterations', isObject: true,
+    style: { maxWidth: '10%', padding: '0px 5px' }},
+  {id: 'parameters.concurrentUsers', numeric: true, disablePadding: false, label: 'Probes', isObject: true,
+    style: { maxWidth: '10%', padding: '0px 5px' }},
   {
     id: 'createDate', numeric: false, disablePadding: false, label: 'Time',
     // tslint:disable-next-line:no-any
@@ -83,14 +116,17 @@ const columnSchema: Array<ColumnSchema> = [
       ? moment(dataItem.createDate).format('MMM DD, YYYY - HH:mm')
       : 'never',
     style: {
-      whiteSpace: 'nowrap'
+      whiteSpace: 'nowrap',
+      maxWidth: '10%',
+      padding: '0px 10px'
     }
   },
-  {id: 'textError', numeric: false, disablePadding: false, label: 'Reason'},
+  {id: 'textError', numeric: false, disablePadding: false, label: 'Reason',
+    style: { maxWidth: '25%', wordWrap: 'break-word' } },
 ];
 
 export class GridControl extends React.Component<ITestHistoryProps & ITestsHistoryDispatch & RouteComponentProps<{}> &
-  WithStyles<'root'>, ITestHistoryState> {
+  WithStyles<'root' | 'tableRowItemHover'>, ITestHistoryState> {
   constructor(props: ITestHistoryProps & ITestsHistoryDispatch & RouteComponentProps<{}> & WithStyles<'root'>) {
     super(props);
 
@@ -120,6 +156,7 @@ export class GridControl extends React.Component<ITestHistoryProps & ITestsHisto
   }
 
   onRowClick(e: React.MouseEvent<HTMLTableRowElement>, dataItem: GridModel) {
+    console.log("onRowClick", e); // tslint:disable-line
     this.props.history.push(`${TestRunDetails}/${dataItem._id}`);
   }
 
@@ -157,7 +194,7 @@ export class GridControl extends React.Component<ITestHistoryProps & ITestsHisto
           apiRoute={ApiPath.api.testRuns}
           columnSchema={columnSchema}
           defaultSort={{
-            order: 'asc',
+            order: 'desc',
             orderBy: 'createDate'
           }}
           filters={[
@@ -178,6 +215,9 @@ export class GridControl extends React.Component<ITestHistoryProps & ITestsHisto
               value: '',
             }
           ]}
+          rowProps={{
+            className: classes.tableRowItemHover
+          }}
         />
       </Paper>
     );
@@ -187,7 +227,17 @@ export class GridControl extends React.Component<ITestHistoryProps & ITestsHisto
 const styles = (theme: Theme) => ({
   root: {
     width: '100%'
-  }
+  },
+  tableRowItemHover: {
+    '&:hover': {
+      cursor: 'pointer',
+      backgroundColor: '#f7f7f7',
+      '& button': {
+        visibility: 'visible !important',
+        pointerEvents: 'all'
+      }
+    }
+  },
 } as React.CSSProperties);
 
 const decorate = withStyles(styles);
