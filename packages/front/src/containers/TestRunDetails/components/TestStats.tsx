@@ -93,7 +93,8 @@ class TestStats extends React.Component<TestStatsProps & StyledComponent> {
                   </div>
                   <div className={classes.durationContainer}>
                     <Typography>
-                      {`In: ${data.stat.recv.bytes.toLocaleString('en', { maximumFractionDigits: 0 })}`}
+                      {`In: ${data.stat.recv.bytes ?
+                        data.stat.recv.bytes.toLocaleString('en', { maximumFractionDigits: 0 }) : ''}`}
                     </Typography>
                     <Typography>
                       {`Out: ${data.stat.send.bytes.toLocaleString('en', { maximumFractionDigits: 0 })}`}

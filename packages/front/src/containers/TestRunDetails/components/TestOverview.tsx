@@ -6,9 +6,24 @@ import Typography from 'material-ui/Typography';
 import { RouteComponentProps, withRouter } from 'react-router';
 import { Theme, withStyles, WithStyles } from 'material-ui/styles';
 import { TestProperty, TestLogs } from '../../../constants/RoutesNames';
+import { Statuses } from '../../../constants/TestStatus';
 import Tooltip from 'material-ui/Tooltip';
 import { formatDuration } from '../../../helpers/testDetails';
 import Icon from 'material-ui/Icon';
+import Toolbar from 'material-ui/Toolbar';
+import Divider from 'material-ui/Divider';
+
+import Build from '@material-ui/icons/Build';
+import Done from '@material-ui/icons/Done';
+import ExitToApp from '@material-ui/icons/ExitToApp';
+import Replay from '@material-ui/icons/Replay';
+import PlayArrow from '@material-ui/icons/PlayArrow';
+import RemoveCircle from '@material-ui/icons/RemoveCircle';
+import Warning from '@material-ui/icons/Warning';
+import Cancel from '@material-ui/icons/Cancel';
+import Error from '@material-ui/icons/Error';
+import Timer from '@material-ui/icons/Timer';
+
 import * as moment from 'moment';
 
 export interface TestOverviewStoreProps {
@@ -32,6 +47,10 @@ interface OverviewLineProps {
   value: React.ReactElement<React.ReactNode> | string | number;
 }
 
+interface StatusIconSwitchProps {
+  status: string;
+}
+
 type StyledComponent = WithStyles<
   'card' |
   'overviewLine' |
@@ -39,7 +58,10 @@ type StyledComponent = WithStyles<
   'tooltip' |
   'lineValue' |
   'lineIcon' |
-  'lineTitle'
+  'lineTitle' |
+  'divider' |
+  'statusValue' |
+  'toolbar'
   >;
 
 class TestOverview extends React.Component<TestOverviewStoreProps &
@@ -74,13 +96,40 @@ class TestOverview extends React.Component<TestOverviewStoreProps &
           </Typography>
           <Typography
             className={this.props.classes.lineValue}
-            style={{color: props.color ? props.color : 'inherit'}}
+            style={{ color: props.color ? props.color : 'inherit' }}
           >
             {props.value}
           </Typography>
         </div>
       </Tooltip>
     );
+  }
+
+  StatusIconSwitch = (props: StatusIconSwitchProps): JSX.Element => {
+    switch (props.status) {
+      case Statuses.warnings:
+        return <Warning style={{ color: '#F1CD2B', marginRight: 5 }} />;
+      case Statuses.error:
+        return <RemoveCircle style={{ color: '#a22a21', marginRight: 5 }} />;
+      case Statuses.failure:
+        return <Error style={{ color: '#A22A21', marginRight: 5 }} />;
+      case Statuses.timeout:
+        return <Timer style={{ color: '#c4c4c4', marginRight: 5 }} />;
+      case Statuses.completed:
+        return <Done style={{ color: '#559542', marginRight: 5 }} />;
+      case Statuses.serviceFailure:
+        return <Build style={{ color: '#c4c4c4', marginRight: 5 }} />;
+      case Statuses.terminated:
+        return <Cancel style={{ color: '#676A6C', marginRight: 5 }} />;
+      case Statuses.started:
+        return <PlayArrow style={{ color: '#c4c4c4', marginRight: 5 }} />;
+      case Statuses.retry:
+        return <Replay style={{ color: '#c4c4c4', marginRight: 5 }} />;
+      case Statuses.dismissed:
+        return <ExitToApp style={{ color: '#c4c4c4', marginRight: 5 }} />;
+      default:
+        return <span />;
+    }
   }
 
   render() {
@@ -98,6 +147,12 @@ class TestOverview extends React.Component<TestOverviewStoreProps &
       <Grid container={true} spacing={16}>
         <Grid item={true} xs={12}>
           <Card className={classes.card}>
+            <Toolbar className={classes.toolbar}>
+              <Typography variant="subheading">
+                Test Result Overview
+              </Typography>
+            </Toolbar>
+            <Divider className={classes.divider} />
             <Grid container={true} spacing={40}>
               <Grid item={true} sm={6} xs={12}>
                 <this.OverviewLine
@@ -147,14 +202,17 @@ class TestOverview extends React.Component<TestOverviewStoreProps &
                   title="Status"
                   tooltipTitle="Test completion status"
                   value={
-                    data.logUrls ?
-                    <a
-                      className={classes.link}
-                      onClick={() => history.push(`${TestLogs}/${data.testId}`)}
-                    >
-                      {data.status}
-                    </a> : data.status
-                  }
+                    <span className={this.props.classes.statusValue} >
+                      <this.StatusIconSwitch status={data.status} />
+                      {data.logUrls ?
+                        <a
+                          className={classes.link}
+                          onClick={() => history.push(`${TestLogs}/${data.testId}`)}
+                        >
+                          {data.status}
+                        </a> :
+                        data.status}
+                    </span>}
                 />
                 <this.OverviewLine
                   title="Test start time"
@@ -235,6 +293,17 @@ const styles = (theme: Theme) => ({
     marginRight: 5,
     fontSize: 20,
     color: '#9a9a9a'
+  },
+  divider: {
+    margin: '16px -16px'
+  },
+  statusValue: {
+    display: 'flex',
+    alignItems: 'center'
+  },
+  toolbar: {
+    minHeight: 24,
+    padding: 0
   }
 } as React.CSSProperties);
 
@@ -246,4 +315,4 @@ const mapStateToProps = (state: IStore) => ({
 
 export default withRouter<RouteComponentProps<{}> & TestOverviewProps>(
   connect<TestOverviewStoreProps, {}, RouteComponentProps<{}> & TestOverviewProps>(mapStateToProps)(
-  decorate<TestOverviewProps & TestOverviewStoreProps & RouteComponentProps<{}>>(TestOverview)));
+    decorate<TestOverviewProps & TestOverviewStoreProps & RouteComponentProps<{}>>(TestOverview)));
