@@ -1,8 +1,5 @@
 import * as React from 'react';
 import { Theme, withStyles, WithStyles } from 'material-ui/styles';
-import {
-  TableCell,
-} from 'material-ui/Table';
 import TextField from 'material-ui/TextField';
 import IconButton from 'material-ui/IconButton';
 import { InputAdornment } from 'material-ui/Input';
@@ -16,7 +13,6 @@ import { GridFilter } from './index';
 import { debounce } from 'lodash';
 
 type StyledComponent = WithStyles<'searchField' |
-  'searchCell' |
   'searchBtn' |
   'filterField'>;
 
@@ -84,7 +80,6 @@ class SearchToolbar extends React.Component<SearchToolbarProps & StyledComponent
       classes,
       onSubmit,
       placeholder,
-      colSpan,
       filters
     } = this.props;
 
@@ -93,10 +88,7 @@ class SearchToolbar extends React.Component<SearchToolbarProps & StyledComponent
     const debouncedSubmit = debounce(() => submit(), 200);
 
     return (
-      <TableCell
-        colSpan={colSpan}
-        className={classes.searchCell}
-      >
+      <div>
         <Form
           onSubmit={onSubmit}
           initialValues={this.state.formInitialValues}
@@ -170,7 +162,7 @@ class SearchToolbar extends React.Component<SearchToolbarProps & StyledComponent
             </form>);
           }}
         />
-      </TableCell>
+      </div>
     );
   }
 }
@@ -185,10 +177,6 @@ const styles = (theme: Theme) => ({
     display: 'inline-flex',
     width: 100,
     marginRight: theme.spacing.unit,
-  },
-  searchCell: {
-    paddingRight: 0,
-    minWidth: 373
   },
   searchBtn: {
     width: 30,

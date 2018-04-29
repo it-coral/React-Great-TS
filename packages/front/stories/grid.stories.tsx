@@ -12,7 +12,7 @@ const columnSchema: Array<ColumnSchema> = [
 
 const customRenderColumn = {
   id: 'Column4', numeric: false, disablePadding: false, label: 'Column 4',
-  render: (data: any) => <strong>{data}</strong>,
+  render: (data: any) => <strong>{data.Column1}</strong>,
   style: {
     textDecoration: 'underline'
   }
@@ -25,6 +25,12 @@ const SampleData = [{
   Column3: 654,
   Column4: "text"
 }];
+
+let sampleFilterValues = [
+  {value: '', label: 'Any Result'},
+  {value: 'warnings', label: 'Warnings'},
+  {value: 'error', label: 'Error'},
+];
 
 storiesOf('Grid', module)
   .addDecorator((story: RenderFunction) => <ThemeProvider story={story()} />)
@@ -52,4 +58,18 @@ storiesOf('Grid', module)
     <Grid
       localData={SampleData}
       columnSchema={[customRenderColumn]}
+    />)
+  .add('Grid with filters', () =>
+    <Grid
+      search={true}
+      searchByLabel={'search label'}
+      localData={SampleData}
+      columnSchema={columnSchema}
+      filters={[
+        {
+          fieldName: 'Column1',
+          filterValues: sampleFilterValues,
+          value: '',
+        }
+      ]}
     />);
