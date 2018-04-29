@@ -172,7 +172,7 @@ const styles = (theme: Theme) => ({
     minWidth: 35,
     height: 35,
     minHeight: 35,
-    color: '#4682C3',
+    color: theme.palette.primary.main,
     visibility: 'hidden',
     pointerEvents: 'none'
   }

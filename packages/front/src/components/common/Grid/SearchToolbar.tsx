@@ -10,7 +10,7 @@ import arrayMutators from 'final-form-arrays';
 import { FieldArray } from 'react-final-form-arrays';
 import SelectFieldControl from '../form-elements/SelectFieldControl';
 import { GridFilter } from './index';
-import { debounce } from 'lodash';
+import { debounce, isEqual } from 'lodash';
 
 type StyledComponent = WithStyles<'searchField' |
   'searchBtn' |
@@ -58,7 +58,7 @@ class SearchToolbar extends React.Component<SearchToolbarProps & StyledComponent
 
     if (props.filters !== undefined &&
       this.state.formInitialValues.filter === undefined && props.filters.length !== 0) {
-      initialValues = {filter: []};
+      initialValues = { filter: [] };
       props.filters.forEach(filter => {
         if (filter.value === undefined && initialValues.filter !== undefined) {
           initialValues.filter.push({});
@@ -95,29 +95,29 @@ class SearchToolbar extends React.Component<SearchToolbarProps & StyledComponent
           mutators={{
             ...arrayMutators,
           }}
-          render={({handleSubmit, submitError, change}) => {
+          render={({ handleSubmit, submitError, change, values }) => {
             submit = handleSubmit;
 
             return (<form
               onSubmit={handleSubmit}
             >
               {filters !== undefined &&
-              <FieldArray name="filter">
-                {({fields}) =>
-                  fields.map((name, index) => (
-                    <React.Fragment key={index}>
-                      <div className={classes.filterField}>
-                        <Field
-                          component={SelectFieldControl}
-                          name={`${name}.${filters[index].fieldName}`}
-                          label="Filter"
-                          emptyOption={false}
-                          options={filters[index].filterValues}
-                        />
-                      </div>
-                    </React.Fragment>
-                  ))}
-              </FieldArray>
+                <FieldArray name="filter">
+                  {({ fields }) =>
+                    fields.map((name, index) => (
+                      <React.Fragment key={index}>
+                        <div className={classes.filterField}>
+                          <Field
+                            component={SelectFieldControl}
+                            name={`${name}.${filters[index].fieldName}`}
+                            label="Filter"
+                            emptyOption={false}
+                            options={filters[index].filterValues}
+                          />
+                        </div>
+                      </React.Fragment>
+                    ))}
+                </FieldArray>
               }
 
               <Field
@@ -133,20 +133,20 @@ class SearchToolbar extends React.Component<SearchToolbarProps & StyledComponent
                     InputProps={{
                       endAdornment: <InputAdornment position="end">
                         {props.input.value &&
-                        <IconButton
-                          className={classes.searchBtn}
-                          aria-label="clear"
-                          onClick={() => change('searchField', '')}
-                        >
-                          <Cancel/>
-                        </IconButton>
+                          <IconButton
+                            className={classes.searchBtn}
+                            aria-label="clear"
+                            onClick={() => change('searchField', '')}
+                          >
+                            <Cancel />
+                          </IconButton>
                         }
                         <IconButton
                           className={classes.searchBtn}
                           type="submit"
                           aria-label="search"
                         >
-                          <Search/>
+                          <Search />
                         </IconButton>
                       </InputAdornment>
                     }}
@@ -154,8 +154,13 @@ class SearchToolbar extends React.Component<SearchToolbarProps & StyledComponent
                 )}
               />
               <FormSpy
-                subscription={{values: true}}
-                onChange={(values) => {
+                subscription={{ values: true }}
+                onChange={(newFormState) => {
+                  if (!isEqual(newFormState.values, values)) {
+                    if (newFormState.values.searchField !== values.searchField) {
+                      return;
+                    }
+                  }
                   debouncedSubmit();
                 }}
               />
@@ -171,7 +176,10 @@ const styles = (theme: Theme) => ({
   searchField: {
     width: 245,
     marginRight: theme.spacing.unit,
-    display: 'inline-flex'
+    display: 'inline-flex',
+    height: 48,
+    verticalAlign: 'top',
+    justifyContent: 'flex-end'
   },
   filterField: {
     display: 'inline-flex',

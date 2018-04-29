@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { Redirect, Route, Switch } from 'react-router';
-import withStyles from 'material-ui/styles/withStyles';
-import { Theme, WithStyles } from 'material-ui/styles';
+import { Theme, WithStyles, withStyles } from 'material-ui/styles';
 import { CircularProgress } from 'material-ui/Progress';
 import Navbar from './components/Navbar';
 import Sidebar from './components/Sidebar';
