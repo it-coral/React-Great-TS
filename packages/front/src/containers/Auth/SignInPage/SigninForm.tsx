@@ -95,7 +95,7 @@ class SigninForm extends React.Component<RouteComponentProps<{}> & StyledCompone
               >
                 <Grid
                   container={true}
-                  spacing={16}                  
+                  spacing={16}
                 >
                   <Grid
                     item={true}
@@ -131,7 +131,7 @@ class SigninForm extends React.Component<RouteComponentProps<{}> & StyledCompone
               >
                 <Grid
                   container={true}
-                  spacing={16}                  
+                  spacing={16}
                   className={classes.formSection}
                 >
                   <Grid item={true} xs={6}>

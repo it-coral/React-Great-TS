@@ -6,6 +6,7 @@ import AvTimer from '@material-ui/icons/AvTimer';
 import SwapHoriz from '@material-ui/icons/SwapHoriz';
 import { Theme, withStyles, WithStyles } from 'material-ui/styles';
 import { formatDuration } from '../../../helpers/testDetails';
+import Grow from 'material-ui/transitions/Grow';
 
 export interface TestStatsProps {
   // tslint:disable-next-line:no-any
@@ -34,73 +35,79 @@ class TestStats extends React.Component<TestStatsProps & StyledComponent> {
     return (
       <Grid container={true} spacing={16}>
         <Grid item={true} xs={12} sm={4}>
-          <Card className={classes.cardBlueBorder}>
-            <Grid container={true} spacing={16}>
-              <Grid item={true} xs={12}>
-                <div className={classes.iconContainer}>
-                  <AvTimer className={classes.icon} />
-                </div>
-                <div className={classes.durationContainer}>
+          <Grow in={true}>
+            <Card className={classes.cardBlueBorder}>
+              <Grid container={true} spacing={16}>
+                <Grid item={true} xs={12}>
+                  <div className={classes.iconContainer}>
+                    <AvTimer className={classes.icon} />
+                  </div>
+                  <div className={classes.durationContainer}>
+                    <Typography>
+                      {formatDuration(data.stat.voiceSetupTime * 1000, 'DHMSms')}
+                    </Typography>
+                  </div>
+                </Grid>
+                <Grid item={true} xs={12}>
                   <Typography>
-                    {formatDuration(data.stat.voiceSetupTime * 1000, 'DHMSms')}
-                  </Typography>
-                </div>
-              </Grid>
-              <Grid item={true} xs={12}>
-                <Typography>
-                  Average call setup time (sec)
+                    Average call setup time (sec)
                 </Typography>
+                </Grid>
               </Grid>
-            </Grid>
-          </Card>
+            </Card>
+          </Grow>
         </Grid>
         <Grid item={true} xs={12} sm={4}>
-          <Card className={classes.cardGreenBorder}>
-            <Grid container={true} spacing={16}>
-              <Grid item={true} xs={12}>
-                <div className={classes.iconContainer}>
-                  <SwapHoriz className={classes.icon} />
-                </div>
-                <div className={classes.durationContainer}>
+          <Grow in={true} timeout={500}>
+            <Card className={classes.cardGreenBorder}>
+              <Grid container={true} spacing={16}>
+                <Grid item={true} xs={12}>
+                  <div className={classes.iconContainer}>
+                    <SwapHoriz className={classes.icon} />
+                  </div>
+                  <div className={classes.durationContainer}>
+                    <Typography>
+                      {`In: ${calc.recv && calc.recv.packerErrorPCT.toFixed(3)}%`}
+                    </Typography>
+                    <Typography>
+                      {`Out: ${calc.send && calc.send.packerErrorPCT.toFixed(3)}%`}
+                    </Typography>
+                  </div>
+                </Grid>
+                <Grid item={true} xs={12}>
                   <Typography>
-                    {`In: ${calc.recv && calc.recv.packerErrorPCT.toFixed(3)}%`}
-                  </Typography>
-                  <Typography>
-                    {`Out: ${calc.send && calc.send.packerErrorPCT.toFixed(3)}%`}
-                  </Typography>
-                </div>
-              </Grid>
-              <Grid item={true} xs={12}>
-                <Typography>
-                  Packet loss
+                    Packet loss
                 </Typography>
+                </Grid>
               </Grid>
-            </Grid>
-          </Card>
+            </Card>
+          </Grow>
         </Grid>
         <Grid item={true} xs={12} sm={4}>
-          <Card className={classes.cardOrangeBorder}>
-            <Grid container={true} spacing={16}>
-              <Grid item={true} xs={12}>
-                <div className={classes.iconContainer}>
-                  <SwapHoriz className={classes.icon} />
-                </div>
-                <div className={classes.durationContainer}>
+          <Grow in={true} timeout={1000}>
+            <Card className={classes.cardOrangeBorder}>
+              <Grid container={true} spacing={16}>
+                <Grid item={true} xs={12}>
+                  <div className={classes.iconContainer}>
+                    <SwapHoriz className={classes.icon} />
+                  </div>
+                  <div className={classes.durationContainer}>
+                    <Typography>
+                      {`In: ${data.stat.recv.bytes.toLocaleString('en', { maximumFractionDigits: 0 })}`}
+                    </Typography>
+                    <Typography>
+                      {`Out: ${data.stat.send.bytes.toLocaleString('en', { maximumFractionDigits: 0 })}`}
+                    </Typography>
+                  </div>
+                </Grid>
+                <Grid item={true} xs={12}>
                   <Typography>
-                    {`In: ${data.stat.recv.bytes.toLocaleString('en-IN', { maximumFractionDigits: 0 })}`}
-                  </Typography>
-                  <Typography>
-                    {`Out: ${data.stat.send.bytes.toLocaleString('en-IN', { maximumFractionDigits: 0 })}`}
-                  </Typography>
-                </div>
-              </Grid>
-              <Grid item={true} xs={12}>
-                <Typography>
-                  Effective Bit-rate (Kbits)
+                    Effective Bit-rate (Kbits)
                 </Typography>
+                </Grid>
               </Grid>
-            </Grid>
-          </Card>
+            </Card>
+          </Grow>
         </Grid>
       </Grid>
     );

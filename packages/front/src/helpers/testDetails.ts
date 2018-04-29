@@ -1,14 +1,14 @@
 import * as moment from 'moment';
 import 'moment-duration-format';
 
-export function formatDuration(duration: number, format: string) {
+export function formatDuration(duration: number, format: string): string {
     switch (format) {
         case 'DHMSms':
             return moment.duration(duration).format('D[d] H[h] m[m] s.ms[s]');
 
         case 'DHMS':
             return moment.duration(duration).format('D[d] H[h] m[m] s[s]');
-        default: return;
+        default: return '';
     }
 }
 

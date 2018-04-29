@@ -6,7 +6,7 @@ import { CircularProgress } from 'material-ui/Progress';
 import Fade from 'material-ui/transitions/Fade';
 import Grid from 'material-ui/Grid';
 import TestStats from './components/TestStats';
-// import TestOverview from './components/TestOverview';
+import TestOverview from './components/TestOverview';
 // import TestSessions from './components/TestSessions';
 import AxiosFactory from '../../services/AxiosFactory';
 import ApiPath from '../../constants/ApiPath';
@@ -31,7 +31,8 @@ interface TestRunDetailsState {
     testDuration?: number;
   };
   audioMOS?: number;
-  audioMosPanelClass?: string;
+  audioMosPanelColor?: string;
+  successRate?: string;
   // tslint:disable-next-line:no-any
   filtCusTestMetric?: any;
 }
@@ -77,6 +78,7 @@ class TestRunDetails extends React.Component<
             });
           },                                  1000);
           this.processTestData();
+          this.getAllTestIterations();
         });
         return res;
       });
@@ -121,7 +123,7 @@ class TestRunDetails extends React.Component<
       }
 
       if (newState.audioMOS) {
-        newState.audioMosPanelClass = this.getAudioMosPanelClass(newState.audioMOS);
+        newState.audioMosPanelColor = this.getAudioMosPanelClass(newState.audioMOS);
       }
 
       this.setState({
@@ -129,6 +131,23 @@ class TestRunDetails extends React.Component<
         ...newState
       });
     }
+  }
+
+  getAllTestIterations() {
+    let axiosFactory = new AxiosFactory();
+    axiosFactory.axios.get(`${ApiPath.api.testIterations}/${this.props.match.params.objectId}/all`)
+      .then(({ data }) => {
+        // tslint:disable-next-line:no-any
+        let success = data.filter((iter: any) => iter.status === 'completed' || iter.status === 'warnings');
+        let total = data.length;
+        let rate = Math.ceil(success.length / total * 100);
+
+        if (!isNaN(rate)) {
+          this.setState({
+            successRate: `${rate}% (${success.length}/${total})`
+          });
+        }
+      });
   }
 
   // tslint:disable-next-line:no-any
@@ -142,11 +161,11 @@ class TestRunDetails extends React.Component<
   getAudioMosPanelClass(value: number) {
     switch (true) {
       case (value >= 3):
-        return 'success';
+        return '#559542';
       case (value >= 2 && value < 3):
-        return 'warning';
+        return '#F1CD2B';
       case (value < 2):
-        return 'error';
+        return '#A22A21';
       default: return '';
     }
   }
@@ -166,6 +185,12 @@ class TestRunDetails extends React.Component<
               <TestStats
                 data={this.state.data}
                 calc={this.state.calc}
+              />
+              <TestOverview
+                data={this.state.data}
+                calc={this.state.calc}
+                successRate={this.state.successRate}
+                audioMosPanelColor={this.state.audioMosPanelColor}
               />
             </Grid>
           </Fade>

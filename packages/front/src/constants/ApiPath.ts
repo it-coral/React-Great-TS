@@ -5,6 +5,7 @@ export default {
     'api': {
         'userInfo': '/api/users/me',
         'testDefinitions': '/api/test_definitions',
+        'testIterations': '/api/test_iterations',
         'testRuns': '/api/test_runs',
         'testRunsDistinct': '/api/test_runs/test/distinct',
         'run': '/api/test_definitions/run',

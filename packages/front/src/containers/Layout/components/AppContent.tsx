@@ -6,7 +6,7 @@ import Toolbar from 'material-ui/Toolbar';
 import Typography from 'material-ui/Typography';
 import { NavbarHeight, DrawerWidth } from '../../../styles/Constants';
 import { withRouter, RouteComponentProps } from 'react-router-dom';
-import PageStateDictionary from '../../../constants/PageStateDictionary';
+import { getLocationTitle } from '../../../constants/PageStateDictionary';
 
 class AppContent extends React.Component<WithStyles<
 'content' |
@@ -25,7 +25,7 @@ class AppContent extends React.Component<WithStyles<
                 >
                     <Toolbar className={classes.toolbar}>
                         <Typography className={classes.headText} variant="title" color="inherit">
-                            {PageStateDictionary[location.pathname]}
+                            {getLocationTitle(location.pathname)}
                         </Typography>
                     </Toolbar>
                 </AppBar>
