@@ -8,12 +8,12 @@ import { TestRunDetails } from '../../constants/RoutesNames';
 import Flag from '@material-ui/icons/Flag';
 import Build from '@material-ui/icons/Build';
 import Done from '@material-ui/icons/Done';
-import DoneAll from '@material-ui/icons/DoneAll';
 import ExitToApp from '@material-ui/icons/ExitToApp';
 import Replay from '@material-ui/icons/Replay';
 import PlayArrow from '@material-ui/icons/PlayArrow';
 import RemoveCircle from '@material-ui/icons/RemoveCircle';
 import Warning from '@material-ui/icons/Warning';
+import Cancel from '@material-ui/icons/Cancel';
 import Error from '@material-ui/icons/Error';
 import Timer from '@material-ui/icons/Timer';
 import * as moment from 'moment';
@@ -72,15 +72,15 @@ export class GridControl extends React.Component<ITestHistoryProps & ITestsHisto
           case Statuses.timeout:
             return tooltipHelper('Timeout', <Timer style={{ color: '#c4c4c4' }} />);
           case Statuses.completed:
-            return tooltipHelper('Completed', <DoneAll style={{ color: '#559542' }} />);
+            return tooltipHelper('Completed', <Done style={{ color: '#559542' }} />);
           case Statuses.serviceFailure:
             return tooltipHelper('Service failure', <Build style={{ color: '#c4c4c4' }} />);
           case Statuses.terminated:
-            return tooltipHelper('Done', <Done style={{ color: '#559542' }} />);
+            return tooltipHelper('Terminated', <Cancel style={{ color: '#676A6C' }} />);
           case Statuses.started:
             return tooltipHelper('Started', <PlayArrow style={{ color: '#c4c4c4' }} />);
           case Statuses.retry:
-            return tooltipHelper('Replay', <Replay style={{ color: '#c4c4c4' }} />);
+            return tooltipHelper('Retry', <Replay style={{ color: '#c4c4c4' }} />);
           case Statuses.dismissed:
             return tooltipHelper('Dismissed', <ExitToApp style={{ color: '#c4c4c4' }} />);
           default:
