@@ -3,6 +3,7 @@ import { AxiosResponse } from 'axios';
 import { RouteComponentProps } from 'react-router';
 import { Theme, WithStyles, withStyles } from 'material-ui/styles';
 import { CircularProgress } from 'material-ui/Progress';
+import Fade from 'material-ui/transitions/Fade';
 import Grid from 'material-ui/Grid';
 import TestStats from './components/TestStats';
 // import TestOverview from './components/TestOverview';
@@ -156,16 +157,18 @@ class TestRunDetails extends React.Component<
       <React.Fragment>
         {!this.state.data ?
           <CircularProgress className={classes.circularProgress} size={80} /> :
-          <Grid
-            container={true}
-            spacing={16}
-            className={classes.detailsContainer}
-          >
-            <TestStats
-              data={this.state.data}
-              calc={this.state.calc}
-            />
-          </Grid>
+          <Fade in={true}>
+            <Grid
+              container={true}
+              spacing={16}
+              className={classes.detailsContainer}
+            >
+              <TestStats
+                data={this.state.data}
+                calc={this.state.calc}
+              />
+            </Grid>
+          </Fade>
         }
       </React.Fragment>
     );
