@@ -3,7 +3,6 @@ import { Grid } from '../../../components/common/Grid/index';
 import ApiPath from '../../../constants/ApiPath';
 import withStyles from 'material-ui/styles/withStyles';
 import { PropTypes, Theme, WithStyles } from 'material-ui';
-// import { TestRunGroup } from '../../../constants/RoutesNames';
 import Button from 'material-ui/Button';
 import Color = PropTypes.Color;
 import AxiosFactory from '../../../services/AxiosFactory';
