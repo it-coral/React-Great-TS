@@ -6,16 +6,6 @@ import ApiPath from '../../constants/ApiPath';
 import { RouteComponentProps } from 'react-router';
 import { TestRunDetails } from '../../constants/RoutesNames';
 import Flag from '@material-ui/icons/Flag';
-import Build from '@material-ui/icons/Build';
-import Done from '@material-ui/icons/Done';
-import ExitToApp from '@material-ui/icons/ExitToApp';
-import Replay from '@material-ui/icons/Replay';
-import PlayArrow from '@material-ui/icons/PlayArrow';
-import RemoveCircle from '@material-ui/icons/RemoveCircle';
-import Warning from '@material-ui/icons/Warning';
-import Cancel from '@material-ui/icons/Cancel';
-import Error from '@material-ui/icons/Error';
-import Timer from '@material-ui/icons/Timer';
 import * as moment from 'moment';
 import Tooltip from 'material-ui/Tooltip';
 import { connect, Dispatch } from 'react-redux';
@@ -23,6 +13,7 @@ import { FetchTestsDistinct } from '../../actions/dictionaryAction';
 import IconButton from 'material-ui/IconButton';
 import OpenInNew from '@material-ui/icons/OpenInNew';
 import { Statuses } from '../../constants/TestStatus';
+import { testStatusHelper } from '../../helpers/testStatusHelper';
 
 interface ITestHistoryState {
   filters: Array<GridFilter>;
@@ -62,30 +53,7 @@ export class GridControl extends React.Component<ITestHistoryProps & ITestsHisto
       labelRender: () => <Flag />,
       // tslint:disable-next-line:no-any
       render: (dataItem: any) => {
-        switch (dataItem.status) {
-          case Statuses.warnings:
-            return tooltipHelper('Warnings', <Warning style={{ color: '#F1CD2B' }} />);
-          case Statuses.error:
-            return tooltipHelper('Error', <RemoveCircle style={{ color: '#a22a21' }} />);
-          case Statuses.failure:
-            return tooltipHelper('Failure', <Error style={{ color: '#A22A21' }} />);
-          case Statuses.timeout:
-            return tooltipHelper('Timeout', <Timer style={{ color: '#c4c4c4' }} />);
-          case Statuses.completed:
-            return tooltipHelper('Completed', <Done style={{ color: '#559542' }} />);
-          case Statuses.serviceFailure:
-            return tooltipHelper('Service failure', <Build style={{ color: '#c4c4c4' }} />);
-          case Statuses.terminated:
-            return tooltipHelper('Terminated', <Cancel style={{ color: '#676A6C' }} />);
-          case Statuses.started:
-            return tooltipHelper('Started', <PlayArrow style={{ color: '#c4c4c4' }} />);
-          case Statuses.retry:
-            return tooltipHelper('Retry', <Replay style={{ color: '#c4c4c4' }} />);
-          case Statuses.dismissed:
-            return tooltipHelper('Dismissed', <ExitToApp style={{ color: '#c4c4c4' }} />);
-          default:
-            return <div>{dataItem.status}</div>;
-        }
+        return testStatusHelper(dataItem.status);
       }
     },
     {
@@ -173,7 +141,6 @@ export class GridControl extends React.Component<ITestHistoryProps & ITestsHisto
   }
 
   onRowClick(e: React.MouseEvent<HTMLTableRowElement>, dataItem: GridModel) {
-    console.log("onRowClick", e); // tslint:disable-line
     this.props.history.push(`${TestRunDetails}/${dataItem._id}`);
   }
 
@@ -235,6 +202,7 @@ export class GridControl extends React.Component<ITestHistoryProps & ITestsHisto
           rowProps={{
             className: classes.tableRowItemHover
           }}
+          pagination={true}
         />
       </Paper>
     );

@@ -12,6 +12,7 @@ import AxiosFactory from '../../services/AxiosFactory';
 import ApiPath from '../../constants/ApiPath';
 import { Statuses } from '../../constants/TestStatus';
 import * as moment from 'moment';
+import TestSessions from './components/TestSessions';
 
 interface TestRunDetailsProps {
 }
@@ -191,6 +192,9 @@ class TestRunDetails extends React.Component<
                 calc={this.state.calc}
                 successRate={this.state.successRate}
                 audioMosPanelColor={this.state.audioMosPanelColor}
+              />
+              <TestSessions
+                testIterationId={this.props.match.params.objectId}
               />
             </Grid>
           </Fade>

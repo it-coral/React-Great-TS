@@ -40,10 +40,10 @@ export default class EnhancedTableHead extends React.Component<EnhancedTableHead
         return (
             <TableHead>
                 <TableRow>
-                    {columnSchema.map((column: ColumnSchema) => {
+                    {columnSchema.map((column: ColumnSchema, i: number) => {
                         return (
                             <TableCell
-                                key={column.id}
+                                key={i}
                                 numeric={column.numeric}
                                 padding={column.disablePadding ? 'none' : 'default'}
                                 sortDirection={column.sortable !== false && orderBy === column.id ? order : false}

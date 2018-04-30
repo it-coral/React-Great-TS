@@ -20,7 +20,9 @@ export interface GridProps<T extends GridModel> {
   apiRoute?: string;
   defaultSort?: SortDescriptor;
   remoteDataBound?: boolean;
+  plainPayload?: boolean;
   search?: boolean;
+  pagination?: boolean;
   searchByLabel?: string;
   // tslint:disable-next-line:no-any
   rowProps?: any;
@@ -99,32 +101,55 @@ export class Grid<T extends GridModel> extends React.Component<GridProps<T>, Gri
     }
   }
 
+  componentWillReceiveProps(nextProps: GridProps<T>) {
+    if (nextProps.localData !== undefined && !nextProps.remoteDataBound) {
+      let prevState = {...this.state};
+      prevState.data.docs = nextProps.localData;
+      this.setState({
+        data: prevState.data,
+      });
+    }
+  }
+
   fetchListInfo(config: DataFetchDescriptor) {
     let axiosFactory = new AxiosFactory();
     this.setState(
-    {
-      dataPending: true
-    },
-    () => {
-      return this.props.apiRoute && axiosFactory.axios.get(this.props.apiRoute, {
-        params: {
-          order: config.order,
-          limit: config.limit,
-          page: config.page,
-          search: config.search,
-          filter: config.filter,
-        }
-      }).then((res: AxiosResponse) => {
-        this.setState({
-          data: res.data,
-          dataPending: false
-        });
-      }).catch((err) => {
-        this.setState({
-          dataPending: false
+      {
+        dataPending: true
+      },
+      () => {
+        return this.props.apiRoute && axiosFactory.axios.get(this.props.apiRoute, {
+          params: {
+            order: config.order,
+            limit: config.limit,
+            page: config.page,
+            search: config.search,
+            filter: config.filter,
+          }
+        }).then((res: AxiosResponse) => {
+
+          if (this.props.plainPayload === undefined || !this.props.plainPayload) {
+            this.setState({
+              data: res.data,
+              dataPending: false
+            });
+          } else {
+
+            let prevState = {...this.state};
+            prevState.data.docs = res.data;
+            prevState.data.total = res.data.length;
+
+            this.setState({
+              data: prevState.data,
+              dataPending: false
+            });
+          }
+        }).catch((err) => {
+          this.setState({
+            dataPending: false
+          });
         });
       });
-    });
   }
 
   onSubmitFilterSearch(values: React.FormEvent<HTMLFormElement>) {

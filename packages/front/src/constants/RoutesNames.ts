@@ -9,17 +9,22 @@ export const Monitoring: string = '/app/monitoring';
 export const MonitorRun: string = '/app/monitor-run';
 export const AnalyzeDump: string = '/app/analyzeDump';
 
+export const TestRunGroup: string = '/app/testRunGroup';
+export const TestIteration: string = '/app/testIteration';
+
 export const App = {
-    Main,
-    Tests,
-    TestRun,
-    TestRunDetails,
-    TestLogs,
-    Monitoring,
-    MonitorRun,
-    TestProperty,
-    NewTestProperty,
-    AnalyzeDump
+  Main,
+  Tests,
+  TestRun,
+  TestRunDetails,
+  TestLogs,
+  Monitoring,
+  MonitorRun,
+  TestProperty,
+  NewTestProperty,
+  AnalyzeDump,
+  TestRunGroup,
+  TestIteration,
 };
 
 export const SignIn: string = '/signin';
@@ -28,10 +33,10 @@ export const SignUpConfirm: string = '/signup-confirm';
 export const ForgotPassword: string = '/forgot-password';
 
 export const Login = {
-    SignIn,
-    SignUp,
-    SignUpConfirm,
-    ForgotPassword
+  SignIn,
+  SignUp,
+  SignUpConfirm,
+  ForgotPassword
 };
 
 export const NotFound: string = '/404';
