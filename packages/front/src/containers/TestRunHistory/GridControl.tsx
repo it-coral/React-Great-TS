@@ -8,21 +8,21 @@ import { TestRunDetails } from '../../constants/RoutesNames';
 import Flag from '@material-ui/icons/Flag';
 import Build from '@material-ui/icons/Build';
 import Done from '@material-ui/icons/Done';
-import DoneAll from '@material-ui/icons/DoneAll';
 import ExitToApp from '@material-ui/icons/ExitToApp';
 import Replay from '@material-ui/icons/Replay';
 import PlayArrow from '@material-ui/icons/PlayArrow';
 import RemoveCircle from '@material-ui/icons/RemoveCircle';
 import Warning from '@material-ui/icons/Warning';
+import Cancel from '@material-ui/icons/Cancel';
 import Error from '@material-ui/icons/Error';
 import Timer from '@material-ui/icons/Timer';
 import * as moment from 'moment';
-import { ReactNode } from 'react';
 import Tooltip from 'material-ui/Tooltip';
 import { connect, Dispatch } from 'react-redux';
 import { FetchTestsDistinct } from '../../actions/dictionaryAction';
 import IconButton from 'material-ui/IconButton';
 import OpenInNew from '@material-ui/icons/OpenInNew';
+import { Statuses } from '../../constants/TestStatus';
 
 interface ITestHistoryState {
   filters: Array<GridFilter>;
@@ -37,97 +37,114 @@ interface ITestHistoryProps {
   testRuns: Array<string>;
 }
 
-const tooltipHelper = (title: string, icon: ReactNode): ReactNode => {
-  return <Tooltip title={title}>{React.createElement('div', null, icon)}</Tooltip>;
+const tooltipHelper = (title: string, icon: React.ReactElement<React.ReactNode>): React.ReactNode => {
+  return <Tooltip placement="top" title={title}>{icon}</Tooltip>;
 };
 
-const columnSchema: Array<ColumnSchema> = [
-  {id: 'manual', numeric: false, disablePadding: false, label: 'Manual',
-    style: { maxWidth: '5%', padding: '0px 5px' },
-    // tslint:disable-next-line:no-any
-    render: (dataItem: any) => { return (dataItem.manual !== 0) ? dataItem.manual : ''; }
-  },
-  {
-    id: 'status', numeric: false, disablePadding: false, label: 'Status', style: { maxWidth: '5%', padding: '0px' },
-    labelRender: () => <Flag/>,
-    // tslint:disable-next-line:no-any
-    render: (dataItem: any) => {
-      switch (dataItem.status) {
-        case 'warnings':
-          return tooltipHelper('Warnings', <Warning style={{color: '#dd7127'}}/>);
-        case 'error':
-          return tooltipHelper('Error', <RemoveCircle style={{color: '#a22a21'}}/>);
-        case 'failure':
-          return tooltipHelper('Failure', <Error style={{color: '#c4c4c4'}}/>);
-        case 'timeout':
-          return tooltipHelper('Timeout', <Timer style={{color: '#c4c4c4'}}/>);
-        case 'completed':
-          return tooltipHelper('Completed', <DoneAll style={{color: '#599647'}}/>);
-        case 'service-failure':
-          return tooltipHelper('Service failure', <Build style={{color: '#c4c4c4'}}/>);
-        case 'terminated':
-          return tooltipHelper('Done', <Done style={{color: '#333333'}}/>);
-        case 'started':
-          return tooltipHelper('Started', <PlayArrow style={{color: '#c4c4c4'}}/>);
-        case 'retry':
-          return tooltipHelper('Replay', <Replay style={{color: '#c4c4c4'}}/>);
-        case 'dismissed':
-          return tooltipHelper('Dismissed', <ExitToApp style={{color: '#c4c4c4'}}/>);
-        default:
-          return <div>{dataItem.status}</div>;
-      }
-    }
-  },
-  {id: 'name', numeric: false, disablePadding: true, label: 'Name', style: { maxWidth: '35%' },
-    render: (dataItem: any) => ( // tslint:disable-line
-      <div
-        style={{
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          pointerEvents: 'none'
-        }}
-      >
-        <span>{dataItem.name}</span>
-        <div>
-          <IconButton
-            style={{visibility: 'hidden'}}
-            onClick={(e: React.MouseEvent<HTMLElement>) => {
-              window.open(`${TestRunDetails}/${dataItem._id}`, '_blank');
-              e.stopPropagation();
-            }}
-          >
-            <OpenInNew />
-          </IconButton>
-        </div>
-      </div>
-    )
-  },
-  {id: 'runName', numeric: false, disablePadding: false, label: 'Machines',
-    style: {maxWidth: '15%', padding: '0px 5px'}},
-  {id: 'parameters.loopCount', numeric: true, disablePadding: false, label: 'Iterations', isObject: true,
-    style: { maxWidth: '10%', padding: '0px 5px' }},
-  {id: 'parameters.concurrentUsers', numeric: true, disablePadding: false, label: 'Probes', isObject: true,
-    style: { maxWidth: '10%', padding: '0px 5px' }},
-  {
-    id: 'createDate', numeric: false, disablePadding: false, label: 'Time',
-    // tslint:disable-next-line:no-any
-    render: (dataItem: any) => dataItem.createDate
-      ? moment(dataItem.createDate).format('MMM DD, YYYY - HH:mm')
-      : 'never',
-    style: {
-      whiteSpace: 'nowrap',
-      maxWidth: '10%',
-      padding: '0px 10px'
-    }
-  },
-  {id: 'textError', numeric: false, disablePadding: false, label: 'Reason',
-    style: { maxWidth: '25%', wordWrap: 'break-word' } },
-];
+type StyledComponent = WithStyles<
+  'root' |
+  'tableRowItemHover' |
+  'hoverActionBtnStyle'
+  >;
 
 export class GridControl extends React.Component<ITestHistoryProps & ITestsHistoryDispatch & RouteComponentProps<{}> &
-  WithStyles<'root' | 'tableRowItemHover'>, ITestHistoryState> {
-  constructor(props: ITestHistoryProps & ITestsHistoryDispatch & RouteComponentProps<{}> & WithStyles<'root'>) {
+  StyledComponent, ITestHistoryState> {
+
+  columnSchema: Array<ColumnSchema> = [
+    {
+      id: 'manual', numeric: false, disablePadding: false, label: 'Manual',
+      style: { maxWidth: '5%' },
+      // tslint:disable-next-line:no-any
+      render: (dataItem: any) => { return (dataItem.manual !== 0) ? dataItem.manual : ''; }
+    },
+    {
+      id: 'status', numeric: false, disablePadding: false, label: 'Status', style: { maxWidth: '5%', padding: '0px' },
+      labelRender: () => <Flag />,
+      // tslint:disable-next-line:no-any
+      render: (dataItem: any) => {
+        switch (dataItem.status) {
+          case Statuses.warnings:
+            return tooltipHelper('Warnings', <Warning style={{ color: '#F1CD2B' }} />);
+          case Statuses.error:
+            return tooltipHelper('Error', <RemoveCircle style={{ color: '#a22a21' }} />);
+          case Statuses.failure:
+            return tooltipHelper('Failure', <Error style={{ color: '#A22A21' }} />);
+          case Statuses.timeout:
+            return tooltipHelper('Timeout', <Timer style={{ color: '#c4c4c4' }} />);
+          case Statuses.completed:
+            return tooltipHelper('Completed', <Done style={{ color: '#559542' }} />);
+          case Statuses.serviceFailure:
+            return tooltipHelper('Service failure', <Build style={{ color: '#c4c4c4' }} />);
+          case Statuses.terminated:
+            return tooltipHelper('Terminated', <Cancel style={{ color: '#676A6C' }} />);
+          case Statuses.started:
+            return tooltipHelper('Started', <PlayArrow style={{ color: '#c4c4c4' }} />);
+          case Statuses.retry:
+            return tooltipHelper('Retry', <Replay style={{ color: '#c4c4c4' }} />);
+          case Statuses.dismissed:
+            return tooltipHelper('Dismissed', <ExitToApp style={{ color: '#c4c4c4' }} />);
+          default:
+            return <div>{dataItem.status}</div>;
+        }
+      }
+    },
+    {
+      id: 'name', numeric: false, disablePadding: true, label: 'Name', style: { maxWidth: '35%' },
+      render: (dataItem: any) => ( // tslint:disable-line
+        <div
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            pointerEvents: 'none'
+          }}
+        >
+          <span>{dataItem.name}</span>
+          <div>
+            {tooltipHelper('Open link in new tab', <IconButton
+              className={this.props.classes.hoverActionBtnStyle}
+              onClick={(e: React.MouseEvent<HTMLElement>) => {
+                window.open(`${TestRunDetails}/${dataItem._id}`, '_blank');
+                e.stopPropagation();
+              }}
+            >
+              <OpenInNew />
+            </IconButton>)}
+          </div>
+        </div>
+      )
+    },
+    {
+      id: 'runName', numeric: false, disablePadding: false, label: 'Machines',
+      style: { maxWidth: '15%', padding: '0px 5px' }
+    },
+    {
+      id: 'parameters.loopCount', numeric: true, disablePadding: false, label: 'Iterations', isObject: true,
+      style: { maxWidth: '10%', padding: '0px 5px' }
+    },
+    {
+      id: 'parameters.concurrentUsers', numeric: true, disablePadding: false, label: 'Probes', isObject: true,
+      style: { maxWidth: '10%', padding: '0px 5px' }
+    },
+    {
+      id: 'createDate', numeric: false, disablePadding: false, label: 'Time',
+      // tslint:disable-next-line:no-any
+      render: (dataItem: any) => dataItem.createDate
+        ? moment(dataItem.createDate).format('MMM DD, YYYY - HH:mm')
+        : 'never',
+      style: {
+        whiteSpace: 'nowrap',
+        maxWidth: '10%',
+        padding: '0px 10px'
+      }
+    },
+    {
+      id: 'textError', numeric: false, disablePadding: false, label: 'Reason',
+      style: { maxWidth: '25%', wordWrap: 'break-word' }
+    },
+  ];
+
+  constructor(props: ITestHistoryProps & ITestsHistoryDispatch & RouteComponentProps<{}> & StyledComponent) {
     super(props);
 
     this.state = {
@@ -144,9 +161,9 @@ export class GridControl extends React.Component<ITestHistoryProps & ITestsHisto
 
   componentWillReceiveProps(nextProps: ITestHistoryProps) {
     if (nextProps.testRuns.length !== 0) {
-      let testRunsFilter: Array<FilterValue> = [{value: '', label: 'Any test'}];
+      let testRunsFilter: Array<FilterValue> = [{ value: '', label: 'Any test' }];
       nextProps.testRuns.map(tr => {
-        let testRunFilterSingle: FilterValue = {value: tr, label: tr};
+        let testRunFilterSingle: FilterValue = { value: tr, label: tr };
         testRunsFilter.push(testRunFilterSingle);
       });
       this.setState({
@@ -161,27 +178,27 @@ export class GridControl extends React.Component<ITestHistoryProps & ITestsHisto
   }
 
   render() {
-    const {classes} = this.props;
+    const { classes } = this.props;
 
     let statusFilterValues = [
-      {value: '', label: 'Any Result'},
-      {value: 'warnings', label: 'Warnings'},
-      {value: 'error', label: 'Error'},
-      {value: 'failure', label: 'Failure'},
-      {value: 'timeout', label: 'Timeout'},
-      {value: 'completed', label: 'Completed'},
-      {value: 'service-failure', label: 'Service failure'},
-      {value: 'terminated', label: 'Terminated'},
-      {value: 'started', label: 'Started'},
-      {value: 'retry', label: 'Retry'},
-      {value: 'dismissed', label: 'Dismissed'},
+      { value: '', label: 'Any Result' },
+      { value: Statuses.warnings, label: 'Warnings' },
+      { value: Statuses.error, label: 'Error' },
+      { value: Statuses.failure, label: 'Failure' },
+      { value: Statuses.timeout, label: 'Timeout' },
+      { value: Statuses.completed, label: 'Completed' },
+      { value: Statuses.serviceFailure, label: 'Service failure' },
+      { value: Statuses.terminated, label: 'Terminated' },
+      { value: Statuses.started, label: 'Started' },
+      { value: Statuses.retry, label: 'Retry' },
+      { value: Statuses.dismissed, label: 'Dismissed' },
     ];
 
     let createDateFilterValues = [
-      {value: '', label: 'Any date'},
-      {value: '0', label: 'Today'},
-      {value: '7', label: 'Last 7 days'},
-      {value: '30', label: 'Last 30 days'},
+      { value: '', label: 'Any date' },
+      { value: '0', label: 'Today' },
+      { value: '7', label: 'Last 7 days' },
+      { value: '30', label: 'Last 30 days' },
     ];
 
     return (
@@ -192,7 +209,7 @@ export class GridControl extends React.Component<ITestHistoryProps & ITestsHisto
           remoteDataBound={true}
           searchByLabel={'name/machine'}
           apiRoute={ApiPath.api.testRuns}
-          columnSchema={columnSchema}
+          columnSchema={this.columnSchema}
           defaultSort={{
             order: 'desc',
             orderBy: 'createDate'
@@ -238,6 +255,14 @@ const styles = (theme: Theme) => ({
       }
     }
   },
+  hoverActionBtnStyle: {
+    width: 35,
+    minWidth: 35,
+    height: 35,
+    minHeight: 35,
+    visibility: 'hidden',
+    pointerEvents: 'none'
+  }
 } as React.CSSProperties);
 
 const decorate = withStyles(styles);
@@ -251,5 +276,5 @@ const mapStateToProps = (state: IStore) => ({
 });
 
 export default connect<ITestHistoryProps, ITestsHistoryDispatch>
-(mapStateToProps, mapDispatchToProps)
-(decorate<ITestHistoryProps & ITestsHistoryDispatch>(GridControl));
+  (mapStateToProps, mapDispatchToProps)
+  (decorate<ITestHistoryProps & ITestsHistoryDispatch>(GridControl));

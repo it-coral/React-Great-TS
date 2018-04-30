@@ -52,7 +52,7 @@ class GridView<T extends GridModel> extends React.Component<GridViewProps<T> & S
             <TableRow>
               <TableCell colSpan={columnSchema.length}>
                 <Grid container={true}>
-                  <Grid item={true} md={7} xs={12}>
+                  <Grid item={true} xs={7}>
                     {search &&
                     <SearchToolbar
                       onSubmit={onSubmitFilterSearch}
@@ -63,7 +63,7 @@ class GridView<T extends GridModel> extends React.Component<GridViewProps<T> & S
                     }
                   </Grid>
 
-                  <Grid item={true} md={5} xs={12}>
+                  <Grid item={true} xs={5}>
                     <TablePagination
                       colSpan={(columnSchema.length / 2) - 1}
                       count={data.total}
@@ -171,5 +171,4 @@ const styles = (theme: Theme) => ({
 
 const decorate = withStyles(styles);
 
-// tslint:disable-next-line:no-any
 export default decorate<GridViewProps<GridModel>>(GridView);

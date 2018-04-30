@@ -7,7 +7,7 @@ import UserOptionsList from './UserOptionsList';
 import HomeIcon from '@material-ui/icons/Home';
 import ForwardIcon from '@material-ui/icons/Forward';
 import HistoryIcon from '@material-ui/icons/History';
-import WatchLaterIcon from '@material-ui/icons/WatchLater';
+// import WatchLaterIcon from '@material-ui/icons/WatchLater';
 import { App as AppRoutes } from '../../../constants/RoutesNames';
 
 export interface ListItemDescriptor {
@@ -32,11 +32,11 @@ const SampleUserOptions: Array<ListItemDescriptor> = [
         label: 'Test run history',
         link: AppRoutes.TestRun
     },
-    {
-        icon: WatchLaterIcon,
-        label: 'Monitoring',
-        link: AppRoutes.Monitoring
-    },
+    // {
+    //     icon: WatchLaterIcon,
+    //     label: 'Monitoring',
+    //     link: AppRoutes.Monitoring
+    // },
 ];
 
 export class DrawerList extends React.Component<WithStyles<'toolbar'>> {
