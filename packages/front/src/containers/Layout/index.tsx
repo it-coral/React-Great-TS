@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { Redirect, Route, Switch } from 'react-router';
-import withStyles from 'material-ui/styles/withStyles';
-import { Theme, WithStyles } from 'material-ui/styles';
+import { Theme, WithStyles, withStyles } from 'material-ui/styles';
 import { CircularProgress } from 'material-ui/Progress';
 import Navbar from './components/Navbar';
 import Sidebar from './components/Sidebar';
@@ -13,6 +12,7 @@ import Main from '../Main';
 import Tests from '../Tests';
 import TestProperty from '../TestProperty';
 import TestRunHistory from '../TestRunHistory';
+import TestRunDetails from '../TestRunDetails';
 import { App as AppRoutes, NotFound } from '../../constants/RoutesNames';
 
 interface IAppProps {
@@ -73,6 +73,7 @@ class AppLayout extends React.Component<IAppProps & IAppDispatch & StyledCompone
                         <Route exact={true} path={AppRoutes.TestRun} component={TestRunHistory}/>
                         <Route exact={true} path={AppRoutes.NewTestProperty} component={TestProperty}/>
                         <Route exact={true} path={AppRoutes.TestProperty + '/:objectId'} component={TestProperty}/>
+                        <Route exact={true} path={AppRoutes.TestRunDetails + '/:objectId'} component={TestRunDetails}/>
                         <Redirect from="*" to={NotFound} />
                     </Switch>
                 </AppContent>

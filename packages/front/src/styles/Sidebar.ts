@@ -1,5 +1,6 @@
 export const ListItemTextStyle = {
     color: '#ADB0B7',
+    fontSize: 14,
     textDecoration: 'none'
 };
 
@@ -14,6 +15,7 @@ export const ListItemStyle = {
 
 export const ListItemIconStyle = {
     color: '#ADB0B7',
+    margin: 0
 };
 
 export const ListLink = {
