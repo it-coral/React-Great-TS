@@ -33,6 +33,7 @@ class GridView<T extends GridModel> extends React.Component<GridViewProps<T> & S
       data,
       sort,
       search,
+      pagination,
       searchByLabel,
       classes,
       onRequestSort,
@@ -48,37 +49,41 @@ class GridView<T extends GridModel> extends React.Component<GridViewProps<T> & S
     return (
       <div className={classes.tableWrapper}>
         <Table className={classes.table}>
-          <TableHead>
-            <TableRow>
-              <TableCell colSpan={columnSchema.length}>
-                <Grid container={true}>
-                  <Grid item={true} xs={7}>
-                    {search &&
-                    <SearchToolbar
-                      onSubmit={onSubmitFilterSearch}
-                      placeholder={`Search by ${searchByLabel}`}
-                      colSpan={(columnSchema.length / 2) + 1}
-                      filters={filters}
-                    />
+          {(search || pagination) &&
+            <TableHead>
+              <TableRow>
+                <TableCell colSpan={columnSchema.length}>
+                  <Grid container={true}>
+                    <Grid item={true} xs={7}>
+                      {search &&
+                      <SearchToolbar
+                        onSubmit={onSubmitFilterSearch}
+                        placeholder={`Search by ${searchByLabel}`}
+                        colSpan={(columnSchema.length / 2) + 1}
+                        filters={filters}
+                      />
+                      }
+                    </Grid>
+
+                    {pagination &&
+                    <Grid item={true} xs={5}>
+                      <TablePagination
+                        colSpan={(columnSchema.length / 2) - 1}
+                        count={data.total}
+                        rowsPerPage={data.limit}
+                        rowsPerPageOptions={[50, 100, 500]}
+                        page={data.page > 0 ? --data.page : data.page}
+                        onChangePage={onChangePage}
+                        onChangeRowsPerPage={onChangeRowsPerPage}
+                        component={'div'}
+                      />
+                    </Grid>
                     }
                   </Grid>
-
-                  <Grid item={true} xs={5}>
-                    <TablePagination
-                      colSpan={(columnSchema.length / 2) - 1}
-                      count={data.total}
-                      rowsPerPage={data.limit}
-                      rowsPerPageOptions={[50, 100, 500]}
-                      page={data.page > 0 ? --data.page : data.page}
-                      onChangePage={onChangePage}
-                      onChangeRowsPerPage={onChangeRowsPerPage}
-                      component={'div'}
-                    />
-                  </Grid>
-                </Grid>
-              </TableCell>
-            </TableRow>
-          </TableHead>
+                </TableCell>
+              </TableRow>
+            </TableHead>
+          }
           <EnhancedTableHead
             columnSchema={columnSchema}
             order={sort.order}
@@ -87,17 +92,17 @@ class GridView<T extends GridModel> extends React.Component<GridViewProps<T> & S
             onRequestSort={onRequestSort}
           />
           <TableBody>
-            {data.docs.length > 0 ? data.docs.map((model: T) => (
+            {data.docs.length > 0 ? data.docs.map((model: T, i: number) => (
               <TableRow
                 onClick={(e) => onRowClick ? onRowClick(e, model) : undefined}
                 className={classes.tableRowItem}
-                key={model._id}
+                key={i}
                 {...rowProps}
               >
                 {
-                  columnSchema.map(column => (
+                  columnSchema.map((column: ColumnSchema, index: number) => (
                     <TableCell
-                      key={model._id + column.id}
+                      key={index}
                       padding={column.disablePadding ? 'none' : 'default'}
                       numeric={column.numeric}
                       style={column.style}

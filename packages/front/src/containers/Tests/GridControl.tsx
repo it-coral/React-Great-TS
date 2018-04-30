@@ -147,6 +147,7 @@ export class GridControl extends React.Component<RouteComponentProps<{}> & Style
           rowProps={{
             className: classes.tableRowItemHover
           }}
+          pagination={true}
         />
       </Paper>
     );
