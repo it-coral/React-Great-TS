@@ -1,17 +1,20 @@
 import * as React from 'react';
-import Grid from 'material-ui/Grid';
-import { Field, Form } from 'react-final-form';
+// import Grid from 'material-ui/Grid';
+// import { Field, Form } from 'react-final-form';
 import Button from 'material-ui/Button';
 import { withStyles, WithStyles } from 'material-ui/styles';
-import { Link } from 'react-router-dom';
-import Typography from 'material-ui/Typography';
-import Email from '@material-ui/icons/Email';
-import Lock from '@material-ui/icons/Lock';
+// import { Link } from 'react-router-dom';
+// import Typography from 'material-ui/Typography';
+// import Email from '@material-ui/icons/Email';
+// import Lock from '@material-ui/icons/Lock';
 import { RouteComponentProps, withRouter } from 'react-router';
-import TextFieldControl from '../../../components/common/form-elements/TextFieldControl';
-import FormValidators from '../../../helpers/form-validators';
+// import TextFieldControl from '../../../components/common/form-elements/TextFieldControl';
+// import FormValidators from '../../../helpers/form-validators';
 import AuthService from '../../../services/AuthService';
-import { Main, Login as LoginRoutes } from '../../../constants/RoutesNames';
+import Auth0Service from '../../../services/Auth0Service';
+
+// import { Main, Login as LoginRoutes } from '../../../constants/RoutesNames';
+import { Main } from '../../../constants/RoutesNames';
 
 interface ILoginForm {
   email: string;
@@ -35,12 +38,15 @@ type StyledComponent = WithStyles<
 
 class SigninForm extends React.Component<RouteComponentProps<{}> & StyledComponent> {
   auth: AuthService;
+  auth0: Auth0Service;
 
   constructor(props: RouteComponentProps<{}> & StyledComponent) {
     super(props);
 
-    this.onSubmit = this.onSubmit.bind(this);
     this.auth = new AuthService();
+    this.onSubmit = this.onSubmit.bind(this);
+    this.auth0 = new Auth0Service();
+    this.onSignInAuth0 = this.onSignInAuth0.bind(this);
   }
 
   componentDidMount() {
@@ -48,118 +54,23 @@ class SigninForm extends React.Component<RouteComponentProps<{}> & StyledCompone
       this.props.history.push(Main);
     }
   }
+  onSignInAuth0() {
 
+    this.auth0.login();
+  }
   public render(): JSX.Element {
+
     const { classes } = this.props;
     return (
-      <Form
-        onSubmit={this.onSubmit}
-        render={({ handleSubmit, submitError }) => (
-          <form
-            className={classes.formContainer}
-            onSubmit={handleSubmit}
+          <Button
+            type="button"
+            variant="raised"
+            color="primary"
+            className={classes.signInButton}
+            onClick={this.onSignInAuth0}
           >
-            <Grid
-              container={true}
-              spacing={16}
-            >
-              <Grid className={classes.fieldIconContainer} item={true} xs={1}>
-                <Email />
-              </Grid>
-              <Grid item={true} xs={11}>
-                <Field
-                  component={TextFieldControl}
-                  type="text"
-                  name="email"
-                  label="Email Address"
-                  validate={FormValidators.composeValidators(FormValidators.required(),
-                                                             FormValidators.isEmail)}
-                />
-              </Grid>
-              <Grid className={classes.fieldIconContainer} item={true} xs={1}>
-                <Lock />
-              </Grid>
-              <Grid item={true} xs={11}>
-                <Field
-                  component={TextFieldControl}
-                  type="password"
-                  name="password"
-                  label="Password"
-                  validate={FormValidators.required()}
-                />
-              </Grid>
-              <Grid
-                item={true}
-                xs={12}
-                className={classes.formSection}
-              >
-                <Grid
-                  container={true}
-                  spacing={16}
-                >
-                  <Grid
-                    item={true}
-                    xs={6}
-                    className={classes.forgotPasswordContainer}
-                  >
-                    <Link className={classes.link} to={LoginRoutes.ForgotPassword}>
-                      <Typography align="right" className={classes.linkText}>
-                        Forgot password?
-                      </Typography>
-                    </Link>
-                  </Grid>
-                  <Grid
-                    item={true}
-                    xs={6}
-                    className={classes.buttonContainer}
-                  >
-                    <Button
-                      type="submit"
-                      variant="raised"
-                      color="secondary"
-                      className={classes.signInButton}
-                    >
-                      Sign in
-                    </Button>
-                  </Grid>
-                </Grid>
-              </Grid>
-              <Grid
-                item={true}
-                xs={12}
-                className={classes.formSection}
-              >
-                <Grid
-                  container={true}
-                  spacing={16}
-                  className={classes.formSection}
-                >
-                  <Grid item={true} xs={6}>
-                    <Link className={classes.link} to="/signup">
-                      <Typography color="textSecondary" className={classes.linkText}>
-                        Create an account
-                      </Typography>
-                    </Link>
-                  </Grid>
-                  <Grid item={true} xs={6}>
-                    <div>
-                      <Link className={classes.link} to="/forgot">
-                        <Typography
-                          color="textSecondary"
-                          align="right"
-                          className={classes.linkText}
-                        >
-                          Subscribe
-                        </Typography>
-                      </Link>
-                    </div>
-                  </Grid>
-                </Grid>
-              </Grid>
-            </Grid>
-          </form>
-        )}
-      />
+            Sign in with Auth0
+          </Button>
     );
   }
 

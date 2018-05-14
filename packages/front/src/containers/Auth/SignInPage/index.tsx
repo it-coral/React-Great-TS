@@ -8,7 +8,7 @@ import Typography from 'material-ui/Typography';
 import Slide from 'material-ui/transitions/Slide';
 import SigninForm from './SigninForm';
 import AnalyzerBanner from '../../../components/common/auth/AnalyzerBanner';
-import LoginSocialButtons from '../../../components/common/auth/LoginSocialButtons';
+// import LoginSocialButtons from '../../../components/common/auth/LoginSocialButtons';
 import FooterColors from '../../../components/common/auth/FooterColors';
 import RemindPasswordModal from './RemindPasswordModal';
 import { Login as LoginRoutes } from '../../../constants/RoutesNames';
@@ -17,6 +17,7 @@ type SignInPageStyles = WithStyles<'root' |
     'title' |
     'orWrapper' |
     'orText' |
+    'signInContainer' |
     'titleContainer'>;
 
 interface ISignInPageState {
@@ -81,21 +82,13 @@ class SignInPage extends React.Component<RouteComponentProps<{}> & SignInPageSty
                                     Login to testRTC
                                 </Typography>
                             </div>
-                            <Grid container={true}>
-                                <Grid item={true} xs={12}>
-                                    <SigninForm />
-                                </Grid>
-                                <Grid item={true} xs={12}>
-                                    <div className={classes.orText}>
-                                        <Typography>
-                                            Or
-                                </Typography>
-                                    </div>
-                                </Grid>
-                            </Grid>
-                            <Grid item={true} xs={12}>
-                                <LoginSocialButtons />
-                            </Grid>
+                            <div className={classes.signInContainer}>
+                                <Grid container={true}>
+                                    <Grid item={true} xs={12}>
+                                        <SigninForm />
+                                    </Grid>                                
+                                </Grid>                            
+                            </div>
                             <FooterColors/>
                         </Paper>
                     </Slide>
@@ -143,7 +136,23 @@ const decorate = withStyles((theme) => ({
         padding: theme.spacing.unit * 5,
         margin: -(theme.spacing.unit * 5),
         justifyContent: 'center'
+    },
+    signInContainer: {
+        marginTop: '5em',
+        textAlign: 'center'
     }
 } as React.CSSProperties));
 
 export default decorate<{}>(SignInPage);
+
+// <Grid item={true} xs={12}>
+//     <LoginSocialButtons />
+// </Grid>
+// 
+// <Grid item={true} xs={12}>
+//     <div className={classes.orText}>
+//         <Typography>
+//             Or
+//         </Typography>
+//     </div>
+// </Grid>z

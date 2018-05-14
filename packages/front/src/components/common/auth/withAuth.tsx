@@ -1,5 +1,5 @@
 import * as React from 'react';
-import AuthService from '../../../services/AuthService';
+import Auth0Service from '../../../services/Auth0Service';
 import { Redirect } from 'react-router';
 
 interface WithRoles {
@@ -8,12 +8,12 @@ interface WithRoles {
 
 const withAuth = <P extends WithRoles>(UnwrappedComponent: React.ComponentType<P>) =>
     class WithAuth extends React.Component<P> {
-        auth: AuthService;
+        auth: Auth0Service;
 
         constructor(props: P) {
             super(props);
 
-            this.auth = new AuthService();
+            this.auth = new Auth0Service();
         }
 
         public render(): JSX.Element {

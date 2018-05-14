@@ -7,6 +7,7 @@ import SignUpPage from '../SignUpPage';
 import { Login as LoginRoutes } from '../../../constants/RoutesNames';
 import SignUpConfirmPage from '../SignUpConfirmPage';
 import ForgotPasswordPage from '../ForgotPasswordPage/index';
+import CallbackPage from '../Callback/index';
 
 export default class LoginLayout extends React.Component {
     render() {
@@ -18,6 +19,7 @@ export default class LoginLayout extends React.Component {
                         <Route exact={true} path={LoginRoutes.SignIn} component={SignInPage}/>
                         <Route exact={true} path={LoginRoutes.SignUp} component={SignUpPage}/>
                         <Route exact={true} path={LoginRoutes.ForgotPassword} component={ForgotPasswordPage}/>
+                        <Route exact={true} path={LoginRoutes.Callback} component={CallbackPage}/>
                         <Route exact={true} path={`${LoginRoutes.SignUpConfirm}/:email`} component={SignUpConfirmPage}/>
                         <Redirect exact={true} from="/" to="/signin"/>
                     </Switch>
